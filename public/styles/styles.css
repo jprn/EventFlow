@@ -323,7 +323,11 @@ img {
 }
 
 .ef-table thead {
-  background-color: #f9fafb;
+  background: linear-gradient(
+    90deg,
+    rgba(37, 99, 235, 0.05),
+    rgba(37, 99, 235, 0.02)
+  );
 }
 
 .ef-table th,
@@ -347,6 +351,17 @@ img {
 
 .ef-table td:last-child {
   white-space: nowrap;
+}
+
+.ef-table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.ef-table td:nth-child(2),
+.ef-table th:nth-child(2),
+.ef-table td:nth-child(4),
+.ef-table th:nth-child(4) {
+  text-align: center;
 }
 
 .ef-page-two-columns {
