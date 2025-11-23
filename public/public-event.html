@@ -15,13 +15,16 @@
 
     <main class="ef-main">
       <section class="ef-container ef-card ef-page-narrow">
-        <h1>Inscription à l'événement</h1>
-        <p>
-          Remplissez le formulaire ci-dessous pour confirmer votre
-          participation.
-        </p>
+        <header class="ef-page-header">
+          <div>
+            <h1 id="public-event-title">Inscription à l'événement</h1>
+            <p id="public-event-meta"></p>
+          </div>
+        </header>
 
-        <form class="ef-form" novalidate>
+        <div id="public-event-description" class="ef-form-help"></div>
+
+        <form id="public-event-form" class="ef-form" novalidate>
           <div class="ef-form-group">
             <label for="nom">Nom complet</label>
             <input id="nom" type="text" placeholder="Votre nom" />
@@ -37,9 +40,15 @@
             <input id="telephone" type="tel" placeholder="06..." />
           </div>
 
-          <button type="submit" class="ef-btn ef-btn-primary">
-            Valider mon inscription
-          </button>
+          <div id="public-event-dynamic-fields"></div>
+
+          <div class="ef-form-actions">
+            <button type="submit" class="ef-btn ef-btn-primary">
+              Valider mon inscription
+            </button>
+          </div>
+
+          <div id="public-event-message" class="ef-auth-message"></div>
         </form>
       </section>
     </main>
@@ -49,5 +58,8 @@
         <p>Propulsé par EventFlow Lite</p>
       </div>
     </footer>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabaseClient.js"></script>
+    <script src="js/public-event.js"></script>
   </body>
 </html>

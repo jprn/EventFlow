@@ -1,0 +1,275 @@
+function efGetSlugFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("slug");
+}
+
+function efShowPublicMessage(type, text) {
+  const box = document.getElementById("public-event-message");
+  if (!box) return;
+  box.textContent = text || "";
+  box.className = "ef-auth-message";
+  if (!text) return;
+  if (type === "error") {
+    box.classList.add("ef-auth-message-error");
+  } else {
+    box.classList.add("ef-auth-message-success");
+  }
+}
+
+async function efLoadPublicEvent() {
+  if (!window.supabaseClient) return;
+  const slug = efGetSlugFromUrl();
+  if (!slug) {
+    efShowPublicMessage(
+      "error",
+      "Lien invalide : aucun identifiant d'événement fourni."
+    );
+    return;
+  }
+
+  const { data: event, error } = await window.supabaseClient
+    .from("events")
+    .select("id, titre, date_evenement, heure_evenement, lieu")
+    .eq("slug", slug)
+    .eq("est_public", true)
+    .maybeSingle();
+
+  if (error || !event) {
+    efShowPublicMessage(
+      "error",
+      "L'événement est introuvable ou n'est plus accessible."
+    );
+    return;
+  }
+
+  const titleEl = document.getElementById("public-event-title");
+  const metaEl = document.getElementById("public-event-meta");
+  const descEl = document.getElementById("public-event-description");
+
+  if (titleEl) titleEl.textContent = event.titre || "Inscription à l'événement";
+
+  if (metaEl) {
+    let meta = "";
+    if (event.date_evenement) {
+      meta += event.date_evenement;
+      if (event.heure_evenement) {
+        const time = String(event.heure_evenement).slice(0, 5);
+        meta += " à " + time;
+      }
+    }
+    if (event.lieu) {
+      if (meta) meta += " · ";
+      meta += event.lieu;
+    }
+    metaEl.textContent = meta;
+  }
+
+  if (descEl) {
+    descEl.textContent =
+      "Vos informations seront utilisées uniquement pour gérer votre participation à cet événement.";
+  }
+
+  await efLoadPublicFields(event.id);
+}
+
+async function efLoadPublicFields(eventId) {
+  if (!window.supabaseClient) return;
+  const container = document.getElementById("public-event-dynamic-fields");
+  if (!container) return;
+  container.innerHTML = "";
+
+  const { data, error } = await window.supabaseClient
+    .from("event_fields")
+    .select("id, label, type, requis, options, ordre")
+    .eq("event_id", eventId)
+    .order("ordre", { ascending: true });
+
+  if (error) {
+    efShowPublicMessage(
+      "error",
+      "Impossible de charger les champs du formulaire."
+    );
+    return;
+  }
+
+  const fields = data || [];
+  fields.forEach((field) => {
+    const group = document.createElement("div");
+    group.className = "ef-form-group";
+
+    const labelEl = document.createElement("label");
+    labelEl.textContent = field.label + (field.requis ? " *" : "");
+    const inputId = "field-" + field.id;
+    labelEl.setAttribute("for", inputId);
+
+    let inputEl;
+
+    switch (field.type) {
+      case "long_text": {
+        inputEl = document.createElement("textarea");
+        inputEl.rows = 3;
+        break;
+      }
+      case "email": {
+        inputEl = document.createElement("input");
+        inputEl.type = "email";
+        break;
+      }
+      case "phone": {
+        inputEl = document.createElement("input");
+        inputEl.type = "tel";
+        break;
+      }
+      case "select": {
+        inputEl = document.createElement("select");
+        const opts = Array.isArray(field.options) ? field.options : [];
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = "Sélectionnez une option";
+        inputEl.appendChild(placeholder);
+        opts.forEach((opt) => {
+          const o = document.createElement("option");
+          o.value = opt;
+          o.textContent = opt;
+          inputEl.appendChild(o);
+        });
+        break;
+      }
+      case "checkbox": {
+        inputEl = document.createElement("input");
+        inputEl.type = "checkbox";
+        break;
+      }
+      case "short_text":
+      default: {
+        inputEl = document.createElement("input");
+        inputEl.type = "text";
+      }
+    }
+
+    inputEl.id = inputId;
+    inputEl.dataset.fieldId = field.id;
+    inputEl.dataset.fieldType = field.type;
+    if (field.requis) {
+      inputEl.required = true;
+    }
+
+    group.appendChild(labelEl);
+    group.appendChild(inputEl);
+    container.appendChild(group);
+  });
+}
+
+function efGenerateQrToken() {
+  if (window.crypto && window.crypto.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  return (
+    Date.now().toString(36) +
+    Math.random().toString(36).substring(2, 10)
+  ).toUpperCase();
+}
+
+async function efHandlePublicSubmit(event) {
+  event.preventDefault();
+  if (!window.supabaseClient) return;
+
+  const slug = efGetSlugFromUrl();
+  if (!slug) {
+    efShowPublicMessage(
+      "error",
+      "Lien invalide : aucun identifiant d'événement fourni."
+    );
+    return;
+  }
+
+  const { data: ev, error: evError } = await window.supabaseClient
+    .from("events")
+    .select("id")
+    .eq("slug", slug)
+    .eq("est_public", true)
+    .maybeSingle();
+
+  if (evError || !ev) {
+    efShowPublicMessage(
+      "error",
+      "L'événement est introuvable ou n'est plus accessible."
+    );
+    return;
+  }
+
+  const eventId = ev.id;
+
+  const nomInput = document.getElementById("nom");
+  const emailInput = document.getElementById("email");
+  const telInput = document.getElementById("telephone");
+
+  const nom = nomInput ? nomInput.value.trim() : "";
+  const email = emailInput ? emailInput.value.trim() : "";
+  const telephone = telInput ? telInput.value.trim() : "";
+
+  if (!nom || !email) {
+    efShowPublicMessage(
+      "error",
+      "Merci de renseigner au minimum votre nom et votre adresse e-mail."
+    );
+    return;
+  }
+
+  const dynamicContainer = document.getElementById(
+    "public-event-dynamic-fields"
+  );
+  const answers = {};
+  if (dynamicContainer) {
+    const inputs = dynamicContainer.querySelectorAll("[data-field-id]");
+    inputs.forEach((input) => {
+      const id = input.dataset.fieldId;
+      const type = input.dataset.fieldType;
+      let value;
+      if (type === "checkbox") {
+        value = input.checked;
+      } else {
+        value = input.value;
+      }
+      answers[id] = value;
+    });
+  }
+
+  const qrToken = efGenerateQrToken();
+
+  efShowPublicMessage("", "");
+
+  const { error: regError } = await window.supabaseClient
+    .from("registrations")
+    .insert({
+      event_id: eventId,
+      nom,
+      email,
+      telephone,
+      answers,
+      qr_token: qrToken,
+    });
+
+  if (regError) {
+    efShowPublicMessage(
+      "error",
+      "Impossible d'enregistrer votre inscription : " +
+        (regError.message || "erreur inconnue.")
+    );
+    return;
+  }
+
+  window.location.href = "thank-you.html";
+}
+
+function efSetupPublicEventPage() {
+  const form = document.getElementById("public-event-form");
+  if (form) {
+    form.addEventListener("submit", efHandlePublicSubmit);
+  }
+
+  efLoadPublicEvent();
+}
+
+document.addEventListener("DOMContentLoaded", efSetupPublicEventPage);
+
