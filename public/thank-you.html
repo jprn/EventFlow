@@ -25,6 +25,14 @@
           <canvas id="thankyou-qr"></canvas>
         </div>
 
+        <div id="thankyou-event-summary" class="ef-form-group ef-text-left"></div>
+
+        <div class="ef-form-actions ef-justify-center" style="margin-top: 1rem">
+          <button id="thankyou-download" type="button" class="ef-btn ef-btn-primary">
+            Télécharger mon billet (PDF)
+          </button>
+        </div>
+
         <p id="thankyou-message" class="ef-form-help"></p>
       </section>
     </main>
@@ -37,6 +45,7 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="js/supabaseClient.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <script src="js/thank-you.js"></script>
   </body>
 </html>

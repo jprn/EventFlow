@@ -28,6 +28,7 @@ async function efSendConfirmationEmail(qrToken) {
 async function efSetupThankYouPage() {
   const token = efGetQrTokenFromUrl();
   const msgEl = document.getElementById("thankyou-message");
+  const summaryEl = document.getElementById("thankyou-event-summary");
 
   if (!token) {
     if (msgEl) {
@@ -64,7 +65,117 @@ async function efSetupThankYouPage() {
       "Vous recevrez également un e-mail de confirmation avec ce QR code.";
   }
 
+  const eventInfo = await efLoadEventInfoFromToken(token, summaryEl);
   await efSendConfirmationEmail(token);
+
+  const downloadBtn = document.getElementById("thankyou-download");
+  if (downloadBtn && eventInfo) {
+    downloadBtn.addEventListener("click", () =>
+      efDownloadTicketPdf(eventInfo, token)
+    );
+  }
+}
+
+async function efLoadEventInfoFromToken(token, summaryEl) {
+  if (!window.supabaseClient || !token) return null;
+
+  try {
+    const { data, error } = await window.supabaseClient
+      .from("registrations")
+      .select(
+        "event:events(titre, date_evenement, heure_evenement, lieu, adresse, latitude, longitude)"
+      )
+      .eq("qr_token", token)
+      .maybeSingle();
+
+    if (error || !data || !data.event) {
+      console.warn("Impossible de charger les infos d'événement pour le billet", error);
+      return null;
+    }
+
+    const ev = data.event;
+
+    if (summaryEl) {
+      let html = "";
+      html += `<strong>${ev.titre || "Événement"}</strong><br/>`;
+
+      if (ev.date_evenement) {
+        html += ev.date_evenement;
+        if (ev.heure_evenement) {
+          const time = String(ev.heure_evenement).slice(0, 5);
+          html += ` à ${time}`;
+        }
+        html += "<br/>";
+      }
+
+      if (ev.lieu) {
+        html += `${ev.lieu}<br/>`;
+      }
+
+      if (ev.adresse) {
+        html += `${ev.adresse}<br/>`;
+      }
+
+      summaryEl.innerHTML = html;
+    }
+
+    return ev;
+  } catch (e) {
+    console.warn("Erreur inattendue lors du chargement des infos d'événement", e);
+    return null;
+  }
+}
+
+function efDownloadTicketPdf(ev, token) {
+  if (!window.jspdf || !window.jspdf.jsPDF) return;
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(18);
+  doc.text("Billet d'événement", 20, 20);
+
+  doc.setFontSize(14);
+  doc.text(ev.titre || "Événement", 20, 35);
+
+  doc.setFontSize(11);
+  let y = 45;
+
+  if (ev.date_evenement) {
+    let line = ev.date_evenement;
+    if (ev.heure_evenement) {
+      const time = String(ev.heure_evenement).slice(0, 5);
+      line += ` à ${time}`;
+    }
+    doc.text(line, 20, y);
+    y += 6;
+  }
+
+  if (ev.lieu) {
+    doc.text(ev.lieu, 20, y);
+    y += 6;
+  }
+
+  if (ev.adresse) {
+    doc.text(doc.splitTextToSize(ev.adresse, 170), 20, y);
+    y += 10;
+  }
+
+  if (typeof ev.latitude === "number" && typeof ev.longitude === "number") {
+    doc.text(
+      `Coordonnées : ${ev.latitude.toFixed(5)}, ${ev.longitude.toFixed(5)}`,
+      20,
+      y
+    );
+    y += 10;
+  }
+
+  doc.text("QR token :", 20, y);
+  y += 6;
+  doc.setFontSize(9);
+  doc.text(doc.splitTextToSize(token, 170), 20, y);
+
+  doc.save("billet-evenement.pdf");
 }
 
 document.addEventListener("DOMContentLoaded", efSetupThankYouPage);
