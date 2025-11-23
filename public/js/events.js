@@ -126,6 +126,12 @@ async function efHandleCreateEvent(event) {
   );
 
   const eventId = data && data.id;
+  // Popup de confirmation avant de fermer le formulaire
+  const message = existingEventId
+    ? "L'événement a bien été mis à jour."
+    : "L'événement a bien été créé.";
+  window.alert(message);
+
   if (eventId) {
     window.location.href = "event-view.html?id=" + encodeURIComponent(eventId);
   } else {
