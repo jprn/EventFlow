@@ -366,6 +366,11 @@ img {
   text-align: center;
 }
 
+.ef-table td:nth-child(5),
+.ef-table th:nth-child(5) {
+  text-align: center;
+}
+
 .ef-table .ef-btn {
   padding: 0.2rem 0.4rem;
   font-size: 0.8rem;
