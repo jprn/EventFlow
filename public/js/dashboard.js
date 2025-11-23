@@ -70,7 +70,8 @@ function efRenderEvents(containerId, events) {
     const tdDate = document.createElement("td");
     let dateText = event.date_evenement || "-";
     if (event.heure_evenement) {
-      dateText += " " + event.heure_evenement;
+      const time = String(event.heure_evenement).slice(0, 5); // HH:MM
+      dateText += " " + time;
     }
     tdDate.textContent = dateText;
 
@@ -88,8 +89,8 @@ function efRenderEvents(containerId, events) {
     tdActions.style.textAlign = "right";
 
     const actionsWrapper = document.createElement("div");
-    actionsWrapper.style.display = "flex";
-    actionsWrapper.style.gap = "0.4rem";
+    actionsWrapper.style.display = "inline-flex";
+    actionsWrapper.style.gap = "0.35rem";
 
     const editBtn = document.createElement("button");
     editBtn.type = "button";

@@ -316,6 +316,35 @@ img {
   color: var(--ef-color-text-muted);
 }
 
+.ef-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.ef-table thead {
+  background-color: #f9fafb;
+}
+
+.ef-table th,
+.ef-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--ef-color-border);
+}
+
+.ef-table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--ef-color-text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ef-table td:last-child {
+  white-space: nowrap;
+}
+
 .ef-page-two-columns {
   display: grid;
   grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
