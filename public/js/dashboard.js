@@ -45,7 +45,7 @@ function efRenderEvents(containerId, events) {
 
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
-  const headers = ["Titre", "Date", "Lieu", "Inscriptions", "Actions"];
+  const headers = ["Titre", "Date / heure", "Lieu", "Inscriptions", "Actions"];
 
   headers.forEach((label) => {
     const th = document.createElement("th");
@@ -68,7 +68,11 @@ function efRenderEvents(containerId, events) {
     tdTitle.appendChild(link);
 
     const tdDate = document.createElement("td");
-    tdDate.textContent = event.date_evenement || "-";
+    let dateText = event.date_evenement || "-";
+    if (event.heure_evenement) {
+      dateText += " " + event.heure_evenement;
+    }
+    tdDate.textContent = dateText;
 
     const tdLieu = document.createElement("td");
     tdLieu.textContent = event.lieu || "-";
@@ -81,6 +85,11 @@ function efRenderEvents(containerId, events) {
     }
 
     const tdActions = document.createElement("td");
+    tdActions.style.textAlign = "right";
+
+    const actionsWrapper = document.createElement("div");
+    actionsWrapper.style.display = "flex";
+    actionsWrapper.style.gap = "0.4rem";
 
     const editBtn = document.createElement("button");
     editBtn.type = "button";
@@ -99,8 +108,18 @@ function efRenderEvents(containerId, events) {
     deleteBtn.title = "Supprimer l'événement";
     deleteBtn.addEventListener("click", () => efDeleteEvent(event.id));
 
-    tdActions.appendChild(editBtn);
-    tdActions.appendChild(deleteBtn);
+    const copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "ef-btn ef-btn-secondary";
+    copyBtn.textContent = "🔗";
+    copyBtn.title = "Copier l'URL publique";
+    copyBtn.addEventListener("click", () => efCopyPublicUrl(event.slug));
+
+    actionsWrapper.appendChild(editBtn);
+    actionsWrapper.appendChild(deleteBtn);
+    actionsWrapper.appendChild(copyBtn);
+
+    tdActions.appendChild(actionsWrapper);
 
     tr.appendChild(tdTitle);
     tr.appendChild(tdDate);
@@ -113,6 +132,23 @@ function efRenderEvents(containerId, events) {
 
   table.appendChild(tbody);
   container.appendChild(table);
+}
+
+async function efCopyPublicUrl(slug) {
+  if (!slug) return;
+  const base = window.location.origin.replace(/\/$/, "");
+  const url = base + "/" + slug;
+
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(url);
+    }
+    window.alert("Adresse publique copiée dans le presse-papiers.");
+  } catch (_) {
+    window.alert(
+      "Impossible de copier l'adresse. Copiez-la manuellement : \n" + url
+    );
+  }
 }
 
 async function efDeleteEvent(eventId) {
@@ -146,7 +182,7 @@ async function efLoadDashboard() {
 
   const { data, error } = await window.supabaseClient
     .from("events")
-    .select("id, titre, date_evenement, lieu")
+    .select("id, titre, date_evenement, heure_evenement, lieu")
     .eq("owner_id", user.id)
     .order("date_evenement", { ascending: true });
 
