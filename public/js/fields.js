@@ -297,7 +297,23 @@ function efSetupFieldsPage() {
     efUpdateOptionsVisibility();
   }
 
+  efUpdateEventSidebarLinksForSettings();
   efLoadFields();
+}
+
+function efUpdateEventSidebarLinksForSettings() {
+  const eventId = efGetEventIdFromUrl();
+  if (!eventId) return;
+
+  const links = document.querySelectorAll(".ef-sidebar-nav a");
+  links.forEach((link) => {
+    const href = link.getAttribute("href");
+    if (!href) return;
+
+    const url = new URL(href, window.location.href);
+    url.searchParams.set("id", eventId);
+    link.setAttribute("href", url.pathname + url.search);
+  });
 }
 
 document.addEventListener("DOMContentLoaded", efSetupFieldsPage);
