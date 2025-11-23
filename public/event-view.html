@@ -37,8 +37,8 @@
 
         <section class="ef-page-content">
           <article class="ef-card">
-            <h1>Vue d'ensemble de l'événement</h1>
-            <p>Résumé, lien public et principales statistiques.</p>
+            <h1 id="event-view-title">Vue d'ensemble de l'événement</h1>
+            <p id="event-view-meta"></p>
           </article>
 
           <article class="ef-card ef-table-card">
@@ -49,6 +49,7 @@
               Aucune inscription pour le moment.
             </div>
           </article>
+          <div id="event-view-message" class="ef-auth-message"></div>
         </section>
       </section>
     </main>
@@ -58,5 +59,8 @@
         <p>EventFlow Lite · Espace organisateur</p>
       </div>
     </footer>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabaseClient.js"></script>
+    <script src="js/event-view.js"></script>
   </body>
 </html>
