@@ -94,7 +94,6 @@ async function efHandleCreateEvent(event) {
       .from("events")
       .update(payload)
       .eq("id", existingEventId)
-      .eq("owner_id", user.id)
       .select("id")
       .maybeSingle();
     data = res.data;
