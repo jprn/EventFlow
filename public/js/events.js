@@ -237,6 +237,7 @@ async function efLoadEventIfEditing() {
   const latitudeInput = document.getElementById("latitude");
   const longitudeInput = document.getElementById("longitude");
   const publicUrlInput = document.getElementById("public_url");
+  const createButton = document.getElementById("create-event-button");
 
   if (titreInput) titreInput.value = data.titre || "";
   if (slugInput) slugInput.value = data.slug || "";
@@ -256,6 +257,10 @@ async function efLoadEventIfEditing() {
   if (slugInput && publicUrlInput) {
     efUpdatePublicUrl(slugInput, publicUrlInput);
   }
+
+   if (createButton) {
+     createButton.textContent = "Confirmer la modification";
+   }
 
   // Met à jour la carte si lat/lng présents
   if (latitudeInput && longitudeInput) {
