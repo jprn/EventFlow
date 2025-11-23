@@ -182,7 +182,7 @@ async function efLoadDashboard() {
 
   const { data, error } = await window.supabaseClient
     .from("events")
-    .select("id, titre, slug, date_evenement, heure_evenement, lieu")
+    .select("id, titre, slug, date_evenement, heure_evenement, lieu, registrations(count)")
     .eq("owner_id", user.id)
     .order("date_evenement", { ascending: true });
 
@@ -195,7 +195,16 @@ async function efLoadDashboard() {
     return;
   }
 
-  const events = data || [];
+  const rawEvents = data || [];
+
+  const events = rawEvents.map((ev) => {
+    let inscriptions_total = 0;
+    if (Array.isArray(ev.registrations) && ev.registrations[0]) {
+      const c = ev.registrations[0].count;
+      if (typeof c === "number") inscriptions_total = c;
+    }
+    return { ...ev, inscriptions_total };
+  });
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
