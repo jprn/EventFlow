@@ -38,9 +38,9 @@ async function efSetupThankYouPage() {
   }
 
   const canvas = document.getElementById("thankyou-qr");
-  if (canvas && window.QRCode) {
+  if (canvas && typeof QRCode !== "undefined") {
     try {
-      await window.QRCode.toCanvas(canvas, token, {
+      await QRCode.toCanvas(canvas, token, {
         width: 220,
         margin: 1,
       });
@@ -50,6 +50,12 @@ async function efSetupThankYouPage() {
         msgEl.textContent =
           "Impossible d'afficher le QR code. Conservez tout de même cet e-mail de confirmation.";
       }
+    }
+  } else {
+    console.warn("Bibliothèque QRCode non disponible ou canvas introuvable.");
+    if (msgEl) {
+      msgEl.textContent =
+        "Impossible de charger la bibliothèque de QR code. Votre inscription est toutefois bien enregistrée.";
     }
   }
 
