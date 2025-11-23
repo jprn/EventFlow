@@ -22,6 +22,17 @@
           </div>
         </header>
 
+        <section class="ef-event-summary">
+          <div class="ef-form-group">
+            <label>Adresse</label>
+            <p id="public-event-address" class="ef-text-muted"></p>
+          </div>
+          <div class="ef-form-group">
+            <label>Localisation</label>
+            <div id="public-event-map" class="ef-map"></div>
+          </div>
+        </section>
+
         <div id="public-event-description" class="ef-form-help"></div>
 
         <form id="public-event-form" class="ef-form" novalidate>
@@ -58,6 +69,17 @@
         <p>Propulsé par EventFlow Lite</p>
       </div>
     </footer>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="js/supabaseClient.js"></script>
     <script src="js/public-event.js"></script>

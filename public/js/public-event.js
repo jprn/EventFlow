@@ -29,7 +29,7 @@ async function efLoadPublicEvent() {
 
   const { data: event, error } = await window.supabaseClient
     .from("events")
-    .select("id, titre, date_evenement, heure_evenement, lieu")
+    .select("id, titre, date_evenement, heure_evenement, lieu, adresse, latitude, longitude")
     .eq("slug", slug)
     .eq("est_public", true)
     .maybeSingle();
@@ -45,6 +45,7 @@ async function efLoadPublicEvent() {
   const titleEl = document.getElementById("public-event-title");
   const metaEl = document.getElementById("public-event-meta");
   const descEl = document.getElementById("public-event-description");
+  const addressEl = document.getElementById("public-event-address");
 
   if (titleEl) titleEl.textContent = event.titre || "Inscription à l'événement";
 
@@ -69,7 +70,52 @@ async function efLoadPublicEvent() {
       "Vos informations seront utilisées uniquement pour gérer votre participation à cet événement.";
   }
 
+  if (addressEl) {
+    addressEl.textContent = event.adresse || "";
+  }
+
+  efInitPublicMap(event);
   await efLoadPublicFields(event.id);
+}
+
+let efPublicMap;
+
+function efInitPublicMap(event) {
+  const mapContainer = document.getElementById("public-event-map");
+  if (!mapContainer || !window.L) return;
+
+  const hasCoords =
+    typeof event.latitude === "number" && typeof event.longitude === "number";
+
+  if (!hasCoords) {
+    mapContainer.style.display = "none";
+    return;
+  }
+
+  const lat = event.latitude;
+  const lng = event.longitude;
+
+  if (!efPublicMap) {
+    efPublicMap = L.map(mapContainer, {
+      zoomControl: false,
+      attributionControl: true,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      boxZoom: false,
+      keyboard: false,
+      tap: false,
+    }).setView([lat, lng], 14);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(efPublicMap);
+  } else {
+    efPublicMap.setView([lat, lng], 14);
+  }
+
+  L.marker([lat, lng]).addTo(efPublicMap);
 }
 
 async function efLoadPublicFields(eventId) {
