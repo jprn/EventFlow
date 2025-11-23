@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inscription à l'événement – EventFlow Lite</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
+  <body>
+    <header class="ef-header ef-header-public">
+      <div class="ef-container ef-header-inner">
+        <span class="ef-logo">EventFlow Lite</span>
+      </div>
+    </header>
+
+    <main class="ef-main">
+      <section class="ef-container ef-card ef-page-narrow">
+        <h1>Inscription à l'événement</h1>
+        <p>
+          Remplissez le formulaire ci-dessous pour confirmer votre
+          participation.
+        </p>
+
+        <form class="ef-form" novalidate>
+          <div class="ef-form-group">
+            <label for="nom">Nom complet</label>
+            <input id="nom" type="text" placeholder="Votre nom" />
+          </div>
+
+          <div class="ef-form-group">
+            <label for="email">Adresse e-mail</label>
+            <input id="email" type="email" placeholder="vous@exemple.fr" />
+          </div>
+
+          <div class="ef-form-group">
+            <label for="telephone">Téléphone (optionnel)</label>
+            <input id="telephone" type="tel" placeholder="06..." />
+          </div>
+
+          <button type="submit" class="ef-btn ef-btn-primary">
+            Valider mon inscription
+          </button>
+        </form>
+      </section>
+    </main>
+
+    <footer class="ef-footer ef-footer-public">
+      <div class="ef-container">
+        <p>Propulsé par EventFlow Lite</p>
+      </div>
+    </footer>
+  </body>
+</html>

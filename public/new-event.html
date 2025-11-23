@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nouvel événement – EventFlow Lite</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
+  <body>
+    <header class="ef-header">
+      <div class="ef-container ef-header-inner">
+        <a href="dashboard.html" class="ef-logo">EventFlow Lite</a>
+        <nav class="ef-nav">
+          <a href="dashboard.html" class="ef-nav-link">Tableau de bord</a>
+          <button class="ef-nav-link ef-link-button" type="button">
+            Déconnexion
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="ef-main">
+      <section class="ef-container ef-card ef-page-narrow">
+        <h1>Créer un nouvel événement</h1>
+        <p>Renseignez les informations principales de votre événement.</p>
+
+        <form class="ef-form" novalidate>
+          <div class="ef-form-group">
+            <label for="titre">Titre de l'événement</label>
+            <input id="titre" type="text" placeholder="Gala de fin d'année" />
+          </div>
+
+          <div class="ef-form-group">
+            <label for="slug">Adresse publique (slug)</label>
+            <input id="slug" type="text" placeholder="gala-2025" />
+            <p class="ef-form-help">
+              Utilisé pour la page publique d'inscription.
+            </p>
+          </div>
+
+          <div class="ef-form-row">
+            <div class="ef-form-group">
+              <label for="date_evenement">Date de l'événement</label>
+              <input id="date_evenement" type="date" />
+            </div>
+            <div class="ef-form-group">
+              <label for="capacite">Capacité (optionnel)</label>
+              <input id="capacite" type="number" min="1" />
+            </div>
+          </div>
+
+          <div class="ef-form-group">
+            <label for="lieu">Lieu</label>
+            <input
+              id="lieu"
+              type="text"
+              placeholder="Salle des fêtes, Paris"
+            />
+          </div>
+
+          <div class="ef-form-group ef-form-checkbox">
+            <label>
+              <input id="est_public" type="checkbox" />
+              Rendre la page d'inscription publique
+            </label>
+          </div>
+
+          <div class="ef-form-actions">
+            <a href="dashboard.html" class="ef-btn ef-btn-secondary">
+              Annuler
+            </a>
+            <button type="submit" class="ef-btn ef-btn-primary">
+              Créer l'événement
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="ef-footer">
+      <div class="ef-container">
+        <p>EventFlow Lite · Espace organisateur</p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tableau de bord – EventFlow Lite</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
+  <body>
+    <header class="ef-header">
+      <div class="ef-container ef-header-inner">
+        <a href="dashboard.html" class="ef-logo">EventFlow Lite</a>
+        <nav class="ef-nav">
+          <a href="dashboard.html" class="ef-nav-link is-active">Mes événements</a>
+          <button class="ef-nav-link ef-link-button" type="button">
+            Déconnexion
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="ef-main">
+      <section class="ef-container">
+        <div class="ef-page-header">
+          <div>
+            <h1>Tableau de bord</h1>
+            <p>Gérez vos événements et suivez la participation.</p>
+          </div>
+          <div>
+            <a href="new-event.html" class="ef-btn ef-btn-primary">
+              Créer un nouvel événement
+            </a>
+          </div>
+        </div>
+
+        <section class="ef-grid ef-grid-3 ef-dashboard-stats">
+          <article class="ef-card ef-stat-card">
+            <h2>Événements actifs</h2>
+            <p class="ef-stat-value">0</p>
+          </article>
+          <article class="ef-card ef-stat-card">
+            <h2>Inscriptions totales</h2>
+            <p class="ef-stat-value">0</p>
+          </article>
+          <article class="ef-card ef-stat-card">
+            <h2>Taux de participation</h2>
+            <p class="ef-stat-value">0%</p>
+          </article>
+        </section>
+
+        <section class="ef-card ef-table-card">
+          <div class="ef-card-header">
+            <h2>Mes événements</h2>
+          </div>
+          <div class="ef-table-empty">
+            Aucun événement créé pour le moment.
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="ef-footer">
+      <div class="ef-container">
+        <p>EventFlow Lite · Espace organisateur</p>
+      </div>
+    </footer>
+  </body>
+</html>
