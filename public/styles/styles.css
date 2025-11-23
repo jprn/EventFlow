@@ -278,6 +278,14 @@ img {
   flex: 1;
 }
 
+#public_url {
+  flex: 1 1 auto;
+}
+
+#copy-public-url-button {
+  white-space: nowrap;
+}
+
 .ef-form-checkbox {
   flex-direction: row;
   align-items: center;
