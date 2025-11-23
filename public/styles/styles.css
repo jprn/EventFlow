@@ -333,12 +333,16 @@ img {
 }
 
 .ef-table th {
-  text-align: left;
+  text-align: center;
   font-weight: 500;
   color: var(--ef-color-text-muted);
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+}
+
+.ef-table th:first-child {
+  text-align: left;
 }
 
 .ef-table td:last-child {
