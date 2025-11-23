@@ -131,8 +131,10 @@ function efRenderEvents(containerId, events) {
     if (isPastContainer) {
       editBtn.disabled = true;
       copyBtn.disabled = true;
+      scannerBtn.disabled = true;
       editBtn.classList.add("ef-btn-disabled");
       copyBtn.classList.add("ef-btn-disabled");
+      scannerBtn.classList.add("ef-btn-disabled");
     }
 
     actionsWrapper.appendChild(editBtn);
