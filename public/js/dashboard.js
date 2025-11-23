@@ -101,10 +101,21 @@ function efRenderEvents(containerId, events) {
         "new-event.html?id=" + encodeURIComponent(event.id);
     });
 
+    const scannerBtn = document.createElement("button");
+    scannerBtn.type = "button";
+    scannerBtn.className = "ef-btn ef-btn-secondary";
+    scannerBtn.textContent = "📷";
+    scannerBtn.title = "Ouvrir le scanner QR";
+    scannerBtn.addEventListener("click", () => {
+      window.location.href = `event-scanner.html?id=${encodeURIComponent(
+        event.id
+      )}`;
+    });
+
     const deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
-    deleteBtn.className = "ef-btn ef-btn-secondary";
-    deleteBtn.textContent = "🗑️";
+    deleteBtn.className = "ef-btn ef-btn-danger";
+    deleteBtn.textContent = "🗑";
     deleteBtn.title = "Supprimer l'événement";
     deleteBtn.addEventListener("click", () => efDeleteEvent(event.id));
 
@@ -125,6 +136,7 @@ function efRenderEvents(containerId, events) {
     }
 
     actionsWrapper.appendChild(editBtn);
+    actionsWrapper.appendChild(scannerBtn);
     actionsWrapper.appendChild(deleteBtn);
     actionsWrapper.appendChild(copyBtn);
 
