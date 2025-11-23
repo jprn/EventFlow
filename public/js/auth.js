@@ -120,7 +120,7 @@ function efSetupAuthPage() {
   const form = document.querySelector(".ef-form");
   const magicButton = document.getElementById("magic-link-button");
 
-  if (form && document.body.classList.contains("ef-login-page")) {
+  if (form) {
     form.addEventListener("submit", efHandlePasswordLogin);
   }
 
