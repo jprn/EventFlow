@@ -47,9 +47,57 @@
               Ajoutez ou réorganisez les champs à demander aux participants lors
               de l'inscription.
             </p>
-            <div class="ef-table-empty">
-              Aucun champ personnalisé pour le moment.
-            </div>
+
+            <div id="fields-list" class="ef-fields-list"></div>
+
+            <form id="field-form" class="ef-form" novalidate>
+              <input id="field-id" type="hidden" />
+
+              <div class="ef-form-row">
+                <div class="ef-form-group">
+                  <label for="field-label">Libellé du champ</label>
+                  <input
+                    id="field-label"
+                    type="text"
+                    placeholder="Nom complet, Entreprise, ..."
+                  />
+                </div>
+                <div class="ef-form-group">
+                  <label for="field-type">Type de champ</label>
+                  <select id="field-type">
+                    <option value="short_text">Texte court</option>
+                    <option value="long_text">Texte long</option>
+                    <option value="email">E-mail</option>
+                    <option value="phone">Téléphone</option>
+                    <option value="select">Sélection</option>
+                    <option value="checkbox">Case à cocher</option>
+                  </select>
+                </div>
+                <div class="ef-form-group ef-form-checkbox">
+                  <label>
+                    <input id="field-required" type="checkbox" />
+                    Champ requis
+                  </label>
+                </div>
+              </div>
+
+              <div class="ef-form-group" id="field-options-group">
+                <label for="field-options">Options (une par ligne)</label>
+                <textarea
+                  id="field-options"
+                  rows="3"
+                  placeholder="Option 1&#10;Option 2&#10;Option 3"
+                ></textarea>
+              </div>
+
+              <div class="ef-form-actions">
+                <button type="submit" class="ef-btn ef-btn-primary">
+                  Enregistrer le champ
+                </button>
+              </div>
+
+              <div id="fields-message" class="ef-auth-message"></div>
+            </form>
           </article>
         </section>
       </section>
@@ -60,5 +108,8 @@
         <p>EventFlow Lite · Espace organisateur</p>
       </div>
     </footer>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabaseClient.js"></script>
+    <script src="js/fields.js"></script>
   </body>
 </html>
