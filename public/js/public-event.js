@@ -298,7 +298,8 @@ async function efHandlePublicSubmit(event) {
     return;
   }
 
-  window.location.href = "thank-you.html";
+  window.location.href =
+    "thank-you.html?token=" + encodeURIComponent(qrToken);
 }
 
 function efSetupPublicEventPage() {

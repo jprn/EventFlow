@@ -15,19 +15,17 @@
 
     <main class="ef-main">
       <section class="ef-container ef-card ef-page-narrow ef-text-center">
-        <h1>Merci pour votre inscription !</h1>
+        <h1>Merci, votre inscription est confirmée</h1>
         <p>
-          Votre inscription a bien été enregistrée. Vous recevrez un e-mail de
-          confirmation avec votre QR code.
+          Votre inscription a bien été enregistrée. Conservez ce QR code : il
+          sera scanné à l'entrée de l'événement.
         </p>
 
         <div class="ef-qr-placeholder">
-          QR code de votre billet (affiché ici plus tard).
+          <canvas id="thankyou-qr"></canvas>
         </div>
 
-        <p class="ef-form-help">
-          Conservez ce QR code : il sera scanné à l'entrée de l'événement.
-        </p>
+        <p id="thankyou-message" class="ef-form-help"></p>
       </section>
     </main>
 
@@ -36,5 +34,9 @@
         <p>Propulsé par EventFlow Lite</p>
       </div>
     </footer>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabaseClient.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="js/thank-you.js"></script>
   </body>
 </html>
