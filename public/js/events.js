@@ -96,7 +96,7 @@ async function efHandleCreateEvent(event) {
       .eq("id", existingEventId)
       .eq("owner_id", user.id)
       .select("id")
-      .single();
+      .maybeSingle();
     data = res.data;
     error = res.error;
   } else {
