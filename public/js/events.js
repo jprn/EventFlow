@@ -99,6 +99,14 @@ async function efHandleCreateEvent(event) {
       .maybeSingle();
     data = res.data;
     error = res.error;
+
+    // Si aucune ligne n'a été mise à jour, on considère que c'est une erreur
+    if (!error && !data) {
+      error = {
+        message:
+          "Aucune modification appliquée (événement introuvable ou non autorisé).",
+      };
+    }
   } else {
     const res = await window.supabaseClient
       .from("events")
