@@ -44,7 +44,37 @@
           <article class="ef-card ef-table-card">
             <div class="ef-card-header">
               <h2>Inscriptions</h2>
+              <div class="ef-badge-group">
+                <span id="ev-count-total" class="ef-badge">Total : 0</span>
+                <span id="ev-count-present" class="ef-badge">Présents : 0</span>
+                <span id="ev-count-absent" class="ef-badge">Non scannés : 0</span>
+              </div>
             </div>
+
+            <div class="ef-table-controls" style="margin-bottom: 0.75rem">
+              <button
+                type="button"
+                class="ef-btn ef-btn-secondary ev-filter-btn is-active"
+                data-ev-filter="all"
+              >
+                Tous
+              </button>
+              <button
+                type="button"
+                class="ef-btn ef-btn-secondary ev-filter-btn"
+                data-ev-filter="present"
+              >
+                Présents
+              </button>
+              <button
+                type="button"
+                class="ef-btn ef-btn-secondary ev-filter-btn"
+                data-ev-filter="absent"
+              >
+                Non scannés
+              </button>
+            </div>
+
             <div id="event-view-registrations" class="ef-table-wrapper">
               <div class="ef-table-empty">Aucune inscription pour le moment.</div>
             </div>

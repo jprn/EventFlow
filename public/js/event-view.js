@@ -1,3 +1,7 @@
+let efEventRegs = [];
+let efEventRegsFilter = "all";
+let efEventRegsChannel = null;
+
 function efGetEventIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
   return params.get("id");
@@ -66,6 +70,7 @@ async function efLoadEventView() {
   }
 
   await efLoadEventRegistrations(eventId);
+  efSetupEventViewFilters();
 }
 
 function efSetupEventViewPage() {
@@ -96,14 +101,83 @@ async function efLoadEventRegistrations(eventId) {
 
   const { data, error } = await window.supabaseClient
     .from("registrations")
-    .select("created_at, answers")
+    .select("id, created_at, answers, checked_in_at")
     .eq("event_id", eventId)
     .order("created_at", { ascending: true });
 
-  if (error || !data || data.length === 0) {
+  if (error) {
+    const empty = document.createElement("div");
+    empty.className = "ef-table-empty";
+    empty.textContent =
+      "Impossible de charger les inscriptions pour le moment.";
+    container.appendChild(empty);
+    return;
+  }
+
+  efEventRegs = data || [];
+  efRenderEventRegistrations();
+
+  // Abonnement temps réel aux inscriptions de cet événement
+  if (!efEventRegsChannel && window.supabaseClient) {
+    efEventRegsChannel = window.supabaseClient
+      .channel("event-registrations-" + eventId)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "registrations",
+          filter: `event_id=eq.${eventId}`,
+        },
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            efEventRegs.push(payload.new);
+          } else if (payload.eventType === "UPDATE") {
+            const idx = efEventRegs.findIndex((r) => r.id === payload.new.id);
+            if (idx !== -1) {
+              efEventRegs[idx] = payload.new;
+            }
+          } else if (payload.eventType === "DELETE") {
+            efEventRegs = efEventRegs.filter((r) => r.id !== payload.old.id);
+          }
+          efRenderEventRegistrations();
+        }
+      )
+      .subscribe();
+  }
+}
+
+function efRenderEventRegistrations() {
+  const container = document.getElementById("event-view-registrations");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  if (!efEventRegs || efEventRegs.length === 0) {
     const empty = document.createElement("div");
     empty.className = "ef-table-empty";
     empty.textContent = "Aucune inscription pour le moment.";
+    container.appendChild(empty);
+    efUpdateEventCounts();
+    return;
+  }
+
+  const filtered = efEventRegs.filter((reg) => {
+    if (efEventRegsFilter === "present") {
+      return !!reg.checked_in_at;
+    }
+    if (efEventRegsFilter === "absent") {
+      return !reg.checked_in_at;
+    }
+    return true;
+  });
+
+  efUpdateEventCounts();
+
+  if (filtered.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "ef-table-empty";
+    empty.textContent = "Aucune inscription pour ce filtre.";
     container.appendChild(empty);
     return;
   }
@@ -113,9 +187,12 @@ async function efLoadEventRegistrations(eventId) {
 
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
-  ["Date", "Détails"].forEach((label) => {
+  ["Date", "Détails", "Présence"].forEach((label, index) => {
     const th = document.createElement("th");
     th.textContent = label;
+    if (index === 2) {
+      th.style.textAlign = "center";
+    }
     headerRow.appendChild(th);
   });
   thead.appendChild(headerRow);
@@ -123,7 +200,7 @@ async function efLoadEventRegistrations(eventId) {
 
   const tbody = document.createElement("tbody");
 
-  data.forEach((reg) => {
+  filtered.forEach((reg) => {
     const tr = document.createElement("tr");
 
     const tdDate = document.createElement("td");
@@ -149,13 +226,49 @@ async function efLoadEventRegistrations(eventId) {
     });
     tdDetails.textContent = parts.join(" · ");
 
+    const tdPresence = document.createElement("td");
+    tdPresence.style.textAlign = "center";
+    tdPresence.textContent = reg.checked_in_at ? "Présent" : "Non scanné";
+
     tr.appendChild(tdDate);
     tr.appendChild(tdDetails);
+    tr.appendChild(tdPresence);
     tbody.appendChild(tr);
   });
 
   table.appendChild(tbody);
   container.appendChild(table);
+}
+
+function efUpdateEventCounts() {
+  const total = efEventRegs.length;
+  const present = efEventRegs.filter((r) => !!r.checked_in_at).length;
+  const absent = total - present;
+
+  const totalEl = document.getElementById("ev-count-total");
+  const presentEl = document.getElementById("ev-count-present");
+  const absentEl = document.getElementById("ev-count-absent");
+
+  if (totalEl) totalEl.textContent = `Total : ${total}`;
+  if (presentEl) presentEl.textContent = `Présents : ${present}`;
+  if (absentEl) absentEl.textContent = `Non scannés : ${absent}`;
+}
+
+function efSetupEventViewFilters() {
+  const buttons = document.querySelectorAll(".ev-filter-btn");
+  if (!buttons.length) return;
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const value = btn.getAttribute("data-ev-filter") || "all";
+      efEventRegsFilter = value;
+
+      buttons.forEach((b) => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+
+      efRenderEventRegistrations();
+    });
+  });
 }
 
 document.addEventListener("DOMContentLoaded", efSetupEventViewPage);
