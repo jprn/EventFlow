@@ -52,6 +52,29 @@
             </p>
           </div>
 
+          <div class="ef-form-group">
+            <label for="public_url">Adresse publique complète</label>
+            <div class="ef-form-row">
+              <input
+                id="public_url"
+                type="text"
+                readonly
+                placeholder="https://mon-site.netlify.app/mon-evenement"
+              />
+              <button
+                type="button"
+                id="copy-public-url-button"
+                class="ef-btn ef-btn-secondary"
+              >
+                Copier
+              </button>
+            </div>
+            <p class="ef-form-help">
+              Cette URL est générée à partir du slug et peut être partagée aux
+              participants.
+            </p>
+          </div>
+
           <div class="ef-form-row">
             <div class="ef-form-group">
               <label for="date_evenement">Date de l'événement</label>

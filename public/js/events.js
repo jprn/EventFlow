@@ -116,15 +116,27 @@ function efSetupNewEventForm() {
 
   const titreInput = document.getElementById("titre");
   const slugInput = document.getElementById("slug");
+  const publicUrlInput = document.getElementById("public_url");
   if (titreInput && slugInput) {
     let slugEditable = false;
 
     const editButton = document.getElementById("edit-slug-button");
     if (editButton) {
       editButton.addEventListener("click", () => {
-        slugEditable = true;
-        slugInput.removeAttribute("readonly");
-        slugInput.focus();
+        // Si on est actuellement en mode lecture seule -> passer en édition
+        if (!slugEditable) {
+          slugEditable = true;
+          slugInput.removeAttribute("readonly");
+          editButton.textContent = "Valider le slug";
+          slugInput.focus();
+        } else {
+          // Validation : on fige la valeur et on repasse en readonly,
+          // sans réactiver l'auto-sync depuis le titre
+          slugEditable = true; // reste vrai pour empêcher toute auto-mise à jour
+          slugInput.setAttribute("readonly", "readonly");
+          editButton.textContent = "Modifier le slug";
+        }
+        efUpdatePublicUrl(slugInput, publicUrlInput);
       });
     }
 
@@ -137,10 +149,42 @@ function efSetupNewEventForm() {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
       slugInput.value = value;
+      efUpdatePublicUrl(slugInput, publicUrlInput);
+    });
+  }
+
+  const copyButton = document.getElementById("copy-public-url-button");
+  if (copyButton && publicUrlInput) {
+    copyButton.addEventListener("click", async () => {
+      const url = publicUrlInput.value.trim();
+      if (!url) return;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(url);
+        }
+        efShowEventMessage("success", "Adresse copiée dans le presse-papiers.");
+      } catch (_) {
+        efShowEventMessage(
+          "error",
+          "Impossible de copier l'adresse. Copiez-la manuellement."
+        );
+      }
     });
   }
 
   efInitMap();
+}
+
+function efUpdatePublicUrl(slugInput, publicUrlInput) {
+  if (!slugInput || !publicUrlInput) return;
+  const slug = slugInput.value.trim();
+  if (!slug) {
+    publicUrlInput.value = "";
+    return;
+  }
+  const base = window.location.origin;
+  // Adresse publique basée sur le slug, ex: https://site/mon-evenement
+  publicUrlInput.value = base.replace(/\/$/, "") + "/" + slug;
 }
 
 function efInitMap() {
