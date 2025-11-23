@@ -106,17 +106,33 @@ async function efHandleMagicLink(event) {
   );
 }
 
+async function efHandleLogout() {
+  if (!window.supabaseClient) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  await window.supabaseClient.auth.signOut();
+  window.location.href = "login.html";
+}
+
 function efSetupAuthPage() {
   const form = document.querySelector(".ef-form");
   const magicButton = document.getElementById("magic-link-button");
 
-  if (form) {
+  if (form && document.body.classList.contains("ef-login-page")) {
     form.addEventListener("submit", efHandlePasswordLogin);
   }
 
   if (magicButton) {
     magicButton.addEventListener("click", efHandleMagicLink);
   }
+
+  // Bouton Déconnexion (header espace organisateur)
+  const logoutButtons = document.querySelectorAll(".ef-nav .ef-link-button");
+  logoutButtons.forEach((btn) => {
+    btn.addEventListener("click", efHandleLogout);
+  });
 }
 
 document.addEventListener("DOMContentLoaded", efSetupAuthPage);
