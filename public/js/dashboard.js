@@ -86,7 +86,6 @@ function efRenderEvents(containerId, events) {
     }
 
     const tdActions = document.createElement("td");
-    tdActions.style.textAlign = "right";
 
     const actionsWrapper = document.createElement("div");
     actionsWrapper.style.display = "inline-flex";

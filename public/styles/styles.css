@@ -359,9 +359,16 @@ img {
 
 .ef-table td:nth-child(2),
 .ef-table th:nth-child(2),
+.ef-table td:nth-child(3),
+.ef-table th:nth-child(3),
 .ef-table td:nth-child(4),
 .ef-table th:nth-child(4) {
   text-align: center;
+}
+
+.ef-table .ef-btn {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.8rem;
 }
 
 .ef-page-two-columns {
