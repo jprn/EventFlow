@@ -258,22 +258,6 @@ async function efHandlePublicSubmit(event) {
 
   const eventId = ev.id;
 
-  const nomInput = document.getElementById("nom");
-  const emailInput = document.getElementById("email");
-  const telInput = document.getElementById("telephone");
-
-  const nom = nomInput ? nomInput.value.trim() : "";
-  const email = emailInput ? emailInput.value.trim() : "";
-  const telephone = telInput ? telInput.value.trim() : "";
-
-  if (!nom || !email) {
-    efShowPublicMessage(
-      "error",
-      "Merci de renseigner au minimum votre nom et votre adresse e-mail."
-    );
-    return;
-  }
-
   const dynamicContainer = document.getElementById(
     "public-event-dynamic-fields"
   );
@@ -301,9 +285,6 @@ async function efHandlePublicSubmit(event) {
     .from("registrations")
     .insert({
       event_id: eventId,
-      nom,
-      email,
-      telephone,
       answers,
       qr_token: qrToken,
     });
