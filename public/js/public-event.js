@@ -1,6 +1,18 @@
 function efGetSlugFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("slug");
+  let slug = params.get("slug");
+
+  // Si aucun paramètre slug n'est présent, on tente de le déduire depuis le chemin
+  if (!slug) {
+    const path = window.location.pathname.replace(/\/+$/, "");
+    const segments = path.split("/");
+    const last = segments[segments.length - 1];
+    if (last && last !== "public-event.html") {
+      slug = last;
+    }
+  }
+
+  return slug;
 }
 
 function efShowPublicMessage(type, text) {
