@@ -83,7 +83,7 @@ async function efLoadEventInfoFromToken(token, summaryEl) {
     const { data, error } = await window.supabaseClient
       .from("registrations")
       .select(
-        "event:events(titre, date_evenement, heure_evenement, lieu, adresse, latitude, longitude)"
+        "answers, event:events(titre, date_evenement, heure_evenement, lieu, adresse, latitude, longitude)"
       )
       .eq("qr_token", token)
       .maybeSingle();
@@ -93,7 +93,7 @@ async function efLoadEventInfoFromToken(token, summaryEl) {
       return null;
     }
 
-    const ev = data.event;
+    const ev = { ...data.event, answers: data.answers };
 
     if (summaryEl) {
       let html = "";
@@ -171,6 +171,19 @@ async function efDownloadTicketPdf(ev, token) {
     y += 10;
   }
 
+  // Infos du participant (on n'affiche que les valeurs)
+  if (ev.answers && typeof ev.answers === "object") {
+    const values = Object.values(ev.answers).filter(
+      (v) => v !== null && v !== undefined && v !== ""
+    );
+    if (values.length) {
+      doc.text("Participant :", 20, y);
+      y += 6;
+      doc.text(doc.splitTextToSize(values.join(" · "), 170), 20, y);
+      y += 10;
+    }
+  }
+
   if (typeof ev.latitude === "number" && typeof ev.longitude === "number") {
     doc.text(
       `Coordonnées : ${ev.latitude.toFixed(5)}, ${ev.longitude.toFixed(5)}`,
@@ -210,7 +223,7 @@ async function efDownloadTicketPdf(ev, token) {
       const ctx = mapCanvas.getContext("2d");
       ctx.drawImage(img, 0, 0);
       const mapData = mapCanvas.toDataURL("image/png");
-      // Positionne la carte sous le texte principal
+      // Positionne la carte sous le texte principal (en dessous des infos participant)
       doc.addImage(mapData, "PNG", 20, y, 120, 75);
     } catch (e) {
       console.warn("Impossible de charger la carte statique pour le PDF", e);
