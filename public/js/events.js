@@ -42,7 +42,6 @@ async function efHandleCreateEvent(event) {
   const adresseInput = document.getElementById("adresse");
   const latitudeInput = document.getElementById("latitude");
   const longitudeInput = document.getElementById("longitude");
-  const estPublicInput = document.getElementById("est_public");
 
   const titre = titreInput ? titreInput.value.trim() : "";
   const slug = slugInput ? slugInput.value.trim() : "";
@@ -53,7 +52,6 @@ async function efHandleCreateEvent(event) {
   const adresse = adresseInput ? adresseInput.value.trim() : "";
   const latitudeValue = latitudeInput ? latitudeInput.value : "";
   const longitudeValue = longitudeInput ? longitudeInput.value : "";
-  const est_public = !!(estPublicInput && estPublicInput.checked);
 
   if (!titre || !slug) {
     efShowEventMessage(
@@ -66,6 +64,7 @@ async function efHandleCreateEvent(event) {
   const capacite = capaciteValue ? Number(capaciteValue) : null;
   const latitude = latitudeValue ? Number(latitudeValue) : null;
   const longitude = longitudeValue ? Number(longitudeValue) : null;
+  const est_public = true;
 
   efShowEventMessage("", "");
 

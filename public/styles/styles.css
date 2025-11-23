@@ -144,6 +144,11 @@ img {
   margin: 0 auto;
 }
 
+.ef-page-wide {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
 .ef-text-center {
   text-align: center;
 }
@@ -245,6 +250,11 @@ img {
   border-radius: 0.6rem;
   border: 1px solid var(--ef-color-border);
   font-size: 0.95rem;
+}
+
+#adresse {
+  background-color: #f3f4f6;
+  color: var(--ef-color-text-muted);
 }
 
 .ef-form-group input:focus {
