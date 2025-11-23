@@ -45,13 +45,7 @@ function efRenderEvents(containerId, events) {
 
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
-  const headers = [
-    "Titre",
-    "Date",
-    "Lieu",
-    "Inscriptions",
-    "Actions",
-  ];
+  const headers = ["Titre", "Date", "Lieu", "Inscriptions", "Actions"];
 
   headers.forEach((label) => {
     const th = document.createElement("th");
@@ -87,11 +81,26 @@ function efRenderEvents(containerId, events) {
     }
 
     const tdActions = document.createElement("td");
-    const editLink = document.createElement("a");
-    editLink.href = "new-event.html?id=" + encodeURIComponent(event.id);
-    editLink.className = "ef-btn ef-btn-secondary";
-    editLink.textContent = "✏️";
-    tdActions.appendChild(editLink);
+
+    const editBtn = document.createElement("button");
+    editBtn.type = "button";
+    editBtn.className = "ef-btn ef-btn-secondary";
+    editBtn.textContent = "✏️";
+    editBtn.title = "Modifier l'événement";
+    editBtn.addEventListener("click", () => {
+      window.location.href =
+        "new-event.html?id=" + encodeURIComponent(event.id);
+    });
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "ef-btn ef-btn-secondary";
+    deleteBtn.textContent = "🗑️";
+    deleteBtn.title = "Supprimer l'événement";
+    deleteBtn.addEventListener("click", () => efDeleteEvent(event.id));
+
+    tdActions.appendChild(editBtn);
+    tdActions.appendChild(deleteBtn);
 
     tr.appendChild(tdTitle);
     tr.appendChild(tdDate);
@@ -104,6 +113,29 @@ function efRenderEvents(containerId, events) {
 
   table.appendChild(tbody);
   container.appendChild(table);
+}
+
+async function efDeleteEvent(eventId) {
+  if (!window.supabaseClient) return;
+
+  const ok = window.confirm(
+    "Voulez-vous vraiment supprimer cet événement ? Cette action est définitive."
+  );
+  if (!ok) return;
+
+  const { error } = await window.supabaseClient
+    .from("events")
+    .delete()
+    .eq("id", eventId);
+
+  if (error) {
+    window.alert(
+      "Impossible de supprimer l'événement : " + (error.message || "erreur inconnue.")
+    );
+    return;
+  }
+
+  await efLoadDashboard();
 }
 
 async function efLoadDashboard() {

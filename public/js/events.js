@@ -90,21 +90,22 @@ async function efHandleCreateEvent(event) {
 
   let data, error;
   if (existingEventId) {
-    const res = await window.supabaseClient
+    const { data: updData, error: updError } = await window.supabaseClient
       .from("events")
       .update(payload)
       .eq("id", existingEventId)
-      .select("id")
-      .maybeSingle();
-    data = res.data;
-    error = res.error;
+      .select("id");
 
-    // Si aucune ligne n'a été mise à jour, on considère que c'est une erreur
-    if (!error && !data) {
+    // updData est un tableau de lignes ; si vide, aucune ligne modifiée
+    if (!updError && Array.isArray(updData) && updData.length === 0) {
       error = {
         message:
           "Aucune modification appliquée (événement introuvable ou non autorisé).",
       };
+      data = null;
+    } else {
+      error = updError;
+      data = updData && updData[0] ? updData[0] : { id: existingEventId };
     }
   } else {
     const res = await window.supabaseClient
