@@ -115,6 +115,15 @@ function efRenderEvents(containerId, events) {
     copyBtn.title = "Copier l'URL publique";
     copyBtn.addEventListener("click", () => efCopyPublicUrl(event.slug));
 
+    // Pour les événements passés, on désactive Modifier et Copier l'URL
+    const isPastContainer = containerId === "dashboard-events-past";
+    if (isPastContainer) {
+      editBtn.disabled = true;
+      copyBtn.disabled = true;
+      editBtn.classList.add("ef-btn-disabled");
+      copyBtn.classList.add("ef-btn-disabled");
+    }
+
     actionsWrapper.appendChild(editBtn);
     actionsWrapper.appendChild(deleteBtn);
     actionsWrapper.appendChild(copyBtn);
@@ -229,8 +238,13 @@ async function efLoadDashboard() {
   efRenderEvents("dashboard-events-future", futureEvents);
   efRenderEvents("dashboard-events-past", pastEvents);
 
+  const totalFutureRegistrations = futureEvents.reduce((sum, ev) => {
+    const n = typeof ev.inscriptions_total === "number" ? ev.inscriptions_total : 0;
+    return sum + n;
+  }, 0);
+
   if (statsEls[0]) statsEls[0].textContent = String(events.length);
-  if (statsEls[1]) statsEls[1].textContent = "0";
+  if (statsEls[1]) statsEls[1].textContent = String(totalFutureRegistrations);
   if (statsEls[2]) statsEls[2].textContent = "0%";
 }
 

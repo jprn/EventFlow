@@ -376,6 +376,11 @@ img {
   font-size: 0.8rem;
 }
 
+.ef-btn-disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
 .ef-page-two-columns {
   display: grid;
   grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
