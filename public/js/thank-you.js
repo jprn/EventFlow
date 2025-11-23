@@ -126,7 +126,17 @@ async function efLoadEventInfoFromToken(token, summaryEl) {
   }
 }
 
-function efDownloadTicketPdf(ev, token) {
+function efLoadImage(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+async function efDownloadTicketPdf(ev, token) {
   if (!window.jspdf || !window.jspdf.jsPDF) return;
 
   const { jsPDF } = window.jspdf;
@@ -170,10 +180,42 @@ function efDownloadTicketPdf(ev, token) {
     y += 10;
   }
 
-  doc.text("QR token :", 20, y);
-  y += 6;
-  doc.setFontSize(9);
-  doc.text(doc.splitTextToSize(token, 170), 20, y);
+  // Intègre le QR code depuis le canvas si disponible
+  const canvas = document.getElementById("thankyou-qr");
+  if (canvas) {
+    try {
+      const imgData = canvas.toDataURL("image/png");
+      // Positionne le QR code à droite du texte
+      doc.addImage(imgData, "PNG", 140, 30, 50, 50);
+    } catch (e) {
+      console.warn("Impossible d'intégrer le QR code dans le PDF", e);
+    }
+  }
+
+  // Ajoute une image de carte statique centrée sur les coordonnées GPS
+  if (typeof ev.latitude === "number" && typeof ev.longitude === "number") {
+    const lat = ev.latitude;
+    const lng = ev.longitude;
+    const staticMapUrl =
+      "https://staticmap.openstreetmap.de/staticmap.php?center=" +
+      encodeURIComponent(lat + "," + lng) +
+      "&zoom=14&size=400x250&markers=" +
+      encodeURIComponent(lat + "," + lng + ",red-pushpin");
+
+    try {
+      const img = await efLoadImage(staticMapUrl);
+      const mapCanvas = document.createElement("canvas");
+      mapCanvas.width = img.width;
+      mapCanvas.height = img.height;
+      const ctx = mapCanvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      const mapData = mapCanvas.toDataURL("image/png");
+      // Positionne la carte sous le texte principal
+      doc.addImage(mapData, "PNG", 20, y, 120, 75);
+    } catch (e) {
+      console.warn("Impossible de charger la carte statique pour le PDF", e);
+    }
+  }
 
   doc.save("billet-evenement.pdf");
 }
