@@ -185,8 +185,26 @@ async function efDownloadTicketPdf(ev, token) {
   }
 
   if (typeof ev.latitude === "number" && typeof ev.longitude === "number") {
+    const lat = ev.latitude;
+    const lng = ev.longitude;
     doc.text(
-      `Coordonnées : ${ev.latitude.toFixed(5)}, ${ev.longitude.toFixed(5)}`,
+      `Coordonnées : ${lat.toFixed(5)}, ${lng.toFixed(5)}`,
+      20,
+      y
+    );
+    y += 6;
+
+    const mapUrl =
+      "https://www.openstreetmap.org/?mlat=" +
+      lat.toFixed(5) +
+      "&mlon=" +
+      lng.toFixed(5) +
+      "#map=16/" +
+      lat.toFixed(5) +
+      "/" +
+      lng.toFixed(5);
+    doc.text(
+      doc.splitTextToSize("Carte : " + mapUrl, 170),
       20,
       y
     );
@@ -202,31 +220,6 @@ async function efDownloadTicketPdf(ev, token) {
       doc.addImage(imgData, "PNG", 140, 30, 50, 50);
     } catch (e) {
       console.warn("Impossible d'intégrer le QR code dans le PDF", e);
-    }
-  }
-
-  // Ajoute une image de carte statique centrée sur les coordonnées GPS
-  if (typeof ev.latitude === "number" && typeof ev.longitude === "number") {
-    const lat = ev.latitude;
-    const lng = ev.longitude;
-    const staticMapUrl =
-      "https://staticmap.openstreetmap.de/staticmap.php?center=" +
-      encodeURIComponent(lat + "," + lng) +
-      "&zoom=14&size=400x250&markers=" +
-      encodeURIComponent(lat + "," + lng + ",red-pushpin");
-
-    try {
-      const img = await efLoadImage(staticMapUrl);
-      const mapCanvas = document.createElement("canvas");
-      mapCanvas.width = img.width;
-      mapCanvas.height = img.height;
-      const ctx = mapCanvas.getContext("2d");
-      ctx.drawImage(img, 0, 0);
-      const mapData = mapCanvas.toDataURL("image/png");
-      // Positionne la carte sous le texte principal (en dessous des infos participant)
-      doc.addImage(mapData, "PNG", 20, y, 120, 75);
-    } catch (e) {
-      console.warn("Impossible de charger la carte statique pour le PDF", e);
     }
   }
 
