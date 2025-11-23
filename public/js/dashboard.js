@@ -182,7 +182,7 @@ async function efLoadDashboard() {
 
   const { data, error } = await window.supabaseClient
     .from("events")
-    .select("id, titre, date_evenement, heure_evenement, lieu")
+    .select("id, titre, slug, date_evenement, heure_evenement, lieu")
     .eq("owner_id", user.id)
     .order("date_evenement", { ascending: true });
 
