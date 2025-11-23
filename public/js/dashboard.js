@@ -14,25 +14,29 @@ async function efRequireAuth() {
   return data.user;
 }
 
-function efRenderEmptyEvents() {
-  const container = document.getElementById("dashboard-events-container");
+function efRenderEmptyEvents(containerId, message) {
+  const container = document.getElementById(containerId);
   if (!container) return;
   container.innerHTML = "";
 
   const empty = document.createElement("div");
   empty.className = "ef-table-empty";
-  empty.textContent = "Aucun événement créé pour le moment.";
+  empty.textContent = message;
   container.appendChild(empty);
 }
 
-function efRenderEvents(events) {
-  const container = document.getElementById("dashboard-events-container");
+function efRenderEvents(containerId, events) {
+  const container = document.getElementById(containerId);
   if (!container) return;
 
   container.innerHTML = "";
 
   if (!events || events.length === 0) {
-    efRenderEmptyEvents();
+    const msg =
+      containerId === "dashboard-events-future"
+        ? "Aucun événement à venir."
+        : "Aucun événement passé.";
+    efRenderEmptyEvents(containerId, msg);
     return;
   }
 
@@ -103,10 +107,11 @@ async function efLoadDashboard() {
     .from("events")
     .select("id, titre, date_evenement, lieu")
     .eq("owner_id", user.id)
-    .order("created_at", { ascending: false });
+    .order("date_evenement", { ascending: true });
 
   if (error) {
-    efRenderEmptyEvents();
+    efRenderEmptyEvents("dashboard-events-future", "Aucun événement à venir.");
+    efRenderEmptyEvents("dashboard-events-past", "Aucun événement passé.");
     if (statsEls[0]) statsEls[0].textContent = "0";
     if (statsEls[1]) statsEls[1].textContent = "0";
     if (statsEls[2]) statsEls[2].textContent = "0%";
@@ -115,7 +120,28 @@ async function efLoadDashboard() {
 
   const events = data || [];
 
-  efRenderEvents(events);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const futureEvents = [];
+  const pastEvents = [];
+
+  for (const ev of events) {
+    if (!ev.date_evenement) {
+      futureEvents.push(ev);
+      continue;
+    }
+    const d = new Date(ev.date_evenement);
+    d.setHours(0, 0, 0, 0);
+    if (d >= today) {
+      futureEvents.push(ev);
+    } else {
+      pastEvents.push(ev);
+    }
+  }
+
+  efRenderEvents("dashboard-events-future", futureEvents);
+  efRenderEvents("dashboard-events-past", pastEvents);
 
   if (statsEls[0]) statsEls[0].textContent = String(events.length);
   if (statsEls[1]) statsEls[1].textContent = "0";
