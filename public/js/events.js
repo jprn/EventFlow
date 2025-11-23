@@ -117,16 +117,26 @@ function efSetupNewEventForm() {
   const titreInput = document.getElementById("titre");
   const slugInput = document.getElementById("slug");
   if (titreInput && slugInput) {
+    let slugEditable = false;
+
+    const editButton = document.getElementById("edit-slug-button");
+    if (editButton) {
+      editButton.addEventListener("click", () => {
+        slugEditable = true;
+        slugInput.removeAttribute("readonly");
+        slugInput.focus();
+      });
+    }
+
     titreInput.addEventListener("input", () => {
-      if (!slugInput.value) {
-        const value = titreInput.value
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-+|-+$/g, "");
-        slugInput.value = value;
-      }
+      if (slugEditable) return;
+      const value = titreInput.value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      slugInput.value = value;
     });
   }
 

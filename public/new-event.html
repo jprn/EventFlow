@@ -32,7 +32,21 @@
 
           <div class="ef-form-group">
             <label for="slug">Adresse publique (slug)</label>
-            <input id="slug" type="text" placeholder="gala-2025" />
+            <div class="ef-form-row">
+              <input
+                id="slug"
+                type="text"
+                placeholder="gala-2025"
+                readonly
+              />
+              <button
+                type="button"
+                id="edit-slug-button"
+                class="ef-btn ef-btn-secondary"
+              >
+                Modifier le slug
+              </button>
+            </div>
             <p class="ef-form-help">
               Utilisé pour la page publique d'inscription.
             </p>
