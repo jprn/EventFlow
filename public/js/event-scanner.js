@@ -92,5 +92,30 @@ function efSetupScanner() {
   );
 }
 
-document.addEventListener("DOMContentLoaded", efSetupScanner);
+function efGetScannerEventIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
+}
+
+function efUpdateScannerSidebarLinks() {
+  const eventId = efGetScannerEventIdFromUrl();
+  if (!eventId) return;
+
+  const links = document.querySelectorAll(".ef-sidebar-nav a");
+  links.forEach((link) => {
+    const href = link.getAttribute("href");
+    if (!href) return;
+
+    const url = new URL(href, window.location.href);
+    url.searchParams.set("id", eventId);
+    link.setAttribute("href", url.pathname + url.search);
+  });
+}
+
+function efSetupScannerPage() {
+  efUpdateScannerSidebarLinks();
+  efSetupScanner();
+}
+
+document.addEventListener("DOMContentLoaded", efSetupScannerPage);
 
