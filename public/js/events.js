@@ -14,6 +14,11 @@ async function efRequireAuthForEvents() {
   return data.user;
 }
 
+function efGetEventIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
+}
+
 function efShowEventMessage(type, text) {
   const box = document.getElementById("event-message");
   if (!box) return;
@@ -32,6 +37,8 @@ async function efHandleCreateEvent(event) {
 
   const user = await efRequireAuthForEvents();
   if (!user) return;
+
+  const existingEventId = efGetEventIdFromUrl();
 
   const titreInput = document.getElementById("titre");
   const slugInput = document.getElementById("slug");
@@ -68,23 +75,39 @@ async function efHandleCreateEvent(event) {
 
   efShowEventMessage("", "");
 
-  const { data, error } = await window.supabaseClient
-    .from("events")
-    .insert({
-      owner_id: user.id,
-      titre,
-      slug,
-      date_evenement,
-      heure_evenement,
-      lieu,
-      adresse,
-      capacite,
-      est_public,
-      latitude,
-      longitude,
-    })
-    .select("id")
-    .single();
+  const payload = {
+    titre,
+    slug,
+    date_evenement,
+    heure_evenement,
+    lieu,
+    adresse,
+    capacite,
+    est_public,
+    latitude,
+    longitude,
+  };
+
+  let data, error;
+  if (existingEventId) {
+    const res = await window.supabaseClient
+      .from("events")
+      .update(payload)
+      .eq("id", existingEventId)
+      .eq("owner_id", user.id)
+      .select("id")
+      .single();
+    data = res.data;
+    error = res.error;
+  } else {
+    const res = await window.supabaseClient
+      .from("events")
+      .insert({ owner_id: user.id, ...payload })
+      .select("id")
+      .single();
+    data = res.data;
+    error = res.error;
+  }
 
   if (error) {
     efShowEventMessage(
@@ -97,7 +120,9 @@ async function efHandleCreateEvent(event) {
 
   efShowEventMessage(
     "success",
-    "Événement créé avec succès. Redirection en cours..."
+    existingEventId
+      ? "Événement mis à jour. Redirection en cours..."
+      : "Événement créé avec succès. Redirection en cours..."
   );
 
   const eventId = data && data.id;
@@ -110,8 +135,15 @@ async function efHandleCreateEvent(event) {
 
 function efSetupNewEventForm() {
   const form = document.querySelector(".ef-form");
-  if (!form) return;
-  form.addEventListener("submit", efHandleCreateEvent);
+  if (form) {
+    // Empêche toute soumission implicite (touche Entrée)
+    form.addEventListener("submit", (e) => e.preventDefault());
+  }
+
+  const createButton = document.getElementById("create-event-button");
+  if (createButton) {
+    createButton.addEventListener("click", efHandleCreateEvent);
+  }
 
   const titreInput = document.getElementById("titre");
   const slugInput = document.getElementById("slug");
@@ -172,6 +204,59 @@ function efSetupNewEventForm() {
   }
 
   efInitMap();
+  efLoadEventIfEditing();
+}
+
+async function efLoadEventIfEditing() {
+  const eventId = efGetEventIdFromUrl();
+  if (!eventId || !window.supabaseClient) return;
+
+  const { data, error } = await window.supabaseClient
+    .from("events")
+    .select(
+      "titre, slug, date_evenement, heure_evenement, lieu, adresse, capacite, latitude, longitude"
+    )
+    .eq("id", eventId)
+    .single();
+
+  if (error || !data) return;
+
+  const titreInput = document.getElementById("titre");
+  const slugInput = document.getElementById("slug");
+  const dateInput = document.getElementById("date_evenement");
+  const heureInput = document.getElementById("heure_evenement");
+  const capaciteInput = document.getElementById("capacite");
+  const lieuInput = document.getElementById("lieu");
+  const adresseInput = document.getElementById("adresse");
+  const latitudeInput = document.getElementById("latitude");
+  const longitudeInput = document.getElementById("longitude");
+  const publicUrlInput = document.getElementById("public_url");
+
+  if (titreInput) titreInput.value = data.titre || "";
+  if (slugInput) slugInput.value = data.slug || "";
+  if (dateInput && data.date_evenement)
+    dateInput.value = data.date_evenement;
+  if (heureInput && data.heure_evenement)
+    heureInput.value = data.heure_evenement;
+  if (capaciteInput && data.capacite)
+    capaciteInput.value = String(data.capacite);
+  if (lieuInput) lieuInput.value = data.lieu || "";
+  if (adresseInput) adresseInput.value = data.adresse || "";
+  if (latitudeInput && data.latitude != null)
+    latitudeInput.value = String(data.latitude);
+  if (longitudeInput && data.longitude != null)
+    longitudeInput.value = String(data.longitude);
+
+  if (slugInput && publicUrlInput) {
+    efUpdatePublicUrl(slugInput, publicUrlInput);
+  }
+
+  // Met à jour la carte si lat/lng présents
+  if (latitudeInput && longitudeInput) {
+    const event = new Event("change");
+    latitudeInput.dispatchEvent(event);
+    longitudeInput.dispatchEvent(event);
+  }
 }
 
 function efUpdatePublicUrl(slugInput, publicUrlInput) {

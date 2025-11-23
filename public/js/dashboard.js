@@ -50,6 +50,7 @@ function efRenderEvents(containerId, events) {
     "Date",
     "Lieu",
     "Inscriptions",
+    "Actions",
   ];
 
   headers.forEach((label) => {
@@ -85,10 +86,18 @@ function efRenderEvents(containerId, events) {
       tdCount.textContent = "-";
     }
 
+    const tdActions = document.createElement("td");
+    const editLink = document.createElement("a");
+    editLink.href = "new-event.html?id=" + encodeURIComponent(event.id);
+    editLink.className = "ef-btn ef-btn-secondary";
+    editLink.textContent = "✏️";
+    tdActions.appendChild(editLink);
+
     tr.appendChild(tdTitle);
     tr.appendChild(tdDate);
     tr.appendChild(tdLieu);
     tr.appendChild(tdCount);
+    tr.appendChild(tdActions);
 
     tbody.appendChild(tr);
   });

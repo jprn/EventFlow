@@ -21,8 +21,8 @@
 
     <main class="ef-main">
       <section class="ef-container ef-card ef-page-wide">
-        <h1>Créer un nouvel événement</h1>
-        <p>Renseignez les informations principales de votre événement.</p>
+        <h1>Créer ou modifier un événement</h1>
+        <p>Renseignez ou mettez à jour les informations principales de votre événement.</p>
 
         <form class="ef-form" novalidate>
           <div class="ef-form-group">
@@ -128,7 +128,11 @@
             <a href="dashboard.html" class="ef-btn ef-btn-secondary">
               Annuler
             </a>
-            <button type="submit" class="ef-btn ef-btn-primary">
+            <button
+              type="button"
+              id="create-event-button"
+              class="ef-btn ef-btn-primary"
+            >
               Créer l'événement
             </button>
           </div>
