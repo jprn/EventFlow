@@ -228,7 +228,13 @@ function efRenderEventRegistrations() {
 
     const tdPresence = document.createElement("td");
     tdPresence.style.textAlign = "center";
-    tdPresence.textContent = reg.checked_in_at ? "Présent" : "Non scanné";
+    if (reg.checked_in_at) {
+      tdPresence.textContent = "✅ Présent";
+      tdPresence.style.color = "#15803d"; // vert
+    } else {
+      tdPresence.textContent = "❌ Non scanné";
+      tdPresence.style.color = "#b91c1c"; // rouge
+    }
 
     tr.appendChild(tdDate);
     tr.appendChild(tdDetails);

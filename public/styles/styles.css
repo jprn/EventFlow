@@ -387,6 +387,43 @@ img {
   gap: 1.5rem;
 }
 
+.ef-badge-group {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.ef-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background-color: #eef2ff;
+  color: #3730a3;
+}
+
+.ef-badge-strong {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.ef-table-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ev-filter-btn {
+  border-radius: 999px;
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.ev-filter-btn.is-active {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
 .ef-sidebar {
   align-self: flex-start;
 }
