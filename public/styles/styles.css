@@ -716,6 +716,18 @@ img {
   font-size: 0.8rem;
 }
 
+/* Lien sur le titre d'un événement dans le tableau */
+.ef-table td:first-child a {
+  font-weight: 600;
+  color: var(--ef-color-primary-dark);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ef-table td:first-child a:hover {
+  text-decoration: underline;
+}
+
 .ef-btn-disabled {
   opacity: 0.45;
   cursor: default;

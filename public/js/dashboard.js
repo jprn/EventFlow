@@ -55,7 +55,13 @@ function efRenderEvents(containerId, events) {
 
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
-  const headers = ["Titre", "Date / heure", "Lieu", "Inscriptions", "Actions"];
+  const headers = [
+    "Titre (détails)",
+    "Date / heure",
+    "Lieu",
+    "Inscriptions",
+    "Actions",
+  ];
 
   headers.forEach((label) => {
     const th = document.createElement("th");
