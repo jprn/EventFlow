@@ -196,6 +196,9 @@ async function efHandleProfileSubmit(event) {
   if (passConfInput) passConfInput.value = "";
 
   efShowProfileMessage("success", "Profil mis à jour avec succès.");
+
+  // Retour au tableau de bord après mise à jour du profil
+  window.location.href = "dashboard.html";
 }
 
 function efSetupProfilePage() {
