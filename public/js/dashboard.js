@@ -295,7 +295,7 @@ async function efLoadDashboard() {
     ? Math.round((totalPresent / totalRegistrations) * 100)
     : 0;
 
-  // Limites par plan pour le nombre d'événements actifs
+  // Limites par plan pour le nombre d'événements
   let maxEvents;
   switch (plan) {
     case "pro":
@@ -308,12 +308,13 @@ async function efLoadDashboard() {
       maxEvents = 1; // plan gratuit ou inconnu
   }
 
-  const activeEventsCount = futureEvents.length;
+  // On applique la limite sur le nombre total d'événements de l'organisateur
+  const totalEventsCount = events.length;
 
   // Désactivation du bouton "Créer un nouvel événement" si la limite est atteinte
   const createBtn = document.querySelector('a[href="new-event.html"]');
   if (createBtn && typeof maxEvents === "number") {
-    if (activeEventsCount >= maxEvents && maxEvents !== Infinity) {
+    if (totalEventsCount >= maxEvents && maxEvents !== Infinity) {
       createBtn.classList.add("ef-btn-disabled");
       createBtn.addEventListener("click", (e) => {
         e.preventDefault();
