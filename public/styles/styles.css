@@ -820,6 +820,57 @@ img {
   color: #1d4ed8;
 }
 
+/* Statistiques Pro --------------------------------------------------------- */
+
+.ef-pro-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ef-pro-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.ef-pro-bar-label {
+  width: 160px;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-pro-bar-outer {
+  flex: 1;
+  background-color: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ef-pro-bar-inner {
+  height: 1.1rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0.5rem;
+}
+
+.ef-pro-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-pro-list li + li {
+  margin-top: 0.35rem;
+}
+
 @media (max-width: 768px) {
   .ef-main {
     padding-top: 1.5rem;
