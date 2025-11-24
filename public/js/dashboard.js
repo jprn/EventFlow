@@ -312,7 +312,7 @@ async function efLoadDashboard() {
   const totalEventsCount = events.length;
 
   // Désactivation du bouton "Créer un nouvel événement" si la limite est atteinte
-  const createBtn = document.querySelector('a[href="new-event.html"]');
+  const createBtn = document.getElementById("ef-create-event-btn");
   if (createBtn && typeof maxEvents === "number") {
     if (totalEventsCount >= maxEvents && maxEvents !== Infinity) {
       createBtn.classList.add("ef-btn-disabled");
