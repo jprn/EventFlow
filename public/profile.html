@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mon profil – EventFlow Lite</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body>
+    <header class="ef-header">
+      <div class="ef-container ef-header-inner">
+        <a href="dashboard.html" class="ef-logo">EventFlow Lite</a>
+        <nav class="ef-nav">
+          <a href="dashboard.html" class="ef-nav-link">Tableau de bord</a>
+          <button class="ef-nav-link ef-link-button" type="button">
+            Déconnexion
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="ef-main">
+      <section class="ef-container ef-card ef-page-narrow">
+        <h1>Mon profil</h1>
+        <p>Gérez vos informations de compte organisateur.</p>
+
+        <form id="profile-form" class="ef-form" novalidate>
+          <div class="ef-form-group">
+            <label for="profile-email">Adresse e-mail</label>
+            <input id="profile-email" type="email" disabled />
+          </div>
+
+          <div class="ef-form-group">
+            <label for="profile-name">Nom et prénom</label>
+            <input
+              id="profile-name"
+              type="text"
+              placeholder="Votre nom complet"
+            />
+          </div>
+
+          <div class="ef-form-group">
+            <label for="profile-org">Organisation</label>
+            <input
+              id="profile-org"
+              type="text"
+              placeholder="Votre entreprise / association"
+            />
+          </div>
+
+          <fieldset class="ef-form-group">
+            <legend>Modifier le mot de passe (optionnel)</legend>
+            <div class="ef-form-group">
+              <label for="profile-password">Nouveau mot de passe</label>
+              <input
+                id="profile-password"
+                type="password"
+                placeholder="••••••••"
+              />
+            </div>
+            <div class="ef-form-group">
+              <label for="profile-password-confirm">
+                Confirmer le nouveau mot de passe
+              </label>
+              <input
+                id="profile-password-confirm"
+                type="password"
+                placeholder="••••••••"
+              />
+            </div>
+          </fieldset>
+
+          <div class="ef-form-actions">
+            <a href="dashboard.html" class="ef-btn ef-btn-secondary">Annuler</a>
+            <button type="submit" class="ef-btn ef-btn-primary">
+              Enregistrer les modifications
+            </button>
+          </div>
+
+          <div id="profile-message" class="ef-auth-message"></div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="ef-footer">
+      <div class="ef-container">
+        <p>EventFlow Lite · Espace organisateur</p>
+      </div>
+    </footer>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabaseClient.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+  </body>
+</html>
