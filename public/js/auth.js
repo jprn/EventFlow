@@ -161,8 +161,20 @@ async function efHandleSignUp(event) {
     return;
   }
 
+  if (data && data.user) {
+    try {
+      await window.supabaseClient.from("profiles").insert({
+        user_id: data.user.id,
+        full_name,
+        organization,
+        plan: "free",
+      });
+    } catch (e) {
+      // si l'insertion échoue, on ne bloque pas la création du compte
+    }
+  }
+
   if (data && data.session) {
-    // Le compte est directement connecté (selon la config Supabase)
     window.location.href = "dashboard.html";
   } else {
     efShowMessage(

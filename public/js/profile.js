@@ -20,7 +20,6 @@ async function efLoadProfile() {
   } = await window.supabaseClient.auth.getSession();
 
   if (error || !session || !session.user) {
-    // Pas de session : on renvoie vers la connexion
     window.location.href = "login.html";
     return;
   }
@@ -31,9 +30,17 @@ async function efLoadProfile() {
   const orgInput = document.getElementById("profile-org");
 
   if (emailInput) emailInput.value = user.email || "";
-  const metadata = user.user_metadata || {};
-  if (nameInput) nameInput.value = metadata.full_name || "";
-  if (orgInput) orgInput.value = metadata.organization || "";
+
+  const { data: profile, error: profileError } = await window.supabaseClient
+    .from("profiles")
+    .select("full_name, organization, plan")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (!profileError && profile) {
+    if (nameInput) nameInput.value = profile.full_name || "";
+    if (orgInput) orgInput.value = profile.organization || "";
+  }
 }
 
 async function efHandleProfileSubmit(event) {
@@ -67,26 +74,48 @@ async function efHandleProfileSubmit(event) {
 
   efShowProfileMessage("", "");
 
-  const updatePayload = {
-    data: {
-      full_name,
-      organization,
-    },
-  };
+  const {
+    data: { session },
+    error: sessionError,
+  } = await window.supabaseClient.auth.getSession();
 
-  if (newPassword) {
-    updatePayload.password = newPassword;
+  if (sessionError || !session || !session.user) {
+    window.location.href = "login.html";
+    return;
   }
 
-  const { error } = await window.supabaseClient.auth.updateUser(updatePayload);
+  const userId = session.user.id;
 
-  if (error) {
+  const { error: profileError } = await window.supabaseClient
+    .from("profiles")
+    .upsert({
+      user_id: userId,
+      full_name,
+      organization,
+    });
+
+  if (profileError) {
     efShowProfileMessage(
       "error",
       "Impossible de mettre à jour le profil : " +
-        (error.message || "erreur inconnue.")
+        (profileError.message || "erreur inconnue.")
     );
     return;
+  }
+
+  if (newPassword) {
+    const { error: pwError } = await window.supabaseClient.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (pwError) {
+      efShowProfileMessage(
+        "error",
+        "Profil mis à jour, mais le mot de passe n'a pas pu être modifié : " +
+          (pwError.message || "erreur inconnue.")
+      );
+      return;
+    }
   }
 
   // Nettoie les champs mots de passe après succès
