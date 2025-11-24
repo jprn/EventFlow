@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Créer un compte organisateur – EventFlow Lite</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body>
+    <header class="ef-header">
+      <div class="ef-container ef-header-inner">
+        <a href="index.html" class="ef-logo">EventFlow Lite</a>
+      </div>
+    </header>
+
+    <main class="ef-main">
+      <section class="ef-container ef-card ef-page-narrow">
+        <h1>Créer un compte organisateur</h1>
+        <p>
+          Créez votre espace organisateur pour gérer vos événements, vos
+          inscriptions et le check-in par QR code.
+        </p>
+
+        <form id="signup-form" class="ef-form" novalidate>
+          <div class="ef-form-group">
+            <label for="signup-email">Adresse e-mail</label>
+            <input
+              id="signup-email"
+              type="email"
+              placeholder="vous@exemple.fr"
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="ef-form-group">
+            <label for="signup-password">Mot de passe</label>
+            <input
+              id="signup-password"
+              type="password"
+              placeholder="••••••••"
+              autocomplete="new-password"
+            />
+          </div>
+
+          <div class="ef-form-group">
+            <label for="signup-password-confirm">Confirmer le mot de passe</label>
+            <input
+              id="signup-password-confirm"
+              type="password"
+              placeholder="••••••••"
+              autocomplete="new-password"
+            />
+          </div>
+
+          <div class="ef-form-actions">
+            <a href="login.html" class="ef-btn ef-btn-secondary">
+              J'ai déjà un compte
+            </a>
+            <button type="submit" class="ef-btn ef-btn-primary">
+              Créer mon compte
+            </button>
+          </div>
+
+          <p class="ef-form-help">
+            En créant un compte, vous pourrez configurer vos événements, suivre
+            les inscriptions et scanner les QR codes des participants.
+          </p>
+
+          <div id="auth-message" class="ef-auth-message"></div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="ef-footer">
+      <div class="ef-container">
+        <p>EventFlow Lite · Espace organisateur</p>
+      </div>
+    </footer>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabaseClient.js"></script>
+    <script src="js/auth.js"></script>
+  </body>
+</html>

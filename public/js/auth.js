@@ -106,6 +106,72 @@ async function efHandleMagicLink(event) {
   );
 }
 
+async function efHandleSignUp(event) {
+  event.preventDefault();
+
+  if (!window.supabaseClient) {
+    efShowMessage(
+      "error",
+      "Le client Supabase n'est pas initialisé. Vérifiez la configuration."
+    );
+    return;
+  }
+
+  const emailInput = document.getElementById("signup-email");
+  const passwordInput = document.getElementById("signup-password");
+  const confirmInput = document.getElementById("signup-password-confirm");
+
+  const email = emailInput ? emailInput.value.trim() : "";
+  const password = passwordInput ? passwordInput.value : "";
+  const confirm = confirmInput ? confirmInput.value : "";
+
+  if (!email || !password || !confirm) {
+    efShowMessage(
+      "error",
+      "Veuillez renseigner l'e-mail et les deux champs de mot de passe."
+    );
+    return;
+  }
+
+  if (password !== confirm) {
+    efShowMessage("error", "Les mots de passe ne correspondent pas.");
+    return;
+  }
+
+  if (password.length < 6) {
+    efShowMessage(
+      "error",
+      "Le mot de passe doit contenir au moins 6 caractères."
+    );
+    return;
+  }
+
+  efShowMessage("", "");
+
+  const { data, error } = await window.supabaseClient.auth.signUp({
+    email,
+    password,
+  });
+
+  if (error) {
+    efShowMessage(
+      "error",
+      "Impossible de créer le compte : " + (error.message || "erreur inconnue.")
+    );
+    return;
+  }
+
+  if (data && data.session) {
+    // Le compte est directement connecté (selon la config Supabase)
+    window.location.href = "dashboard.html";
+  } else {
+    efShowMessage(
+      "success",
+      "Compte créé. Vérifiez votre boîte mail pour confirmer votre adresse, puis connectez-vous."
+    );
+  }
+}
+
 async function efHandleLogout() {
   if (!window.supabaseClient) {
     window.location.href = "login.html";
@@ -120,8 +186,15 @@ function efSetupAuthPage() {
   const form = document.querySelector(".ef-form");
   const magicButton = document.getElementById("magic-link-button");
 
-  if (form) {
+  const signupForm = document.getElementById("signup-form");
+  const isSignupPage = !!signupForm;
+
+  if (form && !isSignupPage) {
     form.addEventListener("submit", efHandlePasswordLogin);
+  }
+
+  if (signupForm) {
+    signupForm.addEventListener("submit", efHandleSignUp);
   }
 
   if (magicButton) {
