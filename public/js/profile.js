@@ -39,10 +39,37 @@ async function efLoadProfile() {
     .eq("user_id", user.id)
     .maybeSingle();
 
+  let effectiveProfile = null;
+
   if (!profileError && profile) {
-    if (nameInput) nameInput.value = profile.full_name || "";
-    if (orgInput) orgInput.value = profile.organization || "";
-    const plan = profile.plan || "free";
+    effectiveProfile = profile;
+  } else if (!profileError && !profile) {
+    // Aucun profil en base : on crée un profil virtuel à partir des user_metadata
+    const meta = user.user_metadata || {};
+    const initialPlan = meta.initial_plan || "free";
+    effectiveProfile = {
+      full_name: meta.full_name || "",
+      organization: meta.organization || "",
+      plan: initialPlan,
+    };
+
+    // On essaye de persister ce profil en base (sans bloquer en cas d'erreur)
+    try {
+      await window.supabaseClient.from("profiles").insert({
+        user_id: user.id,
+        full_name: effectiveProfile.full_name,
+        organization: effectiveProfile.organization,
+        plan: effectiveProfile.plan,
+      });
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  if (effectiveProfile) {
+    if (nameInput) nameInput.value = effectiveProfile.full_name || "";
+    if (orgInput) orgInput.value = effectiveProfile.organization || "";
+    const plan = effectiveProfile.plan || "free";
     if (planBadge) {
       let label = "";
       switch (plan) {

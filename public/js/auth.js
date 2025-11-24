@@ -170,6 +170,11 @@ async function efHandleSignUp(event) {
   const { data, error } = await window.supabaseClient.auth.signUp({
     email,
     password,
+    options: {
+      data: {
+        initial_plan: chosenPlan,
+      },
+    },
   });
 
   if (error) {
@@ -178,17 +183,6 @@ async function efHandleSignUp(event) {
       "Impossible de créer le compte : " + (error.message || "erreur inconnue.")
     );
     return;
-  }
-
-  if (data && data.user) {
-    try {
-      await window.supabaseClient.from("profiles").insert({
-        user_id: data.user.id,
-        plan: chosenPlan,
-      });
-    } catch (e) {
-      // si l'insertion échoue, on ne bloque pas la création du compte
-    }
   }
 
   // Inscription réussie : on retourne toujours sur la page de connexion

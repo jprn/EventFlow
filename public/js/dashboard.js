@@ -212,6 +212,20 @@ async function efLoadDashboard() {
 
     if (!profileError && profile && profile.plan) {
       plan = profile.plan;
+    } else if (!profileError && !profile) {
+      // Aucun profil en base : on récupère le plan initial dans les metadata
+      const meta = user.user_metadata || {};
+      const initialPlan = meta.initial_plan || "free";
+      plan = initialPlan;
+
+      try {
+        await window.supabaseClient.from("profiles").insert({
+          user_id: user.id,
+          plan: initialPlan,
+        });
+      } catch (e) {
+        // ignore
+      }
     }
   } catch (e) {
     // en cas d'erreur, on reste sur le plan par défaut "free"
