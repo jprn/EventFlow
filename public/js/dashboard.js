@@ -252,14 +252,35 @@ async function efLoadDashboard() {
   efRenderEvents("dashboard-events-future", futureEvents);
   efRenderEvents("dashboard-events-past", pastEvents);
 
-  const totalFutureRegistrations = futureEvents.reduce((sum, ev) => {
-    const n = typeof ev.inscriptions_total === "number" ? ev.inscriptions_total : 0;
-    return sum + n;
-  }, 0);
+  // Statistiques globales (événements à venir uniquement)
+  let totalRegistrations = 0;
+  let totalPresent = 0;
 
-  if (statsEls[0]) statsEls[0].textContent = String(events.length);
-  if (statsEls[1]) statsEls[1].textContent = String(totalFutureRegistrations);
-  if (statsEls[2]) statsEls[2].textContent = "0%";
+  if (futureEvents.length > 0) {
+    const futureIds = futureEvents.map((ev) => ev.id);
+    try {
+      const { data: agg, error: aggError } = await window.supabaseClient
+        .from("registrations")
+        .select("count:count(*), present:count(checked_in_at)")
+        .in("event_id", futureIds)
+        .maybeSingle();
+
+      if (!aggError && agg) {
+        totalRegistrations = agg.count || 0;
+        totalPresent = agg.present || 0;
+      }
+    } catch (e) {
+      // en cas d'erreur, on laisse les compteurs à 0
+    }
+  }
+
+  const rate = totalRegistrations
+    ? Math.round((totalPresent / totalRegistrations) * 100)
+    : 0;
+
+  if (statsEls[0]) statsEls[0].textContent = String(futureEvents.length);
+  if (statsEls[1]) statsEls[1].textContent = String(totalRegistrations);
+  if (statsEls[2]) statsEls[2].textContent = `${rate}%`;
 }
 
 document.addEventListener("DOMContentLoaded", efLoadDashboard);
