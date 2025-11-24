@@ -192,12 +192,12 @@ async function efHandleSignUp(event) {
 
 async function efHandleLogout() {
   if (!window.supabaseClient) {
-    window.location.href = "login.html";
+    window.location.href = "index.html";
     return;
   }
 
   await window.supabaseClient.auth.signOut();
-  window.location.href = "login.html";
+  window.location.href = "index.html";
 }
 
 function efSetupAuthPage() {
