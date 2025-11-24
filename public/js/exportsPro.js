@@ -198,7 +198,7 @@ async function efLoadExportsPro() {
           const t = String(ev.heure_evenement).slice(0, 5);
           html += ` à ${t}`;
         }
-        html += "</p>`;
+        html += "</p>";
       }
       if (ev.lieu) {
         html += `<p><strong>Lieu :</strong> ${ev.lieu}</p>`;
