@@ -3,37 +3,311 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EventFlow Lite – Accueil</title>
+    <title>EventFlow Lite – Inscriptions & QR code</title>
     <link rel="stylesheet" href="styles/styles.css" />
   </head>
-  <body>
-    <header class="ef-header">
+  <body class="ef-landing">
+    <!-- Header sticky -->
+    <header class="ef-header ef-header-landing">
       <div class="ef-container ef-header-inner">
-        <a href="index.html" class="ef-logo">EventFlow Lite</a>
-        <nav class="ef-nav">
-          <a href="login.html" class="ef-nav-link">Connexion organisateur</a>
+        <a href="#accueil" class="ef-logo">EventFlow Lite</a>
+        <nav class="ef-nav ef-nav-landing">
+          <a href="#accueil" class="ef-nav-link">Accueil</a>
+          <a href="#tarifs" class="ef-nav-link">Tarifs</a>
+          <a href="login.html" class="ef-nav-link">Se connecter</a>
+          <a href="login.html" class="ef-btn ef-btn-primary ef-nav-cta">
+            Essayer maintenant
+          </a>
         </nav>
       </div>
     </header>
 
-    <main class="ef-main">
-      <section class="ef-hero ef-container">
-        <h1>Gérez vos événements simplement</h1>
-        <p>
-          Créez vos événements, gérez les inscriptions et contrôlez les entrées
-          par QR code, en quelques clics.
-        </p>
-        <div class="ef-hero-actions">
-          <a href="login.html" class="ef-btn ef-btn-primary">
-            Accéder au tableau de bord
-          </a>
+    <main class="ef-main ef-main-landing" id="accueil">
+      <!-- Hero -->
+      <section class="ef-container ef-hero-landing">
+        <div class="ef-hero-text">
+          <h1>Gérez vos inscriptions et vos entrées en quelques clics.</h1>
+          <p>
+            Créez vos événements, ouvrez une page d'inscription publique, générez
+            des QR codes et scannez les billets le jour J. EventFlow Lite
+            centralise tout votre flux d'accueil.
+          </p>
+          <div class="ef-hero-actions">
+            <a href="login.html" class="ef-btn ef-btn-primary">
+              Créer un événement gratuitement
+            </a>
+            <a href="#fonctionnalites" class="ef-btn ef-btn-secondary ef-btn-ghost">
+              Découvrir les fonctionnalités
+            </a>
+          </div>
+          <p class="ef-hero-note">Aucun engagement · Interface en français · Compatible mobile</p>
+        </div>
+        <div class="ef-hero-visual" aria-hidden="true">
+          <div class="ef-hero-mockup">
+            <div class="ef-hero-mockup-header">Tableau de bord – Aperçu</div>
+            <div class="ef-hero-mockup-body">
+              <div class="ef-hero-mockup-stat">
+                <span>Inscriptions à venir</span>
+                <strong>124</strong>
+              </div>
+              <div class="ef-hero-mockup-stat">
+                <span>Taux de présence</span>
+                <strong>92%</strong>
+              </div>
+              <div class="ef-hero-mockup-table">
+                <div class="ef-hero-mockup-row">
+                  <span>Conférence produit</span>
+                  <span>58 inscrits</span>
+                  <span>📷 Scan</span>
+                </div>
+                <div class="ef-hero-mockup-row">
+                  <span>Afterwork clients</span>
+                  <span>32 inscrits</span>
+                  <span>📷 Scan</span>
+                </div>
+                <div class="ef-hero-mockup-row">
+                  <span>Portes ouvertes</span>
+                  <span>34 inscrits</span>
+                  <span>📷 Scan</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Fonctionnalités principales -->
+      <section id="fonctionnalites" class="ef-section ef-section-alt">
+        <div class="ef-container">
+          <header class="ef-section-header">
+            <h2>Tout ce dont vous avez besoin pour vos inscriptions</h2>
+            <p>
+              EventFlow Lite simplifie chaque étape : avant, pendant et après
+              votre événement.
+            </p>
+          </header>
+
+          <div class="ef-grid ef-grid-3 ef-features-grid">
+            <article class="ef-card ef-card-landing">
+              <h3>Création d’événements</h3>
+              <p>
+                Paramétrez vos événements en quelques secondes : titre, date,
+                lieu, capacité, visibilité publique.
+              </p>
+            </article>
+            <article class="ef-card ef-card-landing">
+              <h3>Page d’inscription</h3>
+              <p>
+                Une page publique générée automatiquement, avec vos champs
+                personnalisés pour collecter les bonnes informations.
+              </p>
+            </article>
+            <article class="ef-card ef-card-landing">
+              <h3>QR code automatique</h3>
+              <p>
+                Chaque inscription reçoit un QR code unique, prêt à être
+                présenté sur mobile ou imprimé en PDF.
+              </p>
+            </article>
+            <article class="ef-card ef-card-landing">
+              <h3>Scanner mobile</h3>
+              <p>
+                Utilisez simplement votre navigateur pour scanner les billets et
+                enregistrer les présences en temps réel.
+              </p>
+            </article>
+            <article class="ef-card ef-card-landing">
+              <h3>Statistiques en direct</h3>
+              <p>
+                Suivez les inscrits, les présents et le taux de participation
+                directement depuis votre tableau de bord.
+              </p>
+            </article>
+            <article class="ef-card ef-card-landing">
+              <h3>E-mails de confirmation</h3>
+              <p>
+                Envoyez automatiquement un e-mail de confirmation avec QR code
+                et récapitulatif de l’événement.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Workflow / Comment ça marche -->
+      <section class="ef-section">
+        <div class="ef-container">
+          <header class="ef-section-header">
+            <h2>Comment ça marche&nbsp;?</h2>
+            <p>Un flux simple, pensé pour les organisateurs comme pour les invités.</p>
+          </header>
+
+          <div class="ef-workflow">
+            <div class="ef-workflow-step">
+              <span class="ef-workflow-step-number">1</span>
+              <h3>L’organisateur crée son événement</h3>
+              <p>
+                Vous définissez le lieu, la date et le formulaire d’inscription
+                en ligne. EventFlow Lite génère automatiquement la page
+                publique.
+              </p>
+            </div>
+            <div class="ef-workflow-step">
+              <span class="ef-workflow-step-number">2</span>
+              <h3>Les participants s’inscrivent</h3>
+              <p>
+                Ils remplissent le formulaire, reçoivent un e-mail de
+                confirmation et leur billet avec QR code sécurisé.
+              </p>
+            </div>
+            <div class="ef-workflow-step">
+              <span class="ef-workflow-step-number">3</span>
+              <h3>Le jour J, vous scannez les QR</h3>
+              <p>
+                Depuis votre navigateur, vous scannez les billets et suivez en
+                direct le nombre de présents et le taux de participation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tarifs -->
+      <section id="tarifs" class="ef-section ef-section-alt">
+        <div class="ef-container">
+          <header class="ef-section-header">
+            <h2>Des plans simples pour tous vos événements</h2>
+            <p>Commencez gratuitement, évoluez quand vos besoins grandissent.</p>
+          </header>
+
+          <div class="ef-pricing-grid">
+            <article class="ef-card ef-card-landing ef-pricing-card">
+              <h3>Gratuit</h3>
+              <p class="ef-pricing-price">0 €</p>
+              <p class="ef-pricing-sub">Pour tester EventFlow Lite en toute simplicité.</p>
+              <ul class="ef-pricing-list">
+                <li>1 événement actif</li>
+                <li>Formulaire d’inscription simple</li>
+                <li>QR codes et scan illimités</li>
+              </ul>
+              <a href="login.html" class="ef-btn ef-btn-secondary ef-btn-full">
+                Démarrer gratuitement
+              </a>
+            </article>
+
+            <article class="ef-card ef-card-landing ef-pricing-card ef-pricing-featured">
+              <div class="ef-pricing-badge">Le plus utilisé</div>
+              <h3>Pack Événement</h3>
+              <p class="ef-pricing-price">29 €</p>
+              <p class="ef-pricing-sub">Idéal pour un événement ponctuel.</p>
+              <ul class="ef-pricing-list">
+                <li>Jusqu’à 500 inscriptions</li>
+                <li>Champs personnalisés avancés</li>
+                <li>Statistiques complètes</li>
+              </ul>
+              <a href="login.html" class="ef-btn ef-btn-primary ef-btn-full">
+                Choisir ce plan
+              </a>
+            </article>
+
+            <article class="ef-card ef-card-landing ef-pricing-card">
+              <h3>Pro</h3>
+              <p class="ef-pricing-price">79 € / mois</p>
+              <p class="ef-pricing-sub">Pour les organisateurs réguliers.</p>
+              <ul class="ef-pricing-list">
+                <li>Événements illimités</li>
+                <li>Check-in multi-entrées</li>
+                <li>Export des données</li>
+              </ul>
+              <a href="login.html" class="ef-btn ef-btn-secondary ef-btn-full">
+                Passer en Pro
+              </a>
+            </article>
+
+            <article class="ef-card ef-card-landing ef-pricing-card">
+              <h3>Business</h3>
+              <p class="ef-pricing-price">Sur mesure</p>
+              <p class="ef-pricing-sub">Pour les structures multi-sites.</p>
+              <ul class="ef-pricing-list">
+                <li>Accompagnement dédié</li>
+                <li>Fonctionnalités avancées</li>
+                <li>Intégrations spécifiques</li>
+              </ul>
+              <a href="login.html" class="ef-btn ef-btn-secondary ef-btn-full">
+                Discuter de votre projet
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Témoignages -->
+      <section class="ef-section">
+        <div class="ef-container">
+          <header class="ef-section-header">
+            <h2>Ils gagnent du temps avec EventFlow Lite</h2>
+            <p>Quelques retours d’organisateurs qui ont simplifié leurs accueils.</p>
+          </header>
+
+          <div class="ef-grid ef-testimonials-grid">
+            <article class="ef-card ef-card-landing ef-testimonial">
+              <p class="ef-testimonial-text">
+                «&nbsp;Nous avons géré plus de 300 invités sur notre dernière
+                conférence sans file d’attente, grâce au scan QR et au suivi en
+                temps réel.&nbsp;»
+              </p>
+              <p class="ef-testimonial-author">Claire, Responsable marketing</p>
+            </article>
+            <article class="ef-card ef-card-landing ef-testimonial">
+              <p class="ef-testimonial-text">
+                «&nbsp;La mise en place a pris une matinée et l’équipe
+                d’accueil a tout de suite adopté la solution.&nbsp;»
+              </p>
+              <p class="ef-testimonial-author">Julien, Organisateur d’événements</p>
+            </article>
+            <article class="ef-card ef-card-landing ef-testimonial">
+              <p class="ef-testimonial-text">
+                «&nbsp;Les exports et statistiques nous ont permis de mieux
+                comprendre nos taux de présence et d’ajuster la communication.&nbsp;»
+              </p>
+              <p class="ef-testimonial-author">Sophie, Chargée de communication</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA final -->
+      <section class="ef-section ef-section-alt">
+        <div class="ef-container">
+          <div class="ef-cta-final ef-card ef-card-landing">
+            <div class="ef-cta-final-text">
+              <h2>Prêt à gagner du temps sur vos prochains événements&nbsp;?</h2>
+              <p>
+                Créez votre premier événement en quelques minutes et testez le
+                flux complet d’inscription et de scan QR.
+              </p>
+            </div>
+            <div class="ef-cta-final-actions">
+              <a href="login.html" class="ef-btn ef-btn-primary">
+                Essayer EventFlow Lite gratuitement
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
-    <footer class="ef-footer">
-      <div class="ef-container">
-        <p>EventFlow Lite · Gestion d'événements par QR code</p>
+    <!-- Footer -->
+    <footer class="ef-footer ef-footer-landing">
+      <div class="ef-container ef-footer-inner">
+        <div class="ef-footer-links">
+          <a href="#accueil">Accueil</a>
+          <a href="#tarifs">Tarifs</a>
+          <a href="login.html">Se connecter</a>
+        </div>
+        <p class="ef-footer-meta">
+          © <span id="year">2025</span> EventFlow Lite · Gestion d’événements par QR code
+        </p>
       </div>
     </footer>
   </body>
