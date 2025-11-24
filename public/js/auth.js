@@ -35,25 +35,6 @@ async function efHandlePasswordLogin(event) {
 
   efShowMessage("", "");
 
-  // Récupère le plan choisi depuis l'URL (par défaut: free)
-  const params = new URLSearchParams(window.location.search);
-  const chosenPlan = params.get("plan") || "free";
-
-  // Si plan payant (pro, business), on exige une simulation de paiement
-  const isPaidPlan = chosenPlan === "pro" || chosenPlan === "business";
-  if (isPaidPlan && !window.efSignupPaymentSimOk) {
-    const paymentBlock = document.getElementById("signup-payment-sim");
-    if (paymentBlock) {
-      paymentBlock.style.display = "block";
-      paymentBlock.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    efShowMessage(
-      "error",
-      "Avant de créer un compte sur un plan payant, veuillez valider le paiement (simulation)."
-    );
-    return;
-  }
-
   const { data, error } = await window.supabaseClient.auth.signInWithPassword({
     email,
     password,
@@ -166,6 +147,25 @@ async function efHandleSignUp(event) {
   }
 
   efShowMessage("", "");
+
+  // Récupère le plan choisi depuis l'URL (par défaut: free)
+  const params = new URLSearchParams(window.location.search);
+  const chosenPlan = params.get("plan") || "free";
+
+  // Si plan payant (pro, business), on exige une simulation de paiement
+  const isPaidPlan = chosenPlan === "pro" || chosenPlan === "business";
+  if (isPaidPlan && !window.efSignupPaymentSimOk) {
+    const paymentBlock = document.getElementById("signup-payment-sim");
+    if (paymentBlock) {
+      paymentBlock.style.display = "block";
+      paymentBlock.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    efShowMessage(
+      "error",
+      "Avant de créer un compte sur un plan payant, veuillez valider le paiement (simulation)."
+    );
+    return;
+  }
 
   const { data, error } = await window.supabaseClient.auth.signUp({
     email,
