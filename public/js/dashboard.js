@@ -259,15 +259,14 @@ async function efLoadDashboard() {
   if (futureEvents.length > 0) {
     const futureIds = futureEvents.map((ev) => ev.id);
     try {
-      const { data: agg, error: aggError } = await window.supabaseClient
+      const { data: regs, error: regsError } = await window.supabaseClient
         .from("registrations")
-        .select("count:count(*), present:count(checked_in_at)")
-        .in("event_id", futureIds)
-        .maybeSingle();
+        .select("id, checked_in_at")
+        .in("event_id", futureIds);
 
-      if (!aggError && agg) {
-        totalRegistrations = agg.count || 0;
-        totalPresent = agg.present || 0;
+      if (!regsError && Array.isArray(regs)) {
+        totalRegistrations = regs.length;
+        totalPresent = regs.filter((r) => !!r.checked_in_at).length;
       }
     } catch (e) {
       // en cas d'erreur, on laisse les compteurs à 0
