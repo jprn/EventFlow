@@ -52,6 +52,55 @@
             />
           </div>
 
+          <fieldset
+            id="signup-payment-sim"
+            class="ef-form-group"
+            style="display: none;"
+          >
+            <legend>Paiement (simulation)</legend>
+            <p>
+              Vous avez choisi un plan payant. Cette étape simule un paiement.
+              Aucun débit réel n'est effectué.
+            </p>
+            <div class="ef-form-group">
+              <label for="signup-payment-name">Nom sur la carte</label>
+              <input
+                id="signup-payment-name"
+                type="text"
+                placeholder="Nom Prénom"
+              />
+            </div>
+            <div class="ef-form-group">
+              <label for="signup-payment-number">Numéro de carte (fictif)</label>
+              <input
+                id="signup-payment-number"
+                type="text"
+                placeholder="4242 4242 4242 4242"
+              />
+            </div>
+            <div class="ef-form-group">
+              <label for="signup-payment-exp">Expiration</label>
+              <input
+                id="signup-payment-exp"
+                type="text"
+                placeholder="12/28"
+              />
+            </div>
+            <div class="ef-form-group">
+              <label for="signup-payment-cvc">CVC</label>
+              <input id="signup-payment-cvc" type="text" placeholder="123" />
+            </div>
+            <div class="ef-form-actions">
+              <button
+                type="button"
+                class="ef-btn ef-btn-primary"
+                id="signup-payment-simulate-button"
+              >
+                Valider le paiement (simulation)
+              </button>
+            </div>
+          </fieldset>
+
           <div class="ef-form-actions">
             <a href="login.html" class="ef-btn ef-btn-secondary">
               J'ai déjà un compte

@@ -39,6 +39,21 @@ async function efHandlePasswordLogin(event) {
   const params = new URLSearchParams(window.location.search);
   const chosenPlan = params.get("plan") || "free";
 
+  // Si plan payant (pro, business), on exige une simulation de paiement
+  const isPaidPlan = chosenPlan === "pro" || chosenPlan === "business";
+  if (isPaidPlan && !window.efSignupPaymentSimOk) {
+    const paymentBlock = document.getElementById("signup-payment-sim");
+    if (paymentBlock) {
+      paymentBlock.style.display = "block";
+      paymentBlock.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    efShowMessage(
+      "error",
+      "Avant de créer un compte sur un plan payant, veuillez valider le paiement (simulation)."
+    );
+    return;
+  }
+
   const { data, error } = await window.supabaseClient.auth.signInWithPassword({
     email,
     password,
@@ -204,6 +219,40 @@ function efSetupAuthPage() {
 
   if (signupForm) {
     signupForm.addEventListener("submit", efHandleSignUp);
+  }
+
+  // Simulation de paiement sur la page signup (pour plans pro/business)
+  if (isSignupPage) {
+    const params = new URLSearchParams(window.location.search);
+    const chosenPlan = params.get("plan") || "free";
+    const isPaidPlan = chosenPlan === "pro" || chosenPlan === "business";
+
+    const paymentBlock = document.getElementById("signup-payment-sim");
+    const paymentBtn = document.getElementById("signup-payment-simulate-button");
+
+    if (paymentBlock && isPaidPlan) {
+      paymentBlock.style.display = "block";
+    }
+
+    if (paymentBtn && isPaidPlan) {
+      paymentBtn.addEventListener("click", () => {
+        const name = document.getElementById("signup-payment-name");
+
+        if (name && !name.value.trim()) {
+          efShowMessage(
+            "error",
+            "Veuillez renseigner au moins le nom sur la carte pour la simulation."
+          );
+          return;
+        }
+
+        window.efSignupPaymentSimOk = true;
+        efShowMessage(
+          "success",
+          "Paiement simulé avec succès. Vous pouvez maintenant créer votre compte."
+        );
+      });
+    }
   }
 
   if (magicButton) {

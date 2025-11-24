@@ -74,6 +74,7 @@ async function efHandleProfileSubmit(event) {
 
   const nameInput = document.getElementById("profile-name");
   const orgInput = document.getElementById("profile-org");
+  const planSelect = document.getElementById("profile-plan-select");
   const passInput = document.getElementById("profile-password");
   const passConfInput = document.getElementById("profile-password-confirm");
 
@@ -82,6 +83,25 @@ async function efHandleProfileSubmit(event) {
   const plan = planSelect ? planSelect.value : undefined;
   const newPassword = passInput ? passInput.value : "";
   const confirmPassword = passConfInput ? passConfInput.value : "";
+
+  // Simulation de paiement pour les upgrades de plan
+  const currentPlan = window.efCurrentPlan || "free";
+  const rank = { free: 0, event: 1, pro: 1, business: 2 };
+  const currentRank = rank[currentPlan] ?? 0;
+  const newRank = rank[plan] ?? 0;
+
+  if (newRank > currentRank && !window.efPaymentSimOk) {
+    const paymentBlock = document.getElementById("profile-payment-sim");
+    if (paymentBlock) {
+      paymentBlock.style.display = "block";
+      paymentBlock.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    efShowProfileMessage(
+      "error",
+      "Avant de passer à un plan supérieur, veuillez valider le paiement (simulation)."
+    );
+    return;
+  }
 
   if (newPassword || confirmPassword) {
     if (newPassword !== confirmPassword) {
@@ -156,6 +176,32 @@ function efSetupProfilePage() {
   const form = document.getElementById("profile-form");
   if (form) {
     form.addEventListener("submit", efHandleProfileSubmit);
+  }
+
+  const paymentButton = document.getElementById("payment-simulate-button");
+  if (paymentButton) {
+    paymentButton.addEventListener("click", () => {
+      const name = document.getElementById("payment-name");
+      const number = document.getElementById("payment-number");
+      const exp = document.getElementById("payment-exp");
+      const cvc = document.getElementById("payment-cvc");
+
+      if (
+        name && !name.value.trim()
+      ) {
+        efShowProfileMessage(
+          "error",
+          "Veuillez renseigner au moins le nom sur la carte pour la simulation."
+        );
+        return;
+      }
+
+      window.efPaymentSimOk = true;
+      efShowProfileMessage(
+        "success",
+        "Paiement simulé avec succès. Vous pouvez maintenant enregistrer votre nouveau plan."
+      );
+    });
   }
 }
 

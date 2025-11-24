@@ -40,6 +40,47 @@
             </select>
           </div>
 
+          <fieldset
+            id="profile-payment-sim"
+            class="ef-form-group"
+            style="display: none;"
+          >
+            <legend>Paiement (simulation)</legend>
+            <p>
+              Cette étape simule un paiement pour le changement de plan.
+              Aucun débit réel n'est effectué.
+            </p>
+            <div class="ef-form-group">
+              <label for="payment-name">Nom sur la carte</label>
+              <input id="payment-name" type="text" placeholder="Nom Prénom" />
+            </div>
+            <div class="ef-form-group">
+              <label for="payment-number">Numéro de carte (fictif)</label>
+              <input
+                id="payment-number"
+                type="text"
+                placeholder="4242 4242 4242 4242"
+              />
+            </div>
+            <div class="ef-form-group">
+              <label for="payment-exp">Expiration</label>
+              <input id="payment-exp" type="text" placeholder="12/28" />
+            </div>
+            <div class="ef-form-group">
+              <label for="payment-cvc">CVC</label>
+              <input id="payment-cvc" type="text" placeholder="123" />
+            </div>
+            <div class="ef-form-actions">
+              <button
+                type="button"
+                class="ef-btn ef-btn-primary"
+                id="payment-simulate-button"
+              >
+                Valider le paiement (simulation)
+              </button>
+            </div>
+          </fieldset>
+
           <div class="ef-form-group">
             <label for="profile-name">Nom et prénom</label>
             <input
