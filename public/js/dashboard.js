@@ -43,6 +43,16 @@ function efRenderEvents(containerId, events) {
   const table = document.createElement("table");
   table.className = "ef-table";
 
+  // Force les mêmes largeurs de colonnes pour les tableaux "À venir" et "Passés"
+  const colgroup = document.createElement("colgroup");
+  const colWidths = ["30%", "20%", "20%", "15%", "15%"];
+  colWidths.forEach((w) => {
+    const col = document.createElement("col");
+    col.style.width = w;
+    colgroup.appendChild(col);
+  });
+  table.appendChild(colgroup);
+
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
   const headers = ["Titre", "Date / heure", "Lieu", "Inscriptions", "Actions"];
