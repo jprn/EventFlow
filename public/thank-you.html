@@ -34,6 +34,43 @@
         </div>
 
         <p id="thankyou-message" class="ef-form-help"></p>
+
+        <div
+          id="thankyou-email-modal"
+          class="ef-card"
+          style="display: none; margin-top: 1.5rem; text-align: left;"
+        >
+          <h2>Recevoir votre billet par e-mail</h2>
+          <p>
+            L’adresse e-mail n’a pas été collectée lors de votre inscription.
+            Indiquez-la ci-dessous pour recevoir votre billet.
+          </p>
+          <div class="ef-form-group">
+            <label for="thankyou-email">Adresse e-mail</label>
+            <input
+              id="thankyou-email"
+              type="email"
+              placeholder="vous@exemple.fr"
+            />
+          </div>
+          <div class="ef-form-group">
+            <label for="thankyou-email-confirm">Confirmer l’adresse e-mail</label>
+            <input
+              id="thankyou-email-confirm"
+              type="email"
+              placeholder="vous@exemple.fr"
+            />
+          </div>
+          <div class="ef-form-actions ef-justify-center">
+            <button
+              id="thankyou-email-confirm-button"
+              type="button"
+              class="ef-btn ef-btn-primary"
+            >
+              Envoyer le billet par e-mail
+            </button>
+          </div>
+        </div>
       </section>
     </main>
 

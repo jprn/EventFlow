@@ -3,7 +3,7 @@ function efGetQrTokenFromUrl() {
   return params.get("token");
 }
 
-async function efSendConfirmationEmail(qrToken) {
+async function efSendConfirmationEmail(qrToken, emailOverride) {
   if (!window.supabaseClient || !qrToken) return;
 
   try {
@@ -11,7 +11,7 @@ async function efSendConfirmationEmail(qrToken) {
     const { error } = await window.supabaseClient.functions.invoke(
       "send-registration-email",
       {
-        body: { qr_token: qrToken },
+        body: { qr_token: qrToken, email_override: emailOverride || null },
       }
     );
 
@@ -23,6 +23,63 @@ async function efSendConfirmationEmail(qrToken) {
   } catch (e) {
     console.warn("Erreur inattendue lors de l'appel de la fonction email", e);
   }
+}
+
+function efExtractEmailFromAnswers(answers) {
+  if (!answers || typeof answers !== "object") return null;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  for (const value of Object.values(answers)) {
+    if (typeof value === "string" && emailRegex.test(value.trim())) {
+      return value.trim();
+    }
+  }
+  return null;
+}
+
+function efSetupEmailModal(callback) {
+  const modal = document.getElementById("thankyou-email-modal");
+  const emailInput = document.getElementById("thankyou-email");
+  const emailConfInput = document.getElementById("thankyou-email-confirm");
+  const confirmBtn = document.getElementById("thankyou-email-confirm-button");
+
+  if (!modal || !emailInput || !emailConfInput || !confirmBtn) return;
+
+  modal.style.display = "block";
+
+  confirmBtn.addEventListener("click", () => {
+    const email = emailInput.value.trim();
+    const emailConf = emailConfInput.value.trim();
+
+    if (!email || !emailConf) {
+      const msgEl = document.getElementById("thankyou-message");
+      if (msgEl) {
+        msgEl.textContent = "Veuillez saisir et confirmer votre adresse e-mail.";
+      }
+      return;
+    }
+
+    if (email !== emailConf) {
+      const msgEl = document.getElementById("thankyou-message");
+      if (msgEl) {
+        msgEl.textContent =
+          "Les deux adresses e-mail ne correspondent pas. Veuillez vérifier.";
+      }
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      const msgEl = document.getElementById("thankyou-message");
+      if (msgEl) {
+        msgEl.textContent =
+          "L'adresse e-mail saisie ne semble pas valide. Veuillez corriger.";
+      }
+      return;
+    }
+
+    modal.style.display = "none";
+    callback(email);
+  });
 }
 
 async function efSetupThankYouPage() {
@@ -66,7 +123,19 @@ async function efSetupThankYouPage() {
   }
 
   const eventInfo = await efLoadEventInfoFromToken(token, summaryEl);
-  await efSendConfirmationEmail(token);
+
+  let emailToUse = null;
+  if (eventInfo && eventInfo.answers) {
+    emailToUse = efExtractEmailFromAnswers(eventInfo.answers);
+  }
+
+  if (emailToUse) {
+    await efSendConfirmationEmail(token, emailToUse);
+  } else {
+    efSetupEmailModal(async (email) => {
+      await efSendConfirmationEmail(token, email);
+    });
+  }
 
   const downloadBtn = document.getElementById("thankyou-download");
   if (downloadBtn && eventInfo) {
