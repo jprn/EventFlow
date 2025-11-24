@@ -59,7 +59,7 @@ async function efLoadStatsEventPro() {
 
   const { data: ev, error: evError } = await window.supabaseClient
     .from("events")
-    .select("id, titre, date_evenement, heure_evenement, lieu, capacity")
+    .select("id, titre, date_evenement, heure_evenement, lieu")
     .eq("id", eventId)
     .maybeSingle();
 
