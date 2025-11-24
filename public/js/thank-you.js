@@ -149,20 +149,40 @@ async function efLoadEventInfoFromToken(token, summaryEl) {
   if (!window.supabaseClient || !token) return null;
 
   try {
-    const { data, error } = await window.supabaseClient
+    // 1) On récupère la ligne d'inscription à partir du qr_token
+    const { data: reg, error: regError } = await window.supabaseClient
       .from("registrations")
-      .select(
-        "answers, event:events(titre, date_evenement, heure_evenement, lieu, adresse, latitude, longitude)"
-      )
+      .select("event_id, answers")
       .eq("qr_token", token)
       .maybeSingle();
 
-    if (error || !data || !data.event) {
-      console.warn("Impossible de charger les infos d'événement pour le billet", error);
+    if (regError || !reg || !reg.event_id) {
+      console.warn(
+        "Impossible de charger l'inscription pour le billet",
+        regError
+      );
       return null;
     }
 
-    const ev = { ...data.event, answers: data.answers };
+    // 2) On charge l'événement public correspondant (même logique que public-event.js)
+    const { data: evRow, error: evError } = await window.supabaseClient
+      .from("events")
+      .select(
+        "titre, date_evenement, heure_evenement, lieu, adresse, latitude, longitude"
+      )
+      .eq("id", reg.event_id)
+      .eq("est_public", true)
+      .maybeSingle();
+
+    if (evError || !evRow) {
+      console.warn(
+        "Impossible de charger les infos d'événement pour le billet",
+        evError
+      );
+      return null;
+    }
+
+    const ev = { ...evRow, answers: reg.answers };
 
     if (summaryEl) {
       let html = "";
