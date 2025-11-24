@@ -201,6 +201,24 @@ async function efLoadDashboard() {
   const user = await efRequireAuth();
   if (!user) return;
 
+  // Récupère le plan de l'utilisateur pour appliquer les limites
+  let plan = "free";
+  try {
+    const { data: profile, error: profileError } = await window.supabaseClient
+      .from("profiles")
+      .select("plan")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (!profileError && profile && profile.plan) {
+      plan = profile.plan;
+    }
+  } catch (e) {
+    // en cas d'erreur, on reste sur le plan par défaut "free"
+  }
+
+  window.efCurrentPlan = plan;
+
   const statsEls = document.querySelectorAll(".ef-dashboard-stats .ef-stat-value");
 
   const { data, error } = await window.supabaseClient
@@ -277,8 +295,64 @@ async function efLoadDashboard() {
     ? Math.round((totalPresent / totalRegistrations) * 100)
     : 0;
 
+  // Limites par plan pour le nombre d'événements actifs
+  let maxEvents;
+  switch (plan) {
+    case "pro":
+      maxEvents = 5;
+      break;
+    case "business":
+      maxEvents = Infinity;
+      break;
+    default:
+      maxEvents = 1; // plan gratuit ou inconnu
+  }
+
+  const activeEventsCount = futureEvents.length;
+
+  // Désactivation du bouton "Créer un nouvel événement" si la limite est atteinte
+  const createBtn = document.querySelector('a[href="new-event.html"]');
+  if (createBtn && typeof maxEvents === "number") {
+    if (activeEventsCount >= maxEvents && maxEvents !== Infinity) {
+      createBtn.classList.add("ef-btn-disabled");
+      createBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        let msg = "Votre plan actuel ne vous permet pas de créer plus d'événements.";
+        if (plan === "free") {
+          msg =
+            "Votre plan Gratuit permet de créer 1 événement actif. Passez à un plan supérieur pour en créer davantage.";
+        } else if (plan === "pro") {
+          msg =
+            "Votre plan Pro permet de créer jusqu'à 5 événements actifs. Passez au plan Business pour aller au-delà.";
+        }
+        window.alert(msg);
+      });
+    }
+  }
+
+  // Limites par plan pour le nombre d'inscriptions (total futur)
+  let maxRegistrations;
+  switch (plan) {
+    case "pro":
+      maxRegistrations = 500;
+      break;
+    case "business":
+      maxRegistrations = Infinity;
+      break;
+    default:
+      maxRegistrations = 25; // plan gratuit ou inconnu
+  }
+
   if (statsEls[0]) statsEls[0].textContent = String(futureEvents.length);
-  if (statsEls[1]) statsEls[1].textContent = String(totalRegistrations);
+
+  if (statsEls[1]) {
+    if (maxRegistrations === Infinity) {
+      statsEls[1].textContent = String(totalRegistrations);
+    } else {
+      statsEls[1].textContent = `${totalRegistrations} / ${maxRegistrations}`;
+    }
+  }
+
   if (statsEls[2]) statsEls[2].textContent = `${rate}%`;
 }
 
