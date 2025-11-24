@@ -45,7 +45,7 @@ function efRenderEvents(containerId, events) {
 
   // Force les mêmes largeurs de colonnes pour les tableaux "À venir" et "Passés"
   const colgroup = document.createElement("colgroup");
-  const colWidths = ["30%", "20%", "20%", "15%", "15%"];
+  const colWidths = ["20%", "20%", "30%", "15%", "15%"];
   colWidths.forEach((w) => {
     const col = document.createElement("col");
     col.style.width = w;
