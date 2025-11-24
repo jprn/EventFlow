@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Statistiques Pro – Vue globale</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body>
+    <header class="ef-header">
+      <div class="ef-container ef-header-inner">
+        <a href="dashboard.html" class="ef-logo">EventFlow Lite</a>
+        <nav class="ef-nav">
+          <a href="dashboard.html" class="ef-nav-link">Mes événements</a>
+          <a href="stats-pro.html" class="ef-nav-link is-active">Statistiques Pro</a>
+          <a href="profile.html" class="ef-nav-link">Mon profil</a>
+          <button class="ef-nav-link ef-link-button" type="button">
+            Déconnexion
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="ef-main">
+      <section class="ef-container ef-page-wide">
+        <div class="ef-page-header">
+          <div>
+            <h1>Statistiques Pro — Vue globale</h1>
+            <p>
+              Indicateurs avancés sur vos événements récents (30 à 90 jours).
+            </p>
+          </div>
+        </div>
+
+        <section class="ef-grid ef-grid-3 ef-dashboard-stats">
+          <article class="ef-card ef-stat-card">
+            <h2>Événements (30 jours)</h2>
+            <p id="pro-kpi-events-30" class="ef-stat-value">0</p>
+          </article>
+          <article class="ef-card ef-stat-card">
+            <h2>Inscriptions (30 jours)</h2>
+            <p id="pro-kpi-reg-30" class="ef-stat-value">0</p>
+          </article>
+          <article class="ef-card ef-stat-card">
+            <h2>Présents (30 jours)</h2>
+            <p id="pro-kpi-present-30" class="ef-stat-value">0</p>
+          </article>
+        </section>
+
+        <section class="ef-grid ef-grid-3 ef-dashboard-stats">
+          <article class="ef-card ef-stat-card">
+            <h2>Événements (90 jours)</h2>
+            <p id="pro-kpi-events-90" class="ef-stat-value">0</p>
+          </article>
+          <article class="ef-card ef-stat-card">
+            <h2>Inscriptions (90 jours)</h2>
+            <p id="pro-kpi-reg-90" class="ef-stat-value">0</p>
+          </article>
+          <article class="ef-card ef-stat-card">
+            <h2>Taux de présence moyen</h2>
+            <p id="pro-kpi-rate-avg" class="ef-stat-value">0%</p>
+          </article>
+        </section>
+
+        <section class="ef-card ef-table-card">
+          <div class="ef-card-header">
+            <h2>Inscriptions par semaine (8 dernières semaines)</h2>
+          </div>
+          <div id="pro-weekly-chart" class="ef-pro-chart"></div>
+        </section>
+
+        <section class="ef-grid ef-grid-3">
+          <article class="ef-card">
+            <h2>Top 3 événements par inscrits</h2>
+            <ul id="pro-top-by-registrations" class="ef-pro-list"></ul>
+          </article>
+          <article class="ef-card">
+            <h2>Top 3 événements par taux de présence</h2>
+            <ul id="pro-top-by-rate" class="ef-pro-list"></ul>
+          </article>
+          <article class="ef-card">
+            <h2>Sources d'inscription principales</h2>
+            <ul id="pro-top-sources" class="ef-pro-list"></ul>
+          </article>
+        </section>
+
+        <div id="pro-stats-message" class="ef-auth-message"></div>
+      </section>
+    </main>
+
+    <footer class="ef-footer">
+      <div class="ef-container">
+        <p>EventFlow Lite · Espace organisateur</p>
+      </div>
+    </footer>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabaseClient.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/statsPro.js"></script>
+  </body>
+</html>

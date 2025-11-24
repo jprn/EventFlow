@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Statistiques Pro — Événement</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body>
+    <header class="ef-header">
+      <div class="ef-container ef-header-inner">
+        <a href="dashboard.html" class="ef-logo">EventFlow Lite</a>
+        <nav class="ef-nav">
+          <a href="dashboard.html" class="ef-nav-link">Mes événements</a>
+          <a href="stats-pro.html" class="ef-nav-link">Statistiques Pro</a>
+          <a href="profile.html" class="ef-nav-link">Mon profil</a>
+          <button class="ef-nav-link ef-link-button" type="button">
+            Déconnexion
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="ef-main">
+      <section class="ef-container ef-page-wide">
+        <div class="ef-page-header">
+          <div>
+            <h1 id="pro-event-title">Statistiques Pro — Événement</h1>
+            <p id="pro-event-meta"></p>
+          </div>
+        </div>
+
+        <section class="ef-grid ef-grid-3 ef-dashboard-stats">
+          <article class="ef-card ef-stat-card">
+            <h2>Inscriptions</h2>
+            <p id="pro-ev-kpi-registrations" class="ef-stat-value">0</p>
+          </article>
+          <article class="ef-card ef-stat-card">
+            <h2>Présents</h2>
+            <p id="pro-ev-kpi-present" class="ef-stat-value">0</p>
+          </article>
+          <article class="ef-card ef-stat-card">
+            <h2>No-show</h2>
+            <p id="pro-ev-kpi-noshow" class="ef-stat-value">0</p>
+          </article>
+        </section>
+
+        <section class="ef-card ef-table-card">
+          <div class="ef-card-header">
+            <h2>Inscriptions dans le temps</h2>
+          </div>
+          <div id="pro-ev-registrations-by-day" class="ef-pro-chart"></div>
+        </section>
+
+        <section class="ef-card ef-table-card">
+          <div class="ef-card-header">
+            <h2>Check-ins par heure (jour J)</h2>
+          </div>
+          <div id="pro-ev-checkins-by-hour" class="ef-pro-chart"></div>
+        </section>
+
+        <section class="ef-card">
+          <h2>Temps d'arrivée</h2>
+          <p id="pro-ev-arrival-summary">
+            En attente de données de présence...
+          </p>
+        </section>
+
+        <div id="pro-ev-message" class="ef-auth-message"></div>
+      </section>
+    </main>
+
+    <footer class="ef-footer">
+      <div class="ef-container">
+        <p>EventFlow Lite · Espace organisateur</p>
+      </div>
+    </footer>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabaseClient.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/statsEventPro.js"></script>
+  </body>
+</html>

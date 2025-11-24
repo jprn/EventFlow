@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exports Pro – EventFlow Lite</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body>
+    <header class="ef-header">
+      <div class="ef-container ef-header-inner">
+        <a href="dashboard.html" class="ef-logo">EventFlow Lite</a>
+        <nav class="ef-nav">
+          <a href="dashboard.html" class="ef-nav-link">Mes événements</a>
+          <a href="stats-pro.html" class="ef-nav-link">Statistiques Pro</a>
+          <a href="profile.html" class="ef-nav-link">Mon profil</a>
+          <button class="ef-nav-link ef-link-button" type="button">
+            Déconnexion
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="ef-main">
+      <section class="ef-container ef-page-wide">
+        <div class="ef-page-header">
+          <div>
+            <h1>Exports Pro</h1>
+            <p>
+              Exports CSV et rapports imprimables pour vos événements.
+            </p>
+          </div>
+        </div>
+
+        <article class="ef-card">
+          <div class="ef-form-group">
+            <label for="pro-export-event-select">Sélectionner un événement</label>
+            <select id="pro-export-event-select"></select>
+          </div>
+
+          <div class="ef-form-actions">
+            <button
+              type="button"
+              class="ef-btn ef-btn-secondary"
+              id="pro-export-participants"
+            >
+              Exporter les participants (CSV)
+            </button>
+            <button
+              type="button"
+              class="ef-btn ef-btn-secondary"
+              id="pro-export-checkins"
+            >
+              Exporter les check-ins (CSV)
+            </button>
+            <button
+              type="button"
+              class="ef-btn ef-btn-primary"
+              id="pro-export-report"
+            >
+              Générer un rapport imprimable
+            </button>
+          </div>
+        </article>
+
+        <article class="ef-card" id="pro-export-report-preview" style="display: none">
+          <h2>Rapport Pro — Aperçu</h2>
+          <div id="pro-export-report-content"></div>
+          <div class="ef-form-actions">
+            <button
+              type="button"
+              class="ef-btn ef-btn-secondary"
+              id="pro-export-print"
+            >
+              Imprimer / Enregistrer en PDF
+            </button>
+          </div>
+        </article>
+
+        <div id="pro-export-message" class="ef-auth-message"></div>
+      </section>
+    </main>
+
+    <footer class="ef-footer">
+      <div class="ef-container">
+        <p>EventFlow Lite · Espace organisateur</p>
+      </div>
+    </footer>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabaseClient.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/exportsPro.js"></script>
+  </body>
+</html>
