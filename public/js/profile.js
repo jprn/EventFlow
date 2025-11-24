@@ -29,6 +29,7 @@ async function efLoadProfile() {
   const nameInput = document.getElementById("profile-name");
   const orgInput = document.getElementById("profile-org");
   const planBadge = document.getElementById("profile-plan");
+  const planSelect = document.getElementById("profile-plan-select");
 
   if (emailInput) emailInput.value = user.email || "";
 
@@ -59,6 +60,9 @@ async function efLoadProfile() {
       }
       planBadge.textContent = label;
     }
+    if (planSelect) {
+      planSelect.value = plan;
+    }
     window.efCurrentPlan = plan;
   }
 }
@@ -75,6 +79,7 @@ async function efHandleProfileSubmit(event) {
 
   const full_name = nameInput ? nameInput.value.trim() : "";
   const organization = orgInput ? orgInput.value.trim() : "";
+  const plan = planSelect ? planSelect.value : undefined;
   const newPassword = passInput ? passInput.value : "";
   const confirmPassword = passConfInput ? passConfInput.value : "";
 
@@ -112,6 +117,7 @@ async function efHandleProfileSubmit(event) {
       user_id: userId,
       full_name,
       organization,
+      plan,
     });
 
   if (profileError) {

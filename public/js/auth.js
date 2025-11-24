@@ -35,6 +35,10 @@ async function efHandlePasswordLogin(event) {
 
   efShowMessage("", "");
 
+  // Récupère le plan choisi depuis l'URL (par défaut: free)
+  const params = new URLSearchParams(window.location.search);
+  const chosenPlan = params.get("plan") || "free";
+
   const { data, error } = await window.supabaseClient.auth.signInWithPassword({
     email,
     password,
@@ -165,7 +169,7 @@ async function efHandleSignUp(event) {
     try {
       await window.supabaseClient.from("profiles").insert({
         user_id: data.user.id,
-        plan: "free",
+        plan: chosenPlan,
       });
     } catch (e) {
       // si l'insertion échoue, on ne bloque pas la création du compte
