@@ -61,7 +61,6 @@ async function efLoadStatsEventPro() {
     .from("events")
     .select("id, titre, date_evenement, heure_evenement, lieu, capacity")
     .eq("id", eventId)
-    .eq("owner_id", user.id)
     .maybeSingle();
 
   if (evError || !ev) {
