@@ -165,8 +165,6 @@ async function efHandleSignUp(event) {
     try {
       await window.supabaseClient.from("profiles").insert({
         user_id: data.user.id,
-        full_name,
-        organization,
         plan: "free",
       });
     } catch (e) {
