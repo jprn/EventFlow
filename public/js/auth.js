@@ -172,14 +172,9 @@ async function efHandleSignUp(event) {
     }
   }
 
-  if (data && data.session) {
-    window.location.href = "dashboard.html";
-  } else {
-    efShowMessage(
-      "success",
-      "Compte créé. Vérifiez votre boîte mail pour confirmer votre adresse, puis connectez-vous."
-    );
-  }
+  // Inscription réussie : on retourne toujours sur la page de connexion
+  // L'utilisateur pourra se connecter après avoir confirmé son e-mail si nécessaire.
+  window.location.href = "login.html";
 }
 
 async function efHandleLogout() {

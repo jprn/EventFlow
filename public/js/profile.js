@@ -28,6 +28,7 @@ async function efLoadProfile() {
   const emailInput = document.getElementById("profile-email");
   const nameInput = document.getElementById("profile-name");
   const orgInput = document.getElementById("profile-org");
+  const planBadge = document.getElementById("profile-plan");
 
   if (emailInput) emailInput.value = user.email || "";
 
@@ -40,6 +41,25 @@ async function efLoadProfile() {
   if (!profileError && profile) {
     if (nameInput) nameInput.value = profile.full_name || "";
     if (orgInput) orgInput.value = profile.organization || "";
+    const plan = profile.plan || "free";
+    if (planBadge) {
+      let label = "";
+      switch (plan) {
+        case "event":
+          label = "Pack Événement";
+          break;
+        case "pro":
+          label = "Pro";
+          break;
+        case "business":
+          label = "Business";
+          break;
+        default:
+          label = "Gratuit";
+      }
+      planBadge.textContent = label;
+    }
+    window.efCurrentPlan = plan;
   }
 }
 
