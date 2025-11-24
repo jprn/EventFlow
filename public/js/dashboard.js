@@ -271,6 +271,7 @@ async function efLoadDashboard() {
     return { ...ev, inscriptions_total };
   });
 
+  const now = new Date();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -282,9 +283,19 @@ async function efLoadDashboard() {
       futureEvents.push(ev);
       continue;
     }
-    const d = new Date(ev.date_evenement);
-    d.setHours(0, 0, 0, 0);
-    if (d >= today) {
+
+    // Combine la date et l'heure pour savoir si l'événement est déjà passé
+    const eventDateTime = new Date(ev.date_evenement);
+    if (ev.heure_evenement) {
+      const timeStr = String(ev.heure_evenement).slice(0, 5); // HH:MM
+      const [h, m] = timeStr.split(":");
+      eventDateTime.setHours(Number(h) || 0, Number(m) || 0, 0, 0);
+    } else {
+      // S'il n'y a pas d'heure, on considère minuit
+      eventDateTime.setHours(0, 0, 0, 0);
+    }
+
+    if (eventDateTime >= now) {
       futureEvents.push(ev);
     } else {
       pastEvents.push(ev);
