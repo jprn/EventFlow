@@ -219,6 +219,18 @@ async function efLoadDashboard() {
   const user = await efRequireAuth();
   if (!user) return;
 
+  // Message de bienvenue personnalisé
+  const greetingEl = document.getElementById("ef-dashboard-greeting");
+  if (greetingEl) {
+    const meta = user.user_metadata || {};
+    const firstName = meta.first_name || meta.prenom || "";
+    const lastName = meta.last_name || meta.nom || "";
+    const fullName = `${firstName} ${lastName}`.trim();
+    greetingEl.textContent = fullName
+      ? `Bonjour ${fullName}`
+      : "Bonjour";
+  }
+
   // Récupère le plan de l'utilisateur pour appliquer les limites
   let plan = "free";
   try {

@@ -572,9 +572,10 @@ img {
 }
 
 .ef-dashboard-kicker {
-  margin: 0 0 0.15rem;
-  font-size: 0.9rem;
-  color: var(--ef-color-text-muted);
+  margin: 0 0 0.3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0f172a;
 }
 
 .ef-dashboard-subtitle {
