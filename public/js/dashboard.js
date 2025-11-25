@@ -223,24 +223,27 @@ async function efLoadDashboard() {
   const greetingEl = document.getElementById("ef-dashboard-greeting");
   if (greetingEl) {
     const meta = user.user_metadata || {};
-    const fullNameFromMeta =
-      meta.full_name || meta.fullname || "";
+    const fullNameFromMeta = meta.full_name || meta.fullname || "";
     const firstName = meta.first_name || meta.prenom || "";
     const lastName = meta.last_name || meta.nom || "";
     const fallbackComposed = `${firstName} ${lastName}`.trim();
     const displayName = (fullNameFromMeta || fallbackComposed).trim();
 
-    // On tente d'extraire le nom de famille (dernier mot) pour l'afficher en MAJUSCULES
-    let lastNameForGreeting = "";
-    if (displayName) {
+    let greetingName = "";
+
+    if (fullNameFromMeta) {
+      // Si full_name est défini dans Supabase, on l'utilise en priorité
+      greetingName = fullNameFromMeta.toUpperCase();
+    } else if (displayName) {
+      // Sinon on extrait au moins le nom de famille en majuscules
       const parts = displayName.split(/\s+/).filter(Boolean);
       if (parts.length > 0) {
-        lastNameForGreeting = parts[parts.length - 1].toUpperCase();
+        greetingName = parts[parts.length - 1].toUpperCase();
       }
     }
 
-    if (lastNameForGreeting) {
-      greetingEl.textContent = `Bonjour, ${lastNameForGreeting} 👋`;
+    if (greetingName) {
+      greetingEl.textContent = `Bonjour, ${greetingName} 👋`;
     } else {
       greetingEl.textContent = "Bonjour 👋";
     }
