@@ -28,9 +28,16 @@ async function efProRequireAuthWithPlanEvent() {
     }
   } catch (e) {}
 
-  if (plan !== "event" && plan !== "pro" && plan !== "business") {
+  // Les statistiques détaillées par événement sont accessibles à tous les plans
+  // (free, event, pro, business). On ne bloque que les plans inconnus.
+  if (
+    plan !== "free" &&
+    plan !== "event" &&
+    plan !== "pro" &&
+    plan !== "business"
+  ) {
     window.alert(
-      "Les statistiques détaillées par événement sont réservées aux packs Événement, Pro et Business. Modifiez votre plan dans le profil pour y accéder."
+      "Votre type de plan n'est pas reconnu. Mettez à jour votre profil pour accéder aux statistiques."
     );
     window.location.href = "dashboard.html";
     return null;
@@ -110,14 +117,34 @@ async function efLoadStatsEventPro() {
     link.setAttribute("href", url.pathname + url.search);
   });
 
-  // Affiche ou masque le bouton vers les statistiques globales selon le plan
+  // Affiche le bouton vers les statistiques globales, mais le désactive
+  // pour les plans non Pro / Business (UX cohérente avec le header).
   const plan = window.efCurrentPlan || "free";
   if (globalStatsBtn) {
     if (plan === "pro" || plan === "business") {
-      globalStatsBtn.style.display = "inline-flex";
+      globalStatsBtn.classList.remove("ef-btn-disabled");
+      globalStatsBtn.removeAttribute("aria-disabled");
     } else {
-      globalStatsBtn.style.display = "none";
+      globalStatsBtn.classList.add("ef-btn-disabled");
+      globalStatsBtn.setAttribute("aria-disabled", "true");
+      // On neutralise le clic même si un href est présent
+      globalStatsBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
     }
+  }
+
+  // Désactive également le lien "Statistiques Pro" du header pour les
+  // plans non Pro / Business sur cette page.
+  const headerStatsLink = document.getElementById("header-nav-stats-pro");
+  if (headerStatsLink && !(plan === "pro" || plan === "business")) {
+    headerStatsLink.classList.add("ef-nav-link-disabled");
+    headerStatsLink.setAttribute("aria-disabled", "true");
+    headerStatsLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
   }
 
   const { data: regs, error: regError } = await window.supabaseClient

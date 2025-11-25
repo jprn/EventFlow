@@ -138,6 +138,12 @@ img {
   border-color: rgba(148, 163, 184, 0.8);
 }
 
+.ef-nav-link-disabled {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
 .ef-link-button {
   background: none;
   border: none;
@@ -1350,6 +1356,7 @@ img {
 .ef-btn-disabled {
   opacity: 0.45;
   cursor: default;
+  pointer-events: none;
 }
 
 .ef-page-two-columns {
