@@ -1141,7 +1141,8 @@ img {
   font-weight: 500;
 }
 
-.ef-form-group input {
+.ef-form-group input,
+.ef-form-group select {
   padding: 0.55rem 0.7rem;
   border-radius: 0.6rem;
   border: 1px solid var(--ef-color-border);
