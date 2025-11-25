@@ -1220,6 +1220,10 @@ img {
   letter-spacing: 0.03em;
 }
 
+.ef-fields-table th:last-child {
+  text-align: right;
+}
+
 .ef-fields-table tbody tr:hover {
   background-color: #f9fafb;
 }
