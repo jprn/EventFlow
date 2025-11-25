@@ -40,10 +40,11 @@ img {
   position: sticky;
   top: 0;
   z-index: 15;
-  background: radial-gradient(circle at top left, #020617 0, #020617 55%, #020617);
+  /* Dégradé bleu/gris plus professionnel à la place du noir pur */
+  background: linear-gradient(90deg, #0f172a, #1e293b 45%, #0f172a 100%);
   color: #e5e7eb;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.95);
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.55);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.8);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(14px);
 }
 
@@ -114,7 +115,7 @@ img {
   gap: 0.35rem;
   padding: 0.15rem;
   border-radius: 999px;
-  background-color: rgba(15, 23, 42, 0.45);
+  background-color: rgba(15, 23, 42, 0.55);
 }
 
 .ef-header-public .ef-nav {
