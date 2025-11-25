@@ -250,22 +250,119 @@ function efRenderEventRegistrations() {
     return;
   }
 
+  // Mode dynamique si on connaît les champs du formulaire
+  const canUseDynamic = efEventFieldDefs && efEventFieldDefs.length;
+
+  if (canUseDynamic) {
+    const table = document.createElement("table");
+    table.className = "ef-table ef-registrations-table";
+
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    const cols = [];
+    efEventFieldDefs.forEach((def) => cols.push(def.label));
+    cols.push("Inscription", "Statut");
+
+    cols.forEach((label) => {
+      const th = document.createElement("th");
+      th.textContent = label;
+      headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+
+    filtered.forEach((reg) => {
+      const tr = document.createElement("tr");
+      const answers = reg.answers || {};
+
+      efEventFieldDefs.forEach((def, index) => {
+        const value = answers[def.id] ?? "";
+        const td = document.createElement("td");
+
+        if (index === 0) {
+          // Première colonne : avatar + valeur principale
+          td.className = "ef-reg-name-cell";
+
+          const avatar = document.createElement("div");
+          avatar.className = "ef-reg-avatar";
+
+          const primaryText = value ? String(value) : "Participant";
+          const initials = primaryText
+            .split(" ")
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((s) => s[0].toUpperCase())
+            .join("");
+          avatar.textContent = initials || "?";
+
+          const nameWrapper = document.createElement("div");
+          nameWrapper.className = "ef-reg-name-wrapper";
+          const nameMain = document.createElement("div");
+          nameMain.className = "ef-reg-name-main";
+          nameMain.textContent = primaryText;
+          nameWrapper.appendChild(nameMain);
+
+          td.appendChild(avatar);
+          td.appendChild(nameWrapper);
+        } else {
+          if (value !== null && value !== undefined) {
+            td.textContent = String(value);
+          }
+        }
+
+        tr.appendChild(td);
+      });
+
+      const tdDate = document.createElement("td");
+      const d = new Date(reg.created_at);
+      const dateStr = d.toLocaleDateString("fr-FR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+      const timeStr = d.toLocaleTimeString("fr-FR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      tdDate.textContent = `${dateStr} ${timeStr}`;
+
+      const tdStatus = document.createElement("td");
+      tdStatus.className = "ef-reg-status-cell";
+      const statusBadge = document.createElement("span");
+      statusBadge.className = "ef-reg-status-badge";
+      if (reg.checked_in_at) {
+        statusBadge.textContent = "Présent";
+        statusBadge.classList.add("is-present");
+      } else {
+        statusBadge.textContent = "En attente";
+        statusBadge.classList.add("is-pending");
+      }
+      tdStatus.appendChild(statusBadge);
+
+      tr.appendChild(tdDate);
+      tr.appendChild(tdStatus);
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    container.appendChild(table);
+    return;
+  }
+
+  // Mode de repli : ancien tableau simple Date / Détails / Présence
   const table = document.createElement("table");
-  table.className = "ef-table ef-registrations-table";
+  table.className = "ef-table";
 
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
-  const cols = [];
-  if (efEventFieldDefs && efEventFieldDefs.length) {
-    efEventFieldDefs.forEach((def) => cols.push(def.label));
-  } else {
-    cols.push("Nom", "Prénom", "Email");
-  }
-  cols.push("Inscription", "Statut");
-
-  cols.forEach((label) => {
+  ["Date", "Détails", "Présence"].forEach((label, index) => {
     const th = document.createElement("th");
     th.textContent = label;
+    if (index === 2) {
+      th.style.textAlign = "center";
+    }
     headerRow.appendChild(th);
   });
   thead.appendChild(headerRow);
@@ -275,55 +372,6 @@ function efRenderEventRegistrations() {
 
   filtered.forEach((reg) => {
     const tr = document.createElement("tr");
-    const answers = reg.answers || {};
-
-    // Champs issus du formulaire (Nom, Prénom, Email + champs configurés)
-    const defsToUse =
-      efEventFieldDefs && efEventFieldDefs.length
-        ? efEventFieldDefs
-        : [
-            { id: "base_nom", label: "Nom" },
-            { id: "base_prenom", label: "Prénom" },
-            { id: "base_email", label: "Email" },
-          ];
-
-    defsToUse.forEach((def, index) => {
-      const value = answers[def.id] ?? "";
-      const td = document.createElement("td");
-
-      if (index === 0) {
-        // Première colonne : avatar + nom
-        td.className = "ef-reg-name-cell";
-
-        const avatar = document.createElement("div");
-        avatar.className = "ef-reg-avatar";
-
-        const primaryText = value ? String(value) : "Participant";
-        const initials = primaryText
-          .split(" ")
-          .filter(Boolean)
-          .slice(0, 2)
-          .map((s) => s[0].toUpperCase())
-          .join("");
-        avatar.textContent = initials || "?";
-
-        const nameWrapper = document.createElement("div");
-        nameWrapper.className = "ef-reg-name-wrapper";
-        const nameMain = document.createElement("div");
-        nameMain.className = "ef-reg-name-main";
-        nameMain.textContent = primaryText;
-        nameWrapper.appendChild(nameMain);
-
-        td.appendChild(avatar);
-        td.appendChild(nameWrapper);
-      } else {
-        if (value !== null && value !== undefined) {
-          td.textContent = String(value);
-        }
-      }
-
-      tr.appendChild(td);
-    });
 
     const tdDate = document.createElement("td");
     const d = new Date(reg.created_at);
@@ -338,23 +386,29 @@ function efRenderEventRegistrations() {
     });
     tdDate.textContent = `${dateStr} ${timeStr}`;
 
-    const tdStatus = document.createElement("td");
-    tdStatus.className = "ef-reg-status-cell";
-    const statusBadge = document.createElement("span");
-    statusBadge.className = "ef-reg-status-badge";
-    if (reg.checked_in_at) {
-      statusBadge.textContent = "Présent";
-      statusBadge.classList.add("is-present");
-    } else {
-      statusBadge.textContent = "En attente";
-      statusBadge.classList.add("is-pending");
-    }
-    tdStatus.appendChild(statusBadge);
+    const tdDetails = document.createElement("td");
+    const answers = reg.answers || {};
+    const parts = [];
+    Object.keys(answers).forEach((key) => {
+      const val = answers[key];
+      if (val === null || val === undefined || val === "") return;
+      parts.push(String(val));
+    });
+    tdDetails.textContent = parts.join(" · ");
 
-    tr.appendChild(tdName);
-    tr.appendChild(tdDetails);
+    const tdPresence = document.createElement("td");
+    tdPresence.style.textAlign = "center";
+    if (reg.checked_in_at) {
+      tdPresence.textContent = "✅ Présent";
+      tdPresence.style.color = "#15803d"; // vert
+    } else {
+      tdPresence.textContent = "❌ Non scanné";
+      tdPresence.style.color = "#b91c1c"; // rouge
+    }
+
     tr.appendChild(tdDate);
-    tr.appendChild(tdStatus);
+    tr.appendChild(tdDetails);
+    tr.appendChild(tdPresence);
     tbody.appendChild(tr);
   });
 
