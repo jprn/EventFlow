@@ -36,6 +36,9 @@ async function efProRequireAuthWithPlanEvent() {
     return null;
   }
 
+  // Expose le plan courant pour les autres scripts de cette page
+  window.efCurrentPlan = plan;
+
   return user;
 }
 
@@ -105,6 +108,17 @@ async function efLoadStatsEventPro() {
     url.searchParams.set("id", eventId);
     link.setAttribute("href", url.pathname + url.search);
   });
+
+  // Affiche ou masque le bouton vers les statistiques globales selon le plan
+  const plan = window.efCurrentPlan || "free";
+  const globalStatsBtn = document.getElementById("pro-ev-open-global-stats");
+  if (globalStatsBtn) {
+    if (plan === "pro" || plan === "business") {
+      globalStatsBtn.style.display = "inline-flex";
+    } else {
+      globalStatsBtn.style.display = "none";
+    }
+  }
 
   const { data: regs, error: regError } = await window.supabaseClient
     .from("registrations")
