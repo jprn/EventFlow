@@ -2,6 +2,7 @@ let efEventRegs = [];
 let efEventRegsFilter = "all";
 let efEventSearchTerm = "";
 let efEventRegsChannel = null;
+let efEventFieldDefs = [];
 
 function efGetEventIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
@@ -96,8 +97,37 @@ async function efLoadEventView() {
     tabSettings.href = url.pathname + url.search;
   }
 
+  // Charge la définition des champs de formulaire pour construire le tableau
+  await efLoadEventFieldDefs(eventId);
+
   await efLoadEventRegistrations(eventId);
   efSetupEventViewFilters();
+}
+
+async function efLoadEventFieldDefs(eventId) {
+  efEventFieldDefs = [
+    { id: "base_nom", label: "Nom" },
+    { id: "base_prenom", label: "Prénom" },
+    { id: "base_email", label: "Email" },
+  ];
+
+  if (!window.supabaseClient) return;
+
+  try {
+    const { data, error } = await window.supabaseClient
+      .from("event_fields")
+      .select("id, label, ordre")
+      .eq("event_id", eventId)
+      .order("ordre", { ascending: true });
+
+    if (!error && Array.isArray(data)) {
+      data.forEach((f) => {
+        efEventFieldDefs.push({ id: String(f.id), label: f.label });
+      });
+    }
+  } catch (e) {
+    // en cas d'erreur, on garde simplement les 3 champs de base
+  }
 }
 
 function efSetupEventViewPage() {
@@ -225,7 +255,15 @@ function efRenderEventRegistrations() {
 
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
-  ["Nom", "Email / détails", "Inscription", "Statut"].forEach((label) => {
+  const cols = [];
+  if (efEventFieldDefs && efEventFieldDefs.length) {
+    efEventFieldDefs.forEach((def) => cols.push(def.label));
+  } else {
+    cols.push("Nom", "Prénom", "Email");
+  }
+  cols.push("Inscription", "Statut");
+
+  cols.forEach((label) => {
     const th = document.createElement("th");
     th.textContent = label;
     headerRow.appendChild(th);
@@ -237,41 +275,55 @@ function efRenderEventRegistrations() {
 
   filtered.forEach((reg) => {
     const tr = document.createElement("tr");
-
-    const tdName = document.createElement("td");
-    tdName.className = "ef-reg-name-cell";
-
-    const avatar = document.createElement("div");
-    avatar.className = "ef-reg-avatar";
-
     const answers = reg.answers || {};
-    const values = Object.values(answers).filter(
-      (v) => v !== null && v !== undefined && v !== ""
-    );
 
-    const primaryText = values[0] ? String(values[0]) : "Participant";
-    const initials = primaryText
-      .split(" ")
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((s) => s[0].toUpperCase())
-      .join("");
-    avatar.textContent = initials || "?";
+    // Champs issus du formulaire (Nom, Prénom, Email + champs configurés)
+    const defsToUse =
+      efEventFieldDefs && efEventFieldDefs.length
+        ? efEventFieldDefs
+        : [
+            { id: "base_nom", label: "Nom" },
+            { id: "base_prenom", label: "Prénom" },
+            { id: "base_email", label: "Email" },
+          ];
 
-    const nameWrapper = document.createElement("div");
-    nameWrapper.className = "ef-reg-name-wrapper";
-    const nameMain = document.createElement("div");
-    nameMain.className = "ef-reg-name-main";
-    nameMain.textContent = primaryText;
-    nameWrapper.appendChild(nameMain);
+    defsToUse.forEach((def, index) => {
+      const value = answers[def.id] ?? "";
+      const td = document.createElement("td");
 
-    tdName.appendChild(avatar);
-    tdName.appendChild(nameWrapper);
+      if (index === 0) {
+        // Première colonne : avatar + nom
+        td.className = "ef-reg-name-cell";
 
-    const tdDetails = document.createElement("td");
-    tdDetails.className = "ef-reg-details-cell";
-    const detailsText = values.slice(1).join(" · ");
-    tdDetails.textContent = detailsText;
+        const avatar = document.createElement("div");
+        avatar.className = "ef-reg-avatar";
+
+        const primaryText = value ? String(value) : "Participant";
+        const initials = primaryText
+          .split(" ")
+          .filter(Boolean)
+          .slice(0, 2)
+          .map((s) => s[0].toUpperCase())
+          .join("");
+        avatar.textContent = initials || "?";
+
+        const nameWrapper = document.createElement("div");
+        nameWrapper.className = "ef-reg-name-wrapper";
+        const nameMain = document.createElement("div");
+        nameMain.className = "ef-reg-name-main";
+        nameMain.textContent = primaryText;
+        nameWrapper.appendChild(nameMain);
+
+        td.appendChild(avatar);
+        td.appendChild(nameWrapper);
+      } else {
+        if (value !== null && value !== undefined) {
+          td.textContent = String(value);
+        }
+      }
+
+      tr.appendChild(td);
+    });
 
     const tdDate = document.createElement("td");
     const d = new Date(reg.created_at);
