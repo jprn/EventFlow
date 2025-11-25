@@ -36,7 +36,7 @@ async function efLoadEventView() {
 
   const { data: event, error } = await window.supabaseClient
     .from("events")
-    .select("titre, date_evenement, heure_evenement, lieu")
+    .select("id, titre, date_evenement, heure_evenement, lieu, slug")
     .eq("id", eventId)
     .maybeSingle();
 
@@ -75,7 +75,7 @@ async function efLoadEventView() {
   const editBtn = document.getElementById("ev-edit-button");
   const scanBtn = document.getElementById("ev-scan-button");
   const tabStats = document.getElementById("ev-tab-stats");
-  const tabSettings = document.getElementById("ev-tab-settings");
+  const tabSettingsToggle = document.getElementById("ev-tab-settings-toggle");
   if (editBtn) {
     const url = new URL("new-event.html", window.location.href);
     url.searchParams.set("id", eventId);
@@ -91,11 +91,74 @@ async function efLoadEventView() {
     url.searchParams.set("id", eventId);
     tabStats.href = url.pathname + url.search;
   }
-  if (tabSettings) {
+
+  // Bouton "Configurer les champs" (dans le panneau Réglages)
+  const openFormConfigBtn = document.getElementById("ev-open-form-config");
+  if (openFormConfigBtn) {
     const url = new URL("event-settings.html", window.location.href);
     url.searchParams.set("id", eventId);
-    tabSettings.href = url.pathname + url.search;
+    openFormConfigBtn.addEventListener("click", () => {
+      window.location.href = url.pathname + url.search;
+    });
   }
+
+  // Lien public d'inscription
+  const publicUrlInput = document.getElementById("public_url");
+  const copyPublicBtn = document.getElementById("copy-public-url-button");
+  if (publicUrlInput && event.slug) {
+    const base = window.location.origin.replace(/\/$/, "");
+    const publicUrl = `${base}/publicevent?slug=${encodeURIComponent(
+      event.slug
+    )}`;
+    publicUrlInput.value = publicUrl;
+
+    if (copyPublicBtn) {
+      copyPublicBtn.addEventListener("click", async () => {
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(publicUrl);
+          }
+          window.alert("Lien d'inscription copié dans le presse-papiers.");
+        } catch (e) {
+          window.alert("Impossible de copier le lien, copiez-le manuellement.");
+        }
+      });
+    }
+  }
+
+  // Gestion des onglets locaux Participants / Réglages
+  const participantsPanel = document.getElementById("ev-participants-panel");
+  const settingsPanel = document.getElementById("ev-settings-panel");
+  const tabButtons = document.querySelectorAll(
+    '.ef-event-tab[data-ev-tab]'
+  );
+
+  function setActiveTab(name) {
+    tabButtons.forEach((btn) => {
+      const tabName = btn.getAttribute("data-ev-tab");
+      if (tabName === name) {
+        btn.classList.add("is-active");
+      } else {
+        btn.classList.remove("is-active");
+      }
+    });
+    if (participantsPanel && settingsPanel) {
+      if (name === "settings") {
+        participantsPanel.style.display = "none";
+        settingsPanel.style.display = "block";
+      } else {
+        participantsPanel.style.display = "block";
+        settingsPanel.style.display = "none";
+      }
+    }
+  }
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tabName = btn.getAttribute("data-ev-tab") || "participants";
+      setActiveTab(tabName);
+    });
+  });
 
   // Charge la définition des champs de formulaire pour construire le tableau
   await efLoadEventFieldDefs(eventId);

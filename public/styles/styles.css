@@ -721,6 +721,20 @@ img {
   align-items: center;
 }
 
+.ef-event-settings-panel {
+  margin-top: 1.25rem;
+}
+
+.ef-event-settings-panel h2 {
+  margin-top: 0;
+  margin-bottom: 0.9rem;
+}
+
+.ef-event-settings-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
 /* Tableau des inscriptions (event-view) ----------------------------------- */
 
 .ef-registrations-table {
@@ -748,9 +762,14 @@ img {
   letter-spacing: 0.03em;
 }
 
+.ef-registrations-table th:first-child {
+  /* décale "NOM" pour qu'il soit aligné avec le texte principal, pas l'avatar */
+  padding-left: 2.4rem;
+}
+
 .ef-registrations-table th:last-child,
 .ef-registrations-table td:last-child {
-  text-align: right;
+  text-align: center;
 }
 
 .ef-registrations-table tbody tr:hover {
@@ -785,7 +804,7 @@ img {
 }
 
 .ef-reg-status-cell {
-  text-align: right;
+  text-align: center;
 }
 
 .ef-reg-status-badge {

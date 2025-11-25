@@ -65,12 +65,31 @@
         </section>
 
         <nav class="ef-event-tabs">
-          <button type="button" class="ef-event-tab is-active">Participants</button>
-          <a href="stats-event-pro.html" id="ev-tab-stats" class="ef-event-tab-link">Statistiques</a>
-          <a href="event-settings.html" id="ev-tab-settings" class="ef-event-tab-link">Réglages</a>
+          <button
+            type="button"
+            class="ef-event-tab is-active"
+            data-ev-tab="participants"
+          >
+            Participants
+          </button>
+          <a
+            href="stats-event-pro.html"
+            id="ev-tab-stats"
+            class="ef-event-tab-link"
+          >
+            Statistiques
+          </a>
+          <button
+            type="button"
+            class="ef-event-tab"
+            id="ev-tab-settings-toggle"
+            data-ev-tab="settings"
+          >
+            Réglages
+          </button>
         </nav>
 
-        <article class="ef-card ef-table-card">
+        <article class="ef-card ef-table-card" id="ev-participants-panel">
           <div class="ef-event-table-toolbar">
             <div class="ef-event-search">
               <input
@@ -116,6 +135,42 @@
             <div class="ef-table-empty">Aucune inscription pour le moment.</div>
           </div>
         </article>
+
+        <section
+          class="ef-card ef-event-settings-panel"
+          id="ev-settings-panel"
+          style="display: none"
+        >
+          <h2>Paramètres de l'événement</h2>
+
+          <div class="ef-event-settings-row">
+            <button
+              type="button"
+              id="ev-open-form-config"
+              class="ef-btn ef-btn-secondary"
+            >
+              ⚙️ Configurer les champs du formulaire
+            </button>
+          </div>
+
+          <div class="ef-form-group" style="margin-top: 1rem">
+            <label>Lien d'inscription public</label>
+            <div class="ef-form-row">
+              <input
+                type="text"
+                id="public_url"
+                readonly
+              />
+              <button
+                type="button"
+                id="copy-public-url-button"
+                class="ef-btn ef-btn-secondary"
+              >
+                Copier
+              </button>
+            </div>
+          </div>
+        </section>
 
         <div id="event-view-message" class="ef-auth-message"></div>
       </section>
