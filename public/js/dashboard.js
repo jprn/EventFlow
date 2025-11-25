@@ -223,12 +223,27 @@ async function efLoadDashboard() {
   const greetingEl = document.getElementById("ef-dashboard-greeting");
   if (greetingEl) {
     const meta = user.user_metadata || {};
+    const fullNameFromMeta =
+      meta.full_name || meta.fullname || "";
     const firstName = meta.first_name || meta.prenom || "";
     const lastName = meta.last_name || meta.nom || "";
-    const fullName = `${firstName} ${lastName}`.trim();
-    greetingEl.textContent = fullName
-      ? `Bonjour ${fullName}`
-      : "Bonjour";
+    const fallbackComposed = `${firstName} ${lastName}`.trim();
+    const displayName = (fullNameFromMeta || fallbackComposed).trim();
+
+    // On tente d'extraire le nom de famille (dernier mot) pour l'afficher en MAJUSCULES
+    let lastNameForGreeting = "";
+    if (displayName) {
+      const parts = displayName.split(/\s+/).filter(Boolean);
+      if (parts.length > 0) {
+        lastNameForGreeting = parts[parts.length - 1].toUpperCase();
+      }
+    }
+
+    if (lastNameForGreeting) {
+      greetingEl.textContent = `Bonjour, ${lastNameForGreeting} 👋`;
+    } else {
+      greetingEl.textContent = "Bonjour 👋";
+    }
   }
 
   // Récupère le plan de l'utilisateur pour appliquer les limites

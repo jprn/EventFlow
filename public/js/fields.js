@@ -132,6 +132,9 @@ function efFillFormForEdit(field) {
   }
 
   efUpdateOptionsVisibility();
+
+  // Affiche le formulaire lorsqu'on édite un champ
+  efToggleFieldForm(true);
 }
 
 async function efDeleteField(fieldId) {
@@ -297,16 +300,49 @@ function efSetupFieldsPage() {
     efUpdateOptionsVisibility();
   }
 
-  efUpdateEventSidebarLinksForSettings();
+  const addButton = document.getElementById("field-add-button");
+  if (addButton) {
+    addButton.addEventListener("click", () => {
+      const idInput = document.getElementById("field-id");
+      const labelInput = document.getElementById("field-label");
+      const typeSelectEl = document.getElementById("field-type");
+      const requiredInput = document.getElementById("field-required");
+      const optionsInput = document.getElementById("field-options");
+
+      if (idInput) idInput.value = "";
+      if (labelInput) labelInput.value = "";
+      if (typeSelectEl) typeSelectEl.value = "short_text";
+      if (requiredInput) requiredInput.checked = false;
+      if (optionsInput) optionsInput.value = "";
+
+      efUpdateOptionsVisibility();
+      efToggleFieldForm(true);
+    });
+  }
+
+  efUpdateEventLinksForSettings();
   efLoadFields();
 }
 
-function efUpdateEventSidebarLinksForSettings() {
+function efToggleFieldForm(show) {
+  const wrapper = document.getElementById("field-form-wrapper");
+  if (!wrapper) return;
+  if (show) {
+    wrapper.classList.remove("is-hidden");
+  } else {
+    wrapper.classList.add("is-hidden");
+  }
+}
+
+function efUpdateEventLinksForSettings() {
   const eventId = efGetEventIdFromUrl();
   if (!eventId) return;
 
-  const links = document.querySelectorAll(".ef-sidebar-nav a");
-  links.forEach((link) => {
+  const backLink = document.getElementById("ef-back-to-event");
+  const finishLink = document.getElementById("ef-finish-config");
+
+  [backLink, finishLink].forEach((link) => {
+    if (!link) return;
     const href = link.getAttribute("href");
     if (!href) return;
 

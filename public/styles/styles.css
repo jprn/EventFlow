@@ -593,6 +593,57 @@ img {
   padding-inline: 1.35rem;
 }
 
+/* Event settings (configuration du formulaire) ---------------------------- */
+
+.ef-settings-hero {
+  margin-bottom: 1.5rem;
+}
+
+.ef-settings-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+}
+
+.ef-settings-subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-form-settings-card {
+  margin-top: 0.5rem;
+}
+
+.ef-form-settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ef-card-subtitle {
+  margin: 0.15rem 0 0;
+  font-size: 0.9rem;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-field-form-wrapper {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ef-color-border);
+}
+
+.ef-form-settings-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
 /* Toolbar (recherche + filtre) -------------------------------------------- */
 
 .ef-dashboard-toolbar {
@@ -734,6 +785,85 @@ img {
 .ef-event-settings-row {
   display: flex;
   justify-content: flex-start;
+}
+
+/* Stats par événement (page stats-event-pro) ------------------------------ */
+
+.ef-event-stats-detail {
+  margin-bottom: 1.5rem;
+}
+
+.ef-presence-card,
+.ef-capacity-card {
+  min-height: 220px;
+}
+
+.ef-presence-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.ef-presence-circle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background-image: conic-gradient(#22c55e 0%, #e5e7eb 0% 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ef-presence-circle-inner {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 8px rgba(34, 197, 94, 0.08);
+}
+
+.ef-presence-percent {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.ef-presence-label {
+  font-size: 0.9rem;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-capacity-subtitle {
+  margin: 0 0 0.6rem;
+  font-size: 0.9rem;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-capacity-bar-outer {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background-color: #e5e7eb;
+  overflow: hidden;
+}
+
+.ef-capacity-bar-inner {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+}
+
+.ef-capacity-footer {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--ef-color-text-muted);
 }
 
 /* Tableau des inscriptions (event-view) ----------------------------------- */

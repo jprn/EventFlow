@@ -92,6 +92,20 @@ async function efLoadStatsEventPro() {
     metaEl.textContent = meta;
   }
 
+  // Met à jour les liens de navigation (retour / onglets) avec l'id courant
+  const backLink = document.getElementById("pro-ev-back");
+  const tabParticipants = document.getElementById("pro-ev-tab-participants");
+  const tabSettings = document.getElementById("pro-ev-tab-settings");
+
+  [backLink, tabParticipants, tabSettings].forEach((link) => {
+    if (!link) return;
+    const href = link.getAttribute("href");
+    if (!href) return;
+    const url = new URL(href, window.location.href);
+    url.searchParams.set("id", eventId);
+    link.setAttribute("href", url.pathname + url.search);
+  });
+
   const { data: regs, error: regError } = await window.supabaseClient
     .from("registrations")
     .select("created_at, checked_in_at")
@@ -106,11 +120,35 @@ async function efLoadStatsEventPro() {
 
   const kReg = document.getElementById("pro-ev-kpi-registrations");
   const kPres = document.getElementById("pro-ev-kpi-present");
-  const kNoshow = document.getElementById("pro-ev-kpi-noshow");
+  const kPending = document.getElementById("pro-ev-kpi-pending");
+  const kRate = document.getElementById("pro-ev-kpi-rate");
 
   if (kReg) kReg.textContent = String(total);
-  if (kPres) kPres.textContent = `${present} (${rate}%)`;
-  if (kNoshow) kNoshow.textContent = String(noshow);
+  if (kPres) kPres.textContent = String(present);
+  if (kPending) kPending.textContent = String(noshow);
+  if (kRate) kRate.textContent = `${rate}%`;
+
+  // Carte Taux de présence (cercle)
+  const circle = document.getElementById("pro-ev-presence-circle");
+  const percentEl = document.getElementById("pro-ev-presence-percent");
+  if (percentEl) {
+    percentEl.textContent = `${rate}%`;
+  }
+  if (circle) {
+    const safeRate = Math.max(0, Math.min(100, rate));
+    circle.style.backgroundImage = `conic-gradient(#22c55e ${safeRate}%, #e5e7eb ${safeRate}% 100%)`;
+  }
+
+  // Carte Capacité (barre simple basée sur le total)
+  const capBar = document.getElementById("pro-ev-capacity-bar");
+  const capCount = document.getElementById("pro-ev-capacity-count");
+  if (capBar) {
+    const width = total === 0 ? 0 : Math.min(100, 10 + total * 5);
+    capBar.style.width = `${width}%`;
+  }
+  if (capCount) {
+    capCount.textContent = String(total);
+  }
 
   // Inscriptions par jour
   const byDay = new Map();

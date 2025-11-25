@@ -23,40 +23,83 @@
 
     <main class="ef-main">
       <section class="ef-container ef-page-wide">
-        <div class="ef-page-header">
+        <div class="ef-event-header">
           <div>
-            <h1 id="pro-event-title">Statistiques Pro — Événement</h1>
-            <p id="pro-event-meta"></p>
+            <a href="event-view.html" id="pro-ev-back" class="ef-back-link">
+              ← Retour à l'événement
+            </a>
+            <h1 id="pro-event-title">Statistiques de l'événement</h1>
+            <p id="pro-event-meta" class="ef-event-meta"></p>
           </div>
         </div>
 
-        <section class="ef-grid ef-grid-3 ef-dashboard-stats">
-          <article class="ef-card ef-stat-card">
+        <section class="ef-grid ef-grid-4 ef-event-stats">
+          <article class="ef-card ef-stat-card ef-stat-card--registrations">
             <h2>Inscriptions</h2>
             <p id="pro-ev-kpi-registrations" class="ef-stat-value">0</p>
           </article>
-          <article class="ef-card ef-stat-card">
+          <article class="ef-card ef-stat-card ef-stat-card--present">
             <h2>Présents</h2>
             <p id="pro-ev-kpi-present" class="ef-stat-value">0</p>
           </article>
-          <article class="ef-card ef-stat-card">
-            <h2>No-show</h2>
-            <p id="pro-ev-kpi-noshow" class="ef-stat-value">0</p>
+          <article class="ef-card ef-stat-card ef-stat-card--pending">
+            <h2>En attente</h2>
+            <p id="pro-ev-kpi-pending" class="ef-stat-value">0</p>
+          </article>
+          <article class="ef-card ef-stat-card ef-stat-card--rate">
+            <h2>Taux de présence</h2>
+            <p id="pro-ev-kpi-rate" class="ef-stat-value">0%</p>
           </article>
         </section>
 
-        <section class="ef-card ef-table-card">
-          <div class="ef-card-header">
-            <h2>Inscriptions dans le temps</h2>
-          </div>
-          <div id="pro-ev-registrations-by-day" class="ef-pro-chart"></div>
-        </section>
+        <div class="ef-event-tabs" style="margin-bottom: 1.5rem;">
+          <a
+            href="event-view.html"
+            id="pro-ev-tab-participants"
+            class="ef-event-tab-link"
+          >
+            Participants
+          </a>
+          <button class="ef-event-tab is-active" type="button">Statistiques</button>
+          <a
+            href="event-settings.html"
+            id="pro-ev-tab-settings"
+            class="ef-event-tab-link"
+          >
+            Réglages
+          </a>
+        </div>
 
-        <section class="ef-card ef-table-card">
-          <div class="ef-card-header">
-            <h2>Check-ins par heure (jour J)</h2>
-          </div>
-          <div id="pro-ev-checkins-by-hour" class="ef-pro-chart"></div>
+        <section class="ef-grid ef-grid-2 ef-event-stats-detail">
+          <article class="ef-card ef-presence-card">
+            <h2>Taux de présence</h2>
+            <div class="ef-presence-content">
+              <div id="pro-ev-presence-circle" class="ef-presence-circle">
+                <div class="ef-presence-circle-inner">
+                  <div class="ef-presence-percent" id="pro-ev-presence-percent">
+                    0%
+                  </div>
+                  <div class="ef-presence-label">présents</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="ef-card ef-capacity-card">
+            <h2>Capacité</h2>
+            <p class="ef-capacity-subtitle">Inscriptions</p>
+            <div class="ef-capacity-bar-outer">
+              <div
+                id="pro-ev-capacity-bar"
+                class="ef-capacity-bar-inner"
+                style="width: 0%;"
+              ></div>
+            </div>
+            <div class="ef-capacity-footer">
+              <span>Total</span>
+              <span id="pro-ev-capacity-count">0</span>
+            </div>
+          </article>
         </section>
 
         <section class="ef-card">

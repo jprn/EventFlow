@@ -20,36 +20,45 @@
     </header>
 
     <main class="ef-main">
-      <section class="ef-container ef-page-two-columns">
-        <aside class="ef-sidebar">
-          <nav class="ef-sidebar-nav">
-            <a href="event-view.html" class="ef-sidebar-link">
-              Vue d'ensemble
+      <section class="ef-container">
+        <div class="ef-settings-hero">
+          <div>
+            <a
+              href="event-view.html"
+              id="ef-back-to-event"
+              class="ef-back-link"
+            >
+              ← Retour à l'événement
             </a>
-            <a href="event-settings.html" class="ef-sidebar-link is-active">
-              Paramètres & formulaire
-            </a>
-            <a href="event-scanner.html" class="ef-sidebar-link">
-              Scanner QR
-            </a>
-          </nav>
-        </aside>
-
-        <section class="ef-page-content">
-          <article class="ef-card">
-            <h1>Paramètres de l'événement</h1>
-            <p>Modifiez les informations de base de votre événement.</p>
-          </article>
-
-          <article class="ef-card">
-            <h2>Champs du formulaire d'inscription</h2>
-            <p>
-              Ajoutez ou réorganisez les champs à demander aux participants lors
-              de l'inscription.
+            <h1 class="ef-settings-title" id="ef-settings-title">
+              Configuration du formulaire
+            </h1>
+            <p class="ef-settings-subtitle">
+              Configurez les champs du formulaire d'inscription pour cet événement.
             </p>
+          </div>
+        </div>
 
-            <div id="fields-list" class="ef-fields-list"></div>
+        <section class="ef-card ef-form-settings-card">
+          <div class="ef-form-settings-header">
+            <div>
+              <h2>Champs du formulaire</h2>
+              <p class="ef-card-subtitle">
+                Ajoutez, modifiez ou réorganisez les champs demandés aux participants.
+              </p>
+            </div>
+            <button
+              type="button"
+              id="field-add-button"
+              class="ef-btn ef-btn-primary"
+            >
+              + Ajouter un champ
+            </button>
+          </div>
 
+          <div id="fields-list" class="ef-fields-list"></div>
+
+          <div id="field-form-wrapper" class="ef-field-form-wrapper is-hidden">
             <form id="field-form" class="ef-form" novalidate>
               <input id="field-id" type="hidden" />
 
@@ -98,7 +107,17 @@
 
               <div id="fields-message" class="ef-auth-message"></div>
             </form>
-          </article>
+          </div>
+
+          <div class="ef-form-settings-footer">
+            <a
+              href="event-view.html"
+              id="ef-finish-config"
+              class="ef-btn ef-btn-secondary"
+            >
+              Terminer la configuration
+            </a>
+          </div>
         </section>
       </section>
     </main>
