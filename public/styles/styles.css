@@ -623,6 +623,73 @@ img {
   white-space: nowrap;
 }
 
+/* Event view --------------------------------------------------------------- */
+
+.ef-event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.ef-back-link {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-back-link:hover {
+  text-decoration: underline;
+}
+
+.ef-event-header h1 {
+  margin: 0 0 0.25rem;
+}
+
+.ef-event-meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-event-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ef-event-stats {
+  margin-bottom: 1.5rem;
+}
+
+.ef-event-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem;
+  background-color: #e5e7eb22;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.ef-event-tab {
+  border: none;
+  background: transparent;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--ef-color-text-muted);
+  cursor: default;
+}
+
+.ef-event-tab.is-active {
+  background-color: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+}
+
 .ef-grid {
   display: grid;
   gap: 1rem;

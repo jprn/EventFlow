@@ -20,70 +20,83 @@
     </header>
 
     <main class="ef-main">
-      <section class="ef-container ef-page-two-columns">
-        <aside class="ef-sidebar">
-          <nav class="ef-sidebar-nav">
-            <a href="event-view.html" class="ef-sidebar-link is-active">
-              Vue d'ensemble
-            </a>
-            <a href="event-settings.html" class="ef-sidebar-link">
-              Paramètres & formulaire
-            </a>
-            <a href="event-scanner.html" class="ef-sidebar-link">
-              Scanner QR
-            </a>
-            <a href="stats-event-pro.html" id="ef-pro-event-stats-link" class="ef-sidebar-link">
-              Statistiques Pro
-            </a>
-          </nav>
-        </aside>
-
-        <section class="ef-page-content">
-          <article class="ef-card">
+      <section class="ef-container">
+        <header class="ef-event-header">
+          <div>
+            <a href="dashboard.html" class="ef-back-link">← Tableau de bord</a>
             <h1 id="event-view-title">Vue d'ensemble de l'événement</h1>
-            <p id="event-view-meta"></p>
+            <p id="event-view-meta" class="ef-event-meta"></p>
+          </div>
+          <div class="ef-event-actions">
+            <a
+              id="ev-edit-button"
+              href="event-settings.html"
+              class="ef-btn ef-btn-secondary"
+            >
+              Modifier
+            </a>
+            <a
+              id="ev-scan-button"
+              href="event-scanner.html"
+              class="ef-btn ef-btn-primary"
+            >
+              Scanner
+            </a>
+          </div>
+        </header>
+
+        <section class="ef-grid ef-grid-3 ef-dashboard-stats ef-event-stats">
+          <article class="ef-card ef-stat-card">
+            <h2>Inscriptions</h2>
+            <p class="ef-stat-value" id="ev-count-total">0</p>
           </article>
-
-          <article class="ef-card ef-table-card">
-            <div class="ef-card-header">
-              <h2>Inscriptions</h2>
-              <div class="ef-badge-group">
-                <span id="ev-count-total" class="ef-badge">Total : 0</span>
-                <span id="ev-count-present" class="ef-badge">Présents : 0</span>
-                <span id="ev-count-absent" class="ef-badge">Non scannés : 0</span>
-              </div>
-            </div>
-
-            <div class="ef-table-controls" style="margin-bottom: 0.75rem">
-              <button
-                type="button"
-                class="ef-btn ef-btn-secondary ev-filter-btn is-active"
-                data-ev-filter="all"
-              >
-                Tous
-              </button>
-              <button
-                type="button"
-                class="ef-btn ef-btn-secondary ev-filter-btn"
-                data-ev-filter="present"
-              >
-                Présents
-              </button>
-              <button
-                type="button"
-                class="ef-btn ef-btn-secondary ev-filter-btn"
-                data-ev-filter="absent"
-              >
-                Non scannés
-              </button>
-            </div>
-
-            <div id="event-view-registrations" class="ef-table-wrapper">
-              <div class="ef-table-empty">Aucune inscription pour le moment.</div>
-            </div>
+          <article class="ef-card ef-stat-card">
+            <h2>Présents</h2>
+            <p class="ef-stat-value" id="ev-count-present">0</p>
           </article>
-          <div id="event-view-message" class="ef-auth-message"></div>
+          <article class="ef-card ef-stat-card">
+            <h2>Non scannés</h2>
+            <p class="ef-stat-value" id="ev-count-absent">0</p>
+          </article>
         </section>
+
+        <nav class="ef-event-tabs">
+          <button type="button" class="ef-event-tab is-active">Participants</button>
+          <button type="button" class="ef-event-tab" disabled>Statistiques</button>
+          <button type="button" class="ef-event-tab" disabled>Réglages</button>
+        </nav>
+
+        <article class="ef-card ef-table-card">
+          <div class="ef-table-controls" style="margin-bottom: 0.75rem">
+            <button
+              type="button"
+              class="ef-btn ef-btn-secondary ev-filter-btn is-active"
+              data-ev-filter="all"
+            >
+              Tous
+            </button>
+            <button
+              type="button"
+              class="ef-btn ef-btn-secondary ev-filter-btn"
+              data-ev-filter="present"
+            >
+              Présents
+            </button>
+            <button
+              type="button"
+              class="ef-btn ef-btn-secondary ev-filter-btn"
+              data-ev-filter="absent"
+            >
+              Non scannés
+            </button>
+          </div>
+
+          <div id="event-view-registrations" class="ef-table-wrapper">
+            <div class="ef-table-empty">Aucune inscription pour le moment.</div>
+          </div>
+        </article>
+
+        <div id="event-view-message" class="ef-auth-message"></div>
       </section>
     </main>
 

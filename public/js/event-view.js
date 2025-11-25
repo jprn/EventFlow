@@ -69,6 +69,20 @@ async function efLoadEventView() {
     metaEl.textContent = meta;
   }
 
+  // Met à jour les liens des actions (Modifier / Scanner) avec l'id courant
+  const editBtn = document.getElementById("ev-edit-button");
+  const scanBtn = document.getElementById("ev-scan-button");
+  if (editBtn) {
+    const url = new URL("event-settings.html", window.location.href);
+    url.searchParams.set("id", eventId);
+    editBtn.href = url.pathname + url.search;
+  }
+  if (scanBtn) {
+    const url = new URL("event-scanner.html", window.location.href);
+    url.searchParams.set("id", eventId);
+    scanBtn.href = url.pathname + url.search;
+  }
+
   await efLoadEventRegistrations(eventId);
   efSetupEventViewFilters();
 }
@@ -255,9 +269,9 @@ function efUpdateEventCounts() {
   const presentEl = document.getElementById("ev-count-present");
   const absentEl = document.getElementById("ev-count-absent");
 
-  if (totalEl) totalEl.textContent = `Total : ${total}`;
-  if (presentEl) presentEl.textContent = `Présents : ${present}`;
-  if (absentEl) absentEl.textContent = `Non scannés : ${absent}`;
+  if (totalEl) totalEl.textContent = String(total);
+  if (presentEl) presentEl.textContent = String(present);
+  if (absentEl) absentEl.textContent = String(absent);
 }
 
 function efSetupEventViewFilters() {
