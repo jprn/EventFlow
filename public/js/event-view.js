@@ -341,6 +341,14 @@ function efRenderEventRegistrations() {
       }
       tdStatus.appendChild(statusBadge);
 
+      // Clic sur le statut : marquer comme présent
+      tdStatus.style.cursor = "pointer";
+      tdStatus.title =
+        "Cliquer pour marquer ce participant comme Présent (sans scanner)";
+      tdStatus.addEventListener("click", () => {
+        efMarkRegistrationPresent(reg.id);
+      });
+
       tr.appendChild(tdDate);
       tr.appendChild(tdStatus);
       tbody.appendChild(tr);
@@ -406,6 +414,13 @@ function efRenderEventRegistrations() {
       tdPresence.style.color = "#b91c1c"; // rouge
     }
 
+    tdPresence.style.cursor = "pointer";
+    tdPresence.title =
+      "Cliquer pour marquer ce participant comme Présent (sans scanner)";
+    tdPresence.addEventListener("click", () => {
+      efMarkRegistrationPresent(reg.id);
+    });
+
     tr.appendChild(tdDate);
     tr.appendChild(tdDetails);
     tr.appendChild(tdPresence);
@@ -414,6 +429,39 @@ function efRenderEventRegistrations() {
 
   table.appendChild(tbody);
   container.appendChild(table);
+}
+
+async function efMarkRegistrationPresent(regId) {
+  if (!window.supabaseClient || !regId) return;
+
+  try {
+    const { error } = await window.supabaseClient
+      .from("registrations")
+      .update({ checked_in_at: new Date().toISOString() })
+      .eq("id", regId);
+
+    if (error) {
+      window.alert(
+        "Impossible de mettre à jour le statut de ce participant : " +
+          (error.message || "erreur inconnue.")
+      );
+      return;
+    }
+
+    // Met à jour le tableau localement sans recharger toute la page
+    const idx = efEventRegs.findIndex((r) => r.id === regId);
+    if (idx !== -1) {
+      efEventRegs[idx] = {
+        ...efEventRegs[idx],
+        checked_in_at: new Date().toISOString(),
+      };
+    }
+    efRenderEventRegistrations();
+  } catch (e) {
+    window.alert(
+      "Erreur inattendue lors de la mise à jour du statut de ce participant."
+    );
+  }
 }
 
 function efUpdateEventCounts() {

@@ -748,6 +748,11 @@ img {
   letter-spacing: 0.03em;
 }
 
+.ef-registrations-table th:last-child,
+.ef-registrations-table td:last-child {
+  text-align: right;
+}
+
 .ef-registrations-table tbody tr:hover {
   background-color: #f9fafb;
 }
@@ -843,14 +848,14 @@ img {
   position: absolute;
   top: 0.8rem;
   right: 0.85rem;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   border-radius: 1rem;
   background-color: #eef2ff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
 }
 
 .ef-stat-card--events::before {
