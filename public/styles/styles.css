@@ -1187,6 +1187,83 @@ img {
   color: var(--ef-color-text-muted);
 }
 
+/* Tableau des champs de formulaire (event-settings) ----------------------- */
+
+.ef-fields-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.ef-fields-table thead {
+  background-color: #f9fafb;
+}
+
+.ef-fields-table th,
+.ef-fields-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--ef-color-border);
+}
+
+.ef-fields-table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--ef-color-text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ef-fields-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.ef-fields-actions-cell {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.ef-fields-required-cell {
+  width: 1%;
+}
+
+.ef-badge-required {
+  background-color: #fef3c7;
+  color: #92400e;
+  font-size: 0.75rem;
+}
+
+.ef-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-left: 0.25rem;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.ef-icon-btn:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+}
+
+.ef-icon-btn-danger {
+  border-color: #fecaca;
+}
+
+.ef-icon-btn-danger:hover {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+}
+
 /* Liste d'événements sous forme de cartes --------------------------------- */
 
 .ef-events-list {

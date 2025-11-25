@@ -54,6 +54,22 @@ async function efLoadStatsPro() {
 
   if (!window.supabaseClient) return;
 
+  // Lien de retour : si un id d'événement est présent, on retourne vers cet événement
+  const params = new URLSearchParams(window.location.search);
+  const fromEventId = params.get("id");
+  const backLink = document.getElementById("pro-global-back");
+  if (backLink) {
+    if (fromEventId) {
+      const url = new URL("event-view.html", window.location.href);
+      url.searchParams.set("id", fromEventId);
+      backLink.href = url.pathname + url.search;
+      backLink.textContent = "Retour à l'événement";
+    } else {
+      backLink.href = "dashboard.html";
+      backLink.textContent = "Retour au tableau de bord";
+    }
+  }
+
   const today = new Date();
   const dayMs = 24 * 60 * 60 * 1000;
   const d30 = new Date(today.getTime() - 30 * dayMs);

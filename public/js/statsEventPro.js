@@ -99,8 +99,9 @@ async function efLoadStatsEventPro() {
   const backLink = document.getElementById("pro-ev-back");
   const tabParticipants = document.getElementById("pro-ev-tab-participants");
   const tabSettings = document.getElementById("pro-ev-tab-settings");
+  const globalStatsBtn = document.getElementById("pro-ev-open-global-stats");
 
-  [backLink, tabParticipants, tabSettings].forEach((link) => {
+  [backLink, tabParticipants, tabSettings, globalStatsBtn].forEach((link) => {
     if (!link) return;
     const href = link.getAttribute("href");
     if (!href) return;
@@ -111,7 +112,6 @@ async function efLoadStatsEventPro() {
 
   // Affiche ou masque le bouton vers les statistiques globales selon le plan
   const plan = window.efCurrentPlan || "free";
-  const globalStatsBtn = document.getElementById("pro-ev-open-global-stats");
   if (globalStatsBtn) {
     if (plan === "pro" || plan === "business") {
       globalStatsBtn.style.display = "inline-flex";

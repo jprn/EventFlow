@@ -55,7 +55,7 @@ function efRenderFieldsList(fields) {
   }
 
   const table = document.createElement("table");
-  table.className = "ef-table";
+  table.className = "ef-table ef-fields-table";
 
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
@@ -79,19 +79,29 @@ function efRenderFieldsList(fields) {
     tdType.textContent = EF_FIELD_TYPES[field.type] || field.type;
 
     const tdRequired = document.createElement("td");
-    tdRequired.textContent = field.requis ? "Oui" : "Non";
+    tdRequired.className = "ef-fields-required-cell";
+    if (field.requis) {
+      const badge = document.createElement("span");
+      badge.className = "ef-badge ef-badge-required";
+      badge.textContent = "Requis";
+      tdRequired.appendChild(badge);
+    }
 
     const tdActions = document.createElement("td");
+    tdActions.className = "ef-fields-actions-cell";
+
     const editBtn = document.createElement("button");
     editBtn.type = "button";
-    editBtn.className = "ef-btn ef-btn-secondary";
-    editBtn.textContent = "Modifier";
+    editBtn.className = "ef-icon-btn";
+    editBtn.title = "Modifier le champ";
+    editBtn.textContent = "✏️";
     editBtn.addEventListener("click", () => efFillFormForEdit(field));
 
     const deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
-    deleteBtn.className = "ef-btn ef-btn-secondary";
-    deleteBtn.textContent = "Supprimer";
+    deleteBtn.className = "ef-icon-btn ef-icon-btn-danger";
+    deleteBtn.title = "Supprimer le champ";
+    deleteBtn.textContent = "🗑";
     deleteBtn.addEventListener("click", () => efDeleteField(field.id));
 
     tdActions.appendChild(editBtn);
