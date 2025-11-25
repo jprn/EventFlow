@@ -855,8 +855,8 @@ img {
 /* Liste d'événements sous forme de cartes --------------------------------- */
 
 .ef-events-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 0.9rem;
   margin-top: 0.75rem;
 }
@@ -872,6 +872,7 @@ img {
   box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
   transition: transform 0.15s ease, box-shadow 0.15s ease,
     border-color 0.15s ease, background-color 0.15s ease;
+  cursor: pointer;
 }
 
 .ef-event-card:hover {

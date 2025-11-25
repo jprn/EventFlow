@@ -155,6 +155,17 @@ function efRenderEvents(containerId, events) {
     body.appendChild(count);
     body.appendChild(actions);
 
+    // Clic sur la carte : ouverture de la vue événement
+    card.addEventListener("click", () => {
+      window.location.href =
+        "event-view.html?id=" + encodeURIComponent(event.id);
+    });
+
+    // Évite que les clics sur les boutons d'actions déclenchent le clic carte
+    actions.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+    });
+
     card.appendChild(header);
     card.appendChild(body);
 
