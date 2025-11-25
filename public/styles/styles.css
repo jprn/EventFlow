@@ -721,6 +721,86 @@ img {
   align-items: center;
 }
 
+/* Tableau des inscriptions (event-view) ----------------------------------- */
+
+.ef-registrations-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.ef-registrations-table thead {
+  background-color: #f9fafb;
+}
+
+.ef-registrations-table th,
+.ef-registrations-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--ef-color-border);
+}
+
+.ef-registrations-table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--ef-color-text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ef-registrations-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.ef-reg-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.ef-reg-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.ef-reg-name-main {
+  font-weight: 500;
+}
+
+.ef-reg-details-cell {
+  color: var(--ef-color-text-muted);
+}
+
+.ef-reg-status-cell {
+  text-align: right;
+}
+
+.ef-reg-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.ef-reg-status-badge.is-present {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.ef-reg-status-badge.is-pending {
+  background-color: #fef9c3;
+  color: #92400e;
+}
+
 .ef-grid {
   display: grid;
   gap: 1rem;
@@ -745,6 +825,80 @@ img {
   font-size: 1.6rem;
   font-weight: 600;
   color: #0f172a;
+}
+
+/* Décorations des cartes de stats (icônes + coin coloré) */
+
+.ef-stat-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.ef-stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0.7rem;
+  left: 0.85rem;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background-color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.ef-stat-card--events::before {
+  content: "📅";
+}
+
+.ef-stat-card--registrations::before {
+  content: "👥";
+}
+
+.ef-stat-card--present::before {
+  content: "✅";
+}
+
+.ef-stat-card--pending::before {
+  content: "⏳";
+}
+
+.ef-stat-card--rate::before {
+  content: "📈";
+}
+
+.ef-stat-card::after {
+  content: "";
+  position: absolute;
+  width: 85px;
+  height: 85px;
+  border-radius: 999px;
+  bottom: -30px;
+  right: -25px;
+  background: radial-gradient(circle at center, #e5e7eb, transparent 65%);
+  opacity: 0.9;
+}
+
+.ef-stat-card--events::after {
+  background: radial-gradient(circle at center, #bfdbfe, transparent 65%);
+}
+
+.ef-stat-card--registrations::after {
+  background: radial-gradient(circle at center, #fde68a, transparent 65%);
+}
+
+.ef-stat-card--present::after {
+  background: radial-gradient(circle at center, #bbf7d0, transparent 65%);
+}
+
+.ef-stat-card--pending::after {
+  background: radial-gradient(circle at center, #fee2e2, transparent 65%);
+}
+
+.ef-stat-card--rate::after {
+  background: radial-gradient(circle at center, #e9d5ff, transparent 65%);
 }
 
 .ef-btn {
