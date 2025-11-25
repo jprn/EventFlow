@@ -223,21 +223,36 @@ async function efLoadDashboard() {
   const greetingEl = document.getElementById("ef-dashboard-greeting");
   if (greetingEl) {
     const meta = user.user_metadata || {};
-    const fullNameFromMeta = meta.full_name || meta.fullname || "";
-    const firstName = meta.first_name || meta.prenom || "";
-    const lastName = meta.last_name || meta.nom || "";
-    const fallbackComposed = `${firstName} ${lastName}`.trim();
-    const displayName = (fullNameFromMeta || fallbackComposed).trim();
+    let fullName = meta.full_name || meta.fullname || "";
+
+    // Si les métadonnées ne contiennent pas le nom complet, on tente de le
+    // récupérer dans la table profiles (champ full_name), qui est utilisée
+    // sur la page profil.
+    if (!fullName && window.supabaseClient) {
+      try {
+        const { data: profile, error: profileError } =
+          await window.supabaseClient
+            .from("profiles")
+            .select("full_name")
+            .eq("user_id", user.id)
+            .maybeSingle();
+
+        if (!profileError && profile && profile.full_name) {
+          fullName = profile.full_name;
+        }
+      } catch (e) {
+        // en cas d'erreur, on ignore et on affichera juste "Bonjour"
+      }
+    }
 
     let greetingName = "";
 
-    if (fullNameFromMeta) {
-      // Si full_name est défini dans Supabase, on l'utilise en priorité
-      greetingName = fullNameFromMeta.toUpperCase();
-    } else if (displayName) {
-      // Sinon on extrait au moins le nom de famille en majuscules
-      const parts = displayName.split(/\s+/).filter(Boolean);
+    if (fullName) {
+      const parts = String(fullName)
+        .split(/\s+/)
+        .filter(Boolean);
       if (parts.length > 0) {
+        // On prend le dernier mot comme nom de famille et on l'affiche en MAJUSCULES
         greetingName = parts[parts.length - 1].toUpperCase();
       }
     }
