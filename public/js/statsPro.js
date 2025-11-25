@@ -31,9 +31,9 @@ async function efProRequireAuthWithPlan() {
     // keep default
   }
 
-  if (plan !== "pro") {
+  if (plan !== "pro" && plan !== "business") {
     window.alert(
-      "Les statistiques Pro sont réservées au plan Pro. Modifiez votre plan dans le profil pour y accéder."
+      "Les statistiques Pro globales sont réservées aux plans Pro et Business. Modifiez votre plan dans le profil pour y accéder."
     );
     window.location.href = "dashboard.html";
     return null;

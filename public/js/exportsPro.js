@@ -28,9 +28,9 @@ async function efProRequireAuthWithPlanExports() {
     }
   } catch (e) {}
 
-  if (plan !== "pro") {
+  if (plan !== "event" && plan !== "pro" && plan !== "business") {
     window.alert(
-      "Les exports Pro sont réservés au plan Pro. Modifiez votre plan dans le profil pour y accéder."
+      "Les exports (CSV et rapports) sont réservés aux packs Événement, Pro et Business. Modifiez votre plan dans le profil pour y accéder."
     );
     window.location.href = "dashboard.html";
     return null;

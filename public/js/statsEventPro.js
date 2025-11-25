@@ -28,9 +28,9 @@ async function efProRequireAuthWithPlanEvent() {
     }
   } catch (e) {}
 
-  if (plan !== "pro") {
+  if (plan !== "event" && plan !== "pro" && plan !== "business") {
     window.alert(
-      "Les statistiques Pro sont réservées au plan Pro. Modifiez votre plan dans le profil pour y accéder."
+      "Les statistiques détaillées par événement sont réservées aux packs Événement, Pro et Business. Modifiez votre plan dans le profil pour y accéder."
     );
     window.location.href = "dashboard.html";
     return null;

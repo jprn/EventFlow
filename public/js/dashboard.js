@@ -336,17 +336,59 @@ async function efLoadDashboard() {
     ? Math.round((totalPresent / totalRegistrations) * 100)
     : 0;
 
+  // Mise à jour du résumé de plan dans le tableau de bord
+  const planBox = document.getElementById("ef-plan-summary");
+  if (planBox) {
+    let title = "Plan actuel";
+    let description = "";
+
+    switch (plan) {
+      case "free":
+        title = "Plan Gratuit";
+        description =
+          "1 événement actif à la fois et jusqu'à environ 50 inscrits sur vos événements à venir.";
+        break;
+      case "event":
+        title = "Pack Événement";
+        description =
+          "Idéal pour un événement ponctuel : jusqu'à environ 300 inscriptions sur vos événements à venir, avec accès aux exports et aux statistiques détaillées par événement.";
+        break;
+      case "pro":
+        title = "Plan Pro";
+        description =
+          "Événements illimités et jusqu'à environ 5000 inscriptions à venir, avec accès aux statistiques globales Pro, aux statistiques par événement et aux exports.";
+        break;
+      case "business":
+        title = "Plan Business";
+        description =
+          "Événements et inscriptions illimités (usage normal), avec toutes les statistiques Pro et les exports. Idéal pour les structures qui pilotent plusieurs équipes.";
+        break;
+      default:
+        description =
+          "Plan inconnu : certaines limites peuvent s'appliquer. Mettez à jour votre plan dans la page Profil si nécessaire.";
+    }
+
+    planBox.innerHTML = "";
+    const h2 = document.createElement("h2");
+    h2.textContent = title;
+    const p = document.createElement("p");
+    p.textContent = description;
+    planBox.appendChild(h2);
+    planBox.appendChild(p);
+  }
+
   // Limites par plan pour le nombre d'événements
+  // Nouveau modèle :
+  // - Gratuit : 1 événement actif
+  // - Pack Événement : pas de limite stricte d'événements dans cette V1
+  // - Pro / Business : événements illimités
   let maxEvents;
   switch (plan) {
-    case "pro":
-      maxEvents = 5;
-      break;
-    case "business":
-      maxEvents = Infinity;
+    case "free":
+      maxEvents = 1;
       break;
     default:
-      maxEvents = 1; // plan gratuit ou inconnu
+      maxEvents = Infinity;
   }
 
   // On applique la limite sur le nombre total d'événements de l'organisateur
@@ -362,10 +404,7 @@ async function efLoadDashboard() {
         let msg = "Votre plan actuel ne vous permet pas de créer plus d'événements.";
         if (plan === "free") {
           msg =
-            "Votre plan Gratuit permet de créer 1 événement actif. Passez à un plan supérieur pour en créer davantage.";
-        } else if (plan === "pro") {
-          msg =
-            "Votre plan Pro permet de créer jusqu'à 5 événements actifs. Passez au plan Business pour aller au-delà.";
+            "Votre plan Gratuit permet de créer 1 événement actif. Passez à un plan supérieur pour gérer plusieurs événements.";
         }
         window.alert(msg);
       });
@@ -373,16 +412,27 @@ async function efLoadDashboard() {
   }
 
   // Limites par plan pour le nombre d'inscriptions (total futur)
+  // On approxime les règles par un plafond global sur les inscriptions à venir :
+  // - Gratuit : ~50 inscrits
+  // - Pack Événement : ~300 inscrits
+  // - Pro : ~5000 inscrits
+  // - Business : illimité
   let maxRegistrations;
   switch (plan) {
+    case "free":
+      maxRegistrations = 50;
+      break;
+    case "event":
+      maxRegistrations = 300;
+      break;
     case "pro":
-      maxRegistrations = 500;
+      maxRegistrations = 5000;
       break;
     case "business":
       maxRegistrations = Infinity;
       break;
     default:
-      maxRegistrations = 25; // plan gratuit ou inconnu
+      maxRegistrations = 50;
   }
 
   if (statsEls[0]) statsEls[0].textContent = String(futureEvents.length);

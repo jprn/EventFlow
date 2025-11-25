@@ -37,17 +37,25 @@ img {
 
 
 .ef-header {
-  background: linear-gradient(90deg, #020617, #0f172a);
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  background: radial-gradient(circle at top left, #020617 0, #020617 55%, #020617);
   color: #e5e7eb;
-  border-bottom: 1px solid #020617;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.35);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.95);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(14px);
 }
 
 .ef-header-public {
-  background-color: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  background-color: rgba(255, 255, 255, 0.96);
   color: var(--ef-color-text);
   border-bottom: 1px solid var(--ef-color-border);
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(12px);
 }
 
 .ef-footer {
@@ -71,25 +79,52 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.9rem 0;
+  padding: 0.8rem 0.1rem;
+  gap: 1.75rem;
 }
 
 .ef-logo {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 0.04em;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ef-logo::before {
+  content: "";
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  border-radius: 0.9rem;
+  background: conic-gradient(from 160deg, #22c55e, #2563eb, #7c3aed, #22c55e);
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.8), 0 8px 18px rgba(15, 23, 42, 0.65);
+}
+
+.ef-header-public .ef-logo::before {
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.4), 0 6px 16px rgba(15, 23, 42, 0.12);
 }
 
 .ef-nav {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.35rem;
+  padding: 0.15rem;
+  border-radius: 999px;
+  background-color: rgba(15, 23, 42, 0.45);
+}
+
+.ef-header-public .ef-nav {
+  background-color: transparent;
 }
 
 .ef-nav-link {
   font-size: 0.95rem;
   color: #e5e7eb;
-  padding: 0.35rem 0.75rem;
+  padding: 0.35rem 0.9rem;
   border-radius: 999px;
   border: 1px solid transparent;
   transition: background-color 0.15s ease, color 0.15s ease,
@@ -99,13 +134,21 @@ img {
 
 .ef-nav-link.is-active,
 .ef-nav-link:hover {
-  background-color: rgba(148, 163, 184, 0.16);
-  border-color: rgba(148, 163, 184, 0.4);
+  background-color: rgba(148, 163, 184, 0.22);
+  border-color: rgba(148, 163, 184, 0.8);
 }
 
 .ef-link-button {
   background: none;
   border: none;
+}
+
+.ef-nav .ef-link-button {
+  color: #fecaca;
+}
+
+.ef-nav .ef-link-button:hover {
+  color: #fee2e2;
 }
 
 .ef-main {

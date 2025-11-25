@@ -152,8 +152,9 @@ async function efHandleSignUp(event) {
   const params = new URLSearchParams(window.location.search);
   const chosenPlan = params.get("plan") || "free";
 
-  // Si plan payant (pro, business), on exige une simulation de paiement
-  const isPaidPlan = chosenPlan === "pro" || chosenPlan === "business";
+  // Si plan payant (Pack Événement, Pro, Business), on exige une simulation de paiement
+  const isPaidPlan =
+    chosenPlan === "event" || chosenPlan === "pro" || chosenPlan === "business";
   if (isPaidPlan && !window.efSignupPaymentSimOk) {
     const paymentBlock = document.getElementById("signup-payment-sim");
     if (paymentBlock) {
