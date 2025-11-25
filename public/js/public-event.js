@@ -136,6 +136,32 @@ async function efLoadPublicFields(eventId) {
   if (!container) return;
   container.innerHTML = "";
 
+  // Champs de base toujours présents : Nom, Prénom, Email
+  function addBaseField({ label, idKey, type }) {
+    const group = document.createElement("div");
+    group.className = "ef-form-group";
+
+    const labelEl = document.createElement("label");
+    const inputId = "field-" + idKey;
+    labelEl.textContent = label + " *";
+    labelEl.setAttribute("for", inputId);
+
+    const inputEl = document.createElement("input");
+    inputEl.id = inputId;
+    inputEl.type = type;
+    inputEl.required = true;
+    inputEl.dataset.fieldId = idKey;
+    inputEl.dataset.fieldType = type === "email" ? "email" : "short_text";
+
+    group.appendChild(labelEl);
+    group.appendChild(inputEl);
+    container.appendChild(group);
+  }
+
+  addBaseField({ label: "Nom", idKey: "base_nom", type: "text" });
+  addBaseField({ label: "Prénom", idKey: "base_prenom", type: "text" });
+  addBaseField({ label: "Email", idKey: "base_email", type: "email" });
+
   const { data, error } = await window.supabaseClient
     .from("event_fields")
     .select("id, label, type, requis, options, ordre")
