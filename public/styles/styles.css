@@ -1012,6 +1012,13 @@ img {
   }
 }
 
+@media (min-width: 901px) {
+  /* Sur grands écrans, on force 3 colonnes pour les KPI de stats */
+  .ef-grid-3.ef-dashboard-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 .ef-stat-card h2 {
   font-size: 0.95rem;
   color: var(--ef-color-text-muted);
