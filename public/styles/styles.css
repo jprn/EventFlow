@@ -996,6 +996,22 @@ img {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
+@media (max-width: 900px) {
+  /* Sur écrans moyens/petits, 2 colonnes pour les cartes de stats */
+  .ef-grid-3,
+  .ef-grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  /* Sur très petits écrans (mobile), on repasse en une seule colonne */
+  .ef-grid-3,
+  .ef-grid-4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .ef-stat-card h2 {
   font-size: 0.95rem;
   color: var(--ef-color-text-muted);
