@@ -69,11 +69,13 @@ async function efLoadEventView() {
     metaEl.textContent = meta;
   }
 
-  // Met à jour les liens des actions (Modifier / Scanner) avec l'id courant
+  // Met à jour les liens des actions (Modifier / Scanner) et des onglets avec l'id courant
   const editBtn = document.getElementById("ev-edit-button");
   const scanBtn = document.getElementById("ev-scan-button");
+  const tabStats = document.getElementById("ev-tab-stats");
+  const tabSettings = document.getElementById("ev-tab-settings");
   if (editBtn) {
-    const url = new URL("event-settings.html", window.location.href);
+    const url = new URL("new-event.html", window.location.href);
     url.searchParams.set("id", eventId);
     editBtn.href = url.pathname + url.search;
   }
@@ -81,6 +83,16 @@ async function efLoadEventView() {
     const url = new URL("event-scanner.html", window.location.href);
     url.searchParams.set("id", eventId);
     scanBtn.href = url.pathname + url.search;
+  }
+  if (tabStats) {
+    const url = new URL("stats-event-pro.html", window.location.href);
+    url.searchParams.set("id", eventId);
+    tabStats.href = url.pathname + url.search;
+  }
+  if (tabSettings) {
+    const url = new URL("event-settings.html", window.location.href);
+    url.searchParams.set("id", eventId);
+    tabSettings.href = url.pathname + url.search;
   }
 
   await efLoadEventRegistrations(eventId);

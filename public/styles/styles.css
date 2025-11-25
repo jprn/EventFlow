@@ -690,6 +690,19 @@ img {
   box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
 }
 
+.ef-event-tab-link {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-event-tab-link:hover {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
 .ef-grid {
   display: grid;
   gap: 1rem;
