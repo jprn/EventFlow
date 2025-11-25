@@ -40,72 +40,68 @@ function efRenderEvents(containerId, events) {
     return;
   }
 
-  const table = document.createElement("table");
-  table.className = "ef-table";
+  const list = document.createElement("div");
+  list.className = "ef-events-list";
 
-  // Force les mêmes largeurs de colonnes pour les tableaux "À venir" et "Passés"
-  const colgroup = document.createElement("colgroup");
-  const colWidths = ["20%", "20%", "30%", "15%", "15%"];
-  colWidths.forEach((w) => {
-    const col = document.createElement("col");
-    col.style.width = w;
-    colgroup.appendChild(col);
-  });
-  table.appendChild(colgroup);
-
-  const thead = document.createElement("thead");
-  const headerRow = document.createElement("tr");
-  const headers = [
-    "Titre (détails)",
-    "Date / heure",
-    "Lieu",
-    "Inscriptions",
-    "Actions",
-  ];
-
-  headers.forEach((label) => {
-    const th = document.createElement("th");
-    th.textContent = label;
-    headerRow.appendChild(th);
-  });
-
-  thead.appendChild(headerRow);
-  table.appendChild(thead);
-
-  const tbody = document.createElement("tbody");
+  const isPastContainer = containerId === "dashboard-events-past";
 
   events.forEach((event) => {
-    const tr = document.createElement("tr");
+    const card = document.createElement("article");
+    card.className = "ef-event-card";
 
-    const tdTitle = document.createElement("td");
+    const header = document.createElement("div");
+    header.className = "ef-event-card-header";
+
+    const titleWrapper = document.createElement("div");
     const link = document.createElement("a");
     link.href = "event-view.html?id=" + encodeURIComponent(event.id);
     link.textContent = event.titre || "Sans titre";
-    tdTitle.appendChild(link);
+    link.className = "ef-event-card-title";
+    titleWrapper.appendChild(link);
 
-    const tdDate = document.createElement("td");
-    let dateText = event.date_evenement || "-";
+    const meta = document.createElement("div");
+    meta.className = "ef-event-card-meta";
+    let dateText = event.date_evenement || "Date à définir";
     if (event.heure_evenement) {
       const time = String(event.heure_evenement).slice(0, 5); // HH:MM
-      dateText += " " + time;
+      dateText += " · " + time;
     }
-    tdDate.textContent = dateText;
-
-    const tdLieu = document.createElement("td");
-    tdLieu.textContent = event.lieu || "-";
-
-    const tdCount = document.createElement("td");
-    if (typeof event.inscriptions_total === "number") {
-      tdCount.textContent = String(event.inscriptions_total);
-    } else {
-      tdCount.textContent = "-";
+    const dateSpan = document.createElement("span");
+    dateSpan.textContent = dateText;
+    const lieuSpan = document.createElement("span");
+    if (event.lieu) {
+      lieuSpan.textContent = event.lieu;
+    }
+    meta.appendChild(dateSpan);
+    if (event.lieu) {
+      const sep = document.createElement("span");
+      sep.textContent = " · ";
+      meta.appendChild(sep);
+      meta.appendChild(lieuSpan);
     }
 
-    const tdActions = document.createElement("td");
+    titleWrapper.appendChild(meta);
 
-    const actionsWrapper = document.createElement("div");
-    actionsWrapper.style.display = "inline-flex";
-    actionsWrapper.style.gap = "0.35rem";
+    const badge = document.createElement("span");
+    badge.className = "ef-badge ef-event-status";
+    badge.textContent = isPastContainer ? "Passé" : "À venir";
+
+    header.appendChild(titleWrapper);
+    header.appendChild(badge);
+
+    const body = document.createElement("div");
+    body.className = "ef-event-card-body";
+
+    const count = document.createElement("div");
+    count.className = "ef-event-card-count";
+    const total =
+      typeof event.inscriptions_total === "number"
+        ? event.inscriptions_total
+        : 0;
+    count.textContent = `${total} inscrit${total > 1 ? "s" : ""}`;
+
+    const actions = document.createElement("div");
+    actions.className = "ef-event-card-actions";
 
     const editBtn = document.createElement("button");
     editBtn.type = "button";
@@ -142,8 +138,6 @@ function efRenderEvents(containerId, events) {
     copyBtn.title = "Copier l'URL publique";
     copyBtn.addEventListener("click", () => efCopyPublicUrl(event.slug));
 
-    // Pour les événements passés, on désactive Modifier et Copier l'URL
-    const isPastContainer = containerId === "dashboard-events-past";
     if (isPastContainer) {
       editBtn.disabled = true;
       copyBtn.disabled = true;
@@ -153,24 +147,21 @@ function efRenderEvents(containerId, events) {
       scannerBtn.classList.add("ef-btn-disabled");
     }
 
-    actionsWrapper.appendChild(editBtn);
-    actionsWrapper.appendChild(scannerBtn);
-    actionsWrapper.appendChild(deleteBtn);
-    actionsWrapper.appendChild(copyBtn);
+    actions.appendChild(editBtn);
+    actions.appendChild(scannerBtn);
+    actions.appendChild(deleteBtn);
+    actions.appendChild(copyBtn);
 
-    tdActions.appendChild(actionsWrapper);
+    body.appendChild(count);
+    body.appendChild(actions);
 
-    tr.appendChild(tdTitle);
-    tr.appendChild(tdDate);
-    tr.appendChild(tdLieu);
-    tr.appendChild(tdCount);
-    tr.appendChild(tdActions);
+    card.appendChild(header);
+    card.appendChild(body);
 
-    tbody.appendChild(tr);
+    list.appendChild(card);
   });
 
-  table.appendChild(tbody);
-  container.appendChild(table);
+  container.appendChild(list);
 }
 
 async function efCopyPublicUrl(slug) {

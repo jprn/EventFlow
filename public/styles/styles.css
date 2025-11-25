@@ -772,87 +772,86 @@ img {
   color: var(--ef-color-text-muted);
 }
 
-.ef-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 0.4rem;
+/* Liste d'événements sous forme de cartes --------------------------------- */
+
+.ef-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 0.75rem;
+}
+
+.ef-event-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  background-color: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.ef-event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+  border-color: rgba(37, 99, 235, 0.35);
+}
+
+.ef-event-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.ef-event-card-title {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: #0f172a;
+  text-decoration: none;
+  margin-bottom: 0.1rem;
+}
+
+.ef-event-card-title:hover {
+  text-decoration: underline;
+}
+
+.ef-event-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-event-status {
+  font-size: 0.75rem;
+}
+
+.ef-event-card-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   font-size: 0.9rem;
 }
 
-.ef-table thead {
-  background: linear-gradient(
-    90deg,
-    rgba(37, 99, 235, 0.05),
-    rgba(37, 99, 235, 0.02)
-  );
-}
-
-.ef-table th,
-.ef-table td {
-  padding: 0.55rem 0.9rem;
-}
-
-.ef-table th {
-  text-align: center;
-  font-weight: 500;
+.ef-event-card-count {
   color: var(--ef-color-text-muted);
+}
+
+.ef-event-card-actions {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.ef-event-card-actions .ef-btn {
+  padding: 0.15rem 0.45rem;
   font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.ef-table th:first-child {
-  text-align: left;
-}
-
-.ef-table td:last-child {
-  white-space: nowrap;
-}
-
-/* Rendu type "cartes" pour les lignes (surtout utilisé sur le dashboard) */
-.ef-table tbody tr {
-  background-color: #ffffff;
-  border-radius: 0.9rem;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
-  transition: transform 0.15s ease, box-shadow 0.15s ease,
-    background-color 0.15s ease;
-}
-
-.ef-table tbody tr:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.12);
-  background-color: #f9fafb;
-}
-
-.ef-table td:nth-child(2),
-.ef-table th:nth-child(2),
-.ef-table td:nth-child(3),
-.ef-table th:nth-child(3),
-.ef-table td:nth-child(4),
-.ef-table th:nth-child(4) {
-  text-align: center;
-}
-
-.ef-table td:nth-child(5),
-.ef-table th:nth-child(5) {
-  text-align: center;
-}
-
-.ef-table .ef-btn {
-  padding: 0.2rem 0.4rem;
-  font-size: 0.8rem;
-}
-
-/* Lien sur le titre d'un événement dans le tableau */
-.ef-table td:first-child a {
-  font-weight: 600;
-  color: var(--ef-color-primary-dark);
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.ef-table td:first-child a:hover {
-  text-decoration: underline;
 }
 
 .ef-btn-disabled {
