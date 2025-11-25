@@ -24,18 +24,21 @@
 
     <main class="ef-main">
       <section class="ef-container">
-        <div class="ef-page-header">
-          <div>
-            <h1>Tableau de bord</h1>
-            <p>Gérez vos événements et suivez la participation.</p>
+        <div class="ef-dashboard-hero">
+          <div class="ef-dashboard-hero-text">
+            <p class="ef-dashboard-kicker">Bonjour,</p>
+            <h1>Gérez vos événements en un clin d'œil</h1>
+            <p class="ef-dashboard-subtitle">
+              Retrouvez en un coup d'œil vos événements, vos inscriptions et votre taux de présence.
+            </p>
           </div>
-          <div>
+          <div class="ef-dashboard-hero-actions">
             <a
               id="ef-create-event-btn"
               href="new-event.html"
-              class="ef-btn ef-btn-primary"
+              class="ef-btn ef-btn-primary ef-dashboard-new-btn"
             >
-              Créer un nouvel événement
+              + Nouvel événement
             </a>
           </div>
         </div>
@@ -58,6 +61,21 @@
             <p class="ef-stat-value">0%</p>
           </article>
         </section>
+
+        <div class="ef-dashboard-toolbar">
+          <div class="ef-dashboard-search">
+            <input
+              type="search"
+              placeholder="Rechercher un événement..."
+              class="ef-dashboard-search-input"
+            />
+          </div>
+          <div class="ef-dashboard-filters">
+            <button type="button" class="ef-btn ef-btn-secondary ef-dashboard-filter-btn">
+              Tous les événements
+            </button>
+          </div>
+        </div>
 
         <section class="ef-card ef-table-card">
           <div class="ef-card-header">

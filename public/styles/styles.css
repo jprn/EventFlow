@@ -556,6 +556,73 @@ img {
   color: var(--ef-color-text-muted);
 }
 
+/* Dashboard hero ----------------------------------------------------------- */
+
+.ef-dashboard-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1.75rem;
+}
+
+.ef-dashboard-hero-text h1 {
+  margin: 0 0 0.4rem;
+  font-size: 1.75rem;
+}
+
+.ef-dashboard-kicker {
+  margin: 0 0 0.15rem;
+  font-size: 0.9rem;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-dashboard-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ef-color-text-muted);
+}
+
+.ef-dashboard-hero-actions {
+  display: flex;
+  align-items: center;
+}
+
+.ef-dashboard-new-btn {
+  padding-inline: 1.35rem;
+}
+
+/* Toolbar (recherche + filtre) -------------------------------------------- */
+
+.ef-dashboard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.5rem 0 1.25rem;
+}
+
+.ef-dashboard-search {
+  flex: 1;
+}
+
+.ef-dashboard-search-input {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--ef-color-border);
+  font-size: 0.9rem;
+  background-color: #ffffff;
+}
+
+.ef-dashboard-search-input::placeholder {
+  color: var(--ef-color-text-muted);
+}
+
+.ef-dashboard-filter-btn {
+  white-space: nowrap;
+}
+
 .ef-grid {
   display: grid;
   gap: 1rem;
