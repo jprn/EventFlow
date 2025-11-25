@@ -703,6 +703,24 @@ img {
   color: #0f172a;
 }
 
+.ef-event-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.ef-event-search {
+  flex: 1;
+}
+
+.ef-event-filters {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
 .ef-grid {
   display: grid;
   gap: 1rem;
@@ -711,6 +729,10 @@ img {
 
 .ef-grid-3 {
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.ef-grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
 .ef-stat-card h2 {

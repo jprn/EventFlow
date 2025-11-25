@@ -1,5 +1,6 @@
 let efEventRegs = [];
 let efEventRegsFilter = "all";
+let efEventSearchTerm = "";
 let efEventRegsChannel = null;
 
 function efGetEventIdFromUrl() {
@@ -189,12 +190,23 @@ function efRenderEventRegistrations() {
   }
 
   const filtered = efEventRegs.filter((reg) => {
-    if (efEventRegsFilter === "present") {
-      return !!reg.checked_in_at;
+    if (efEventRegsFilter === "present" && !reg.checked_in_at) {
+      return false;
     }
-    if (efEventRegsFilter === "absent") {
-      return !reg.checked_in_at;
+    if (efEventRegsFilter === "absent" && reg.checked_in_at) {
+      return false;
     }
+
+    if (efEventSearchTerm) {
+      const answers = reg.answers || {};
+      const text = Object.values(answers)
+        .join(" ")
+        .toLowerCase();
+      if (!text.includes(efEventSearchTerm)) {
+        return false;
+      }
+    }
+
     return true;
   });
 
@@ -280,10 +292,16 @@ function efUpdateEventCounts() {
   const totalEl = document.getElementById("ev-count-total");
   const presentEl = document.getElementById("ev-count-present");
   const absentEl = document.getElementById("ev-count-absent");
+  const rateEl = document.getElementById("ev-rate");
 
   if (totalEl) totalEl.textContent = String(total);
   if (presentEl) presentEl.textContent = String(present);
   if (absentEl) absentEl.textContent = String(absent);
+
+  if (rateEl) {
+    const rate = total ? Math.round((present / total) * 100) : 0;
+    rateEl.textContent = `${rate}%`;
+  }
 }
 
 function efSetupEventViewFilters() {
@@ -301,6 +319,66 @@ function efSetupEventViewFilters() {
       efRenderEventRegistrations();
     });
   });
+
+  const searchInput = document.getElementById("ev-search-input");
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      efEventSearchTerm = (searchInput.value || "").toLowerCase();
+      efRenderEventRegistrations();
+    });
+  }
+
+  const exportBtn = document.getElementById("ev-export-csv");
+  if (exportBtn) {
+    exportBtn.addEventListener("click", () => {
+      if (!efEventRegs || efEventRegs.length === 0) return;
+
+      const header = ["Date inscription", "Statut", "Détails"];
+      const rows = [header];
+
+      efEventRegs.forEach((reg) => {
+        const d = new Date(reg.created_at);
+        const dateStr = d.toLocaleDateString("fr-FR", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
+        const timeStr = d.toLocaleTimeString("fr-FR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const answers = reg.answers || {};
+        const details = Object.values(answers)
+          .filter((v) => v !== null && v !== undefined && v !== "")
+          .join(" · ");
+        const statut = reg.checked_in_at ? "Présent" : "En attente";
+        rows.push([`${dateStr} ${timeStr}`, statut, details]);
+      });
+
+      const csv = rows
+        .map((row) =>
+          row
+            .map((cell) => {
+              const s = String(cell || "").replace(/"/g, '""');
+              return `"${s}"`;
+            })
+            .join(",")
+        )
+        .join("\n");
+
+      const blob = new Blob([csv], {
+        type: "text/csv;charset=utf-8;",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "participants.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", efSetupEventViewPage);

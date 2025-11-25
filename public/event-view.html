@@ -45,7 +45,7 @@
           </div>
         </header>
 
-        <section class="ef-grid ef-grid-3 ef-dashboard-stats ef-event-stats">
+        <section class="ef-grid ef-grid-4 ef-dashboard-stats ef-event-stats">
           <article class="ef-card ef-stat-card">
             <h2>Inscriptions</h2>
             <p class="ef-stat-value" id="ev-count-total">0</p>
@@ -55,8 +55,12 @@
             <p class="ef-stat-value" id="ev-count-present">0</p>
           </article>
           <article class="ef-card ef-stat-card">
-            <h2>Non scannés</h2>
+            <h2>En attente</h2>
             <p class="ef-stat-value" id="ev-count-absent">0</p>
+          </article>
+          <article class="ef-card ef-stat-card">
+            <h2>Taux de présence</h2>
+            <p class="ef-stat-value" id="ev-rate">0%</p>
           </article>
         </section>
 
@@ -67,28 +71,45 @@
         </nav>
 
         <article class="ef-card ef-table-card">
-          <div class="ef-table-controls" style="margin-bottom: 0.75rem">
-            <button
-              type="button"
-              class="ef-btn ef-btn-secondary ev-filter-btn is-active"
-              data-ev-filter="all"
-            >
-              Tous
-            </button>
-            <button
-              type="button"
-              class="ef-btn ef-btn-secondary ev-filter-btn"
-              data-ev-filter="present"
-            >
-              Présents
-            </button>
-            <button
-              type="button"
-              class="ef-btn ef-btn-secondary ev-filter-btn"
-              data-ev-filter="absent"
-            >
-              Non scannés
-            </button>
+          <div class="ef-event-table-toolbar">
+            <div class="ef-event-search">
+              <input
+                id="ev-search-input"
+                type="search"
+                placeholder="Rechercher un participant..."
+                class="ef-dashboard-search-input"
+              />
+            </div>
+            <div class="ef-event-filters">
+              <button
+                type="button"
+                class="ef-btn ef-btn-secondary ev-filter-btn is-active"
+                data-ev-filter="all"
+              >
+                Tous
+              </button>
+              <button
+                type="button"
+                class="ef-btn ef-btn-secondary ev-filter-btn"
+                data-ev-filter="present"
+              >
+                Présents
+              </button>
+              <button
+                type="button"
+                class="ef-btn ef-btn-secondary ev-filter-btn"
+                data-ev-filter="absent"
+              >
+                En attente
+              </button>
+              <button
+                type="button"
+                id="ev-export-csv"
+                class="ef-btn ef-btn-secondary"
+              >
+                Export CSV
+              </button>
+            </div>
           </div>
 
           <div id="event-view-registrations" class="ef-table-wrapper">
