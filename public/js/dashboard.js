@@ -248,13 +248,8 @@ async function efLoadDashboard() {
     let greetingName = "";
 
     if (fullName) {
-      const parts = String(fullName)
-        .split(/\s+/)
-        .filter(Boolean);
-      if (parts.length > 0) {
-        // On prend le dernier mot comme nom de famille et on l'affiche en MAJUSCULES
-        greetingName = parts[parts.length - 1].toUpperCase();
-      }
+      // On affiche le full_name complet tel qu'il est saisi dans le profil
+      greetingName = String(fullName).trim();
     }
 
     if (greetingName) {
