@@ -165,7 +165,7 @@ img {
 /* Landing page ---------------------------------------------------------------- */
 
 .ef-landing {
-  background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #020617 100%);
+  background: radial-gradient(circle at top, #1d4ed8 0, #020617 55%, #020617 100%);
   color: #e5e7eb;
 }
 
@@ -206,14 +206,14 @@ img {
 
 .ef-hero-landing {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-  gap: 2.5rem;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 2.75rem;
   align-items: center;
-  padding-block: 3.5rem;
+  padding-block: 3.8rem;
 }
 
 .ef-hero-text h1 {
-  font-size: clamp(2.2rem, 3.2vw, 3rem);
+  font-size: clamp(2.4rem, 3.6vw, 3.2rem);
   line-height: 1.1;
   margin-bottom: 1rem;
 }
@@ -222,6 +222,21 @@ img {
   color: #cbd5f5;
   max-width: 32rem;
   margin-bottom: 1.75rem;
+}
+
+.ef-hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.18rem 0.7rem;
+  border-radius: 999px;
+  background-color: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #bfdbfe;
+  margin-bottom: 0.8rem;
 }
 
 .ef-hero-note {
@@ -338,6 +353,17 @@ img {
   box-shadow: 0 22px 50px rgba(37, 99, 235, 0.45);
 }
 
+.ef-pricing-grid .ef-card-landing {
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease, background 0.15s ease;
+}
+
+.ef-pricing-grid .ef-card-landing:hover {
+  transform: translateY(-3px);
+  border-color: rgba(129, 140, 248, 0.9);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.85);
+}
+
 .ef-workflow {
   display: grid;
   gap: 1.5rem;
@@ -377,6 +403,12 @@ img {
   display: grid;
   gap: 1.5rem;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* Mise en page des tarifs façon landing SaaS */
+.ef-landing .ef-pricing-grid {
+  max-width: 980px;
+  margin-inline: auto;
 }
 
 .ef-pricing-card {
