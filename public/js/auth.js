@@ -261,5 +261,68 @@ function efSetupAuthPage() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", efSetupAuthPage);
+async function efInitNavUserName() {
+  const link = document.getElementById("ef-nav-user-link");
+  if (!link || !window.supabaseClient) return;
+
+  try {
+    const { data, error } = await window.supabaseClient.auth.getUser();
+    if (error || !data || !data.user) return;
+
+    const user = data.user;
+
+    // On tente d'abord de récupérer full_name depuis la table profiles
+    let fullName = "";
+    try {
+      const { data: profile, error: profileError } =
+        await window.supabaseClient
+          .from("profiles")
+          .select("full_name")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+      if (!profileError && profile && profile.full_name) {
+        fullName = profile.full_name;
+      }
+    } catch (e) {}
+
+    // Fallback sur les métadonnées Supabase si besoin
+    if (!fullName) {
+      const meta = user.user_metadata || {};
+      fullName = meta.full_name || meta.fullname || "";
+    }
+
+    if (!fullName) return;
+
+    const initial = fullName.trim().charAt(0).toUpperCase() || "?";
+
+    // Contenu du lien : petite icône + nom complet
+    const iconSpan = document.createElement("span");
+    iconSpan.textContent = initial;
+    iconSpan.style.display = "inline-flex";
+    iconSpan.style.alignItems = "center";
+    iconSpan.style.justifyContent = "center";
+    iconSpan.style.width = "20px";
+    iconSpan.style.height = "20px";
+    iconSpan.style.borderRadius = "999px";
+    iconSpan.style.background = "linear-gradient(135deg, #f97316, #facc15)";
+    iconSpan.style.color = "#ffffff";
+    iconSpan.style.fontSize = "0.75rem";
+    iconSpan.style.fontWeight = "600";
+
+    const nameSpan = document.createElement("span");
+    nameSpan.textContent = fullName;
+
+    link.textContent = "";
+    link.appendChild(iconSpan);
+    link.appendChild(nameSpan);
+  } catch (e) {
+    // en cas d'erreur, on laisse simplement "Mon profil"
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  efSetupAuthPage();
+  efInitNavUserName();
+});
 

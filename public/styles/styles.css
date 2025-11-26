@@ -173,11 +173,11 @@ img {
   position: sticky;
   top: 0;
   z-index: 20;
-  /* Header landing clair et légèrement translucide sur le fond dégradé */
-  background-color: rgba(255, 255, 255, 0.96);
+  /* Même fond que le header principal pour une continuité visuelle */
+  background-color: #ffffff;
   color: var(--ef-color-text);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35);
 }
 
 .ef-landing .ef-header-inner {
