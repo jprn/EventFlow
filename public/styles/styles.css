@@ -40,11 +40,11 @@ img {
   position: sticky;
   top: 0;
   z-index: 15;
-  /* Dégradé bleu/gris plus professionnel à la place du noir pur */
-  background: linear-gradient(90deg, #0f172a, #1e293b 45%, #0f172a 100%);
+  /* Fond type Base44 : bleu nuit avec léger dégradé */
+  background: linear-gradient(90deg, #020617 0%, #0f172a 40%, #1e293b 100%);
   color: #e5e7eb;
   border-bottom: 1px solid rgba(15, 23, 42, 0.8);
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.45);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(14px);
 }
 
@@ -173,8 +173,9 @@ img {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(10px);
+  /* Même esprit que le header app, avec un peu plus de transparence sur la landing */
+  background: linear-gradient(90deg, rgba(2, 6, 23, 0.95) 0%, rgba(15, 23, 42, 0.95) 40%, rgba(30, 64, 175, 0.9) 100%);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(15, 23, 42, 0.9);
 }
 
