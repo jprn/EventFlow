@@ -298,6 +298,31 @@ function efInitMap() {
   const longitudeInput = document.getElementById("longitude");
   const adresseInput = document.getElementById("adresse");
 
+  function formatNominatimAddress(addressObj, fallbackDisplayName) {
+    if (!addressObj) {
+      return fallbackDisplayName || "";
+    }
+    const houseNumber = addressObj.house_number || "";
+    const road = addressObj.road || "";
+    const cityLike =
+      addressObj.city ||
+      addressObj.town ||
+      addressObj.village ||
+      addressObj.municipality ||
+      addressObj.suburb ||
+      "";
+
+    const street = [houseNumber, road].filter(Boolean).join(" ").trim();
+
+    if (!street && !cityLike) {
+      return fallbackDisplayName || "";
+    }
+
+    if (!street) return cityLike;
+    if (!cityLike) return street;
+    return street + ", " + cityLike;
+  }
+
   const map = L.map("event-map").setView([48.8566, 2.3522], 12);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -324,18 +349,21 @@ function efInitMap() {
     if (longitudeInput) longitudeInput.value = lng.toFixed(6);
     updateMarker(lat, lng);
 
-    // Géocodage inverse pour renseigner automatiquement l'adresse
+    // Géocodage inverse pour renseigner automatiquement l'adresse (N° rue, commune)
     if (adresseInput) {
       try {
         const response = await fetch(
-          "https://nominatim.openstreetmap.org/reverse?format=json&lat=" +
+          "https://nominatim.openstreetmap.org/reverse?format=json&addressdetails=1&lat=" +
             encodeURIComponent(lat) +
             "&lon=" +
             encodeURIComponent(lng)
         );
         const data = await response.json();
-        if (data && data.display_name) {
-          adresseInput.value = data.display_name;
+        if (data && (data.address || data.display_name)) {
+          adresseInput.value = formatNominatimAddress(
+            data.address,
+            data.display_name
+          );
         }
       } catch (_) {}
     }
@@ -363,7 +391,7 @@ function efInitMap() {
       if (!value) return;
       try {
         const response = await fetch(
-          "https://nominatim.openstreetmap.org/search?format=json&q=" +
+          "https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=" +
             encodeURIComponent(value)
         );
         const results = await response.json();
@@ -374,6 +402,13 @@ function efInitMap() {
           if (latitudeInput) latitudeInput.value = lat.toFixed(6);
           if (longitudeInput) longitudeInput.value = lng.toFixed(6);
           updateMarker(lat, lng);
+
+          if (first.address || first.display_name) {
+            adresseInput.value = formatNominatimAddress(
+              first.address,
+              first.display_name
+            );
+          }
         }
       } catch (_) {}
     });
