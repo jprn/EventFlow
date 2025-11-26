@@ -149,7 +149,7 @@ async function efLoadStatsEventPro() {
 
   const { data: regs, error: regError } = await window.supabaseClient
     .from("registrations")
-    .select("created_at, checked_in_at")
+    .select("created_at, checked_in_at, answers")
     .eq("event_id", ev.id);
 
   const registrations = !regError && Array.isArray(regs) ? regs : [];
@@ -288,6 +288,138 @@ async function efLoadStatsEventPro() {
         text += ` Pic de check-ins autour de ${peakHour}h (${peakCount} passages).`;
       }
       arrivalEl.textContent = text;
+    }
+  }
+
+  // Statistiques par options pour les champs personnalisés (plans Event/Pro/Business)
+  const optionsContainer = document.getElementById("pro-ev-options-stats");
+  const optionsUpsell = document.getElementById("pro-ev-options-upsell");
+  if (optionsContainer && optionsUpsell) {
+    optionsContainer.innerHTML = "";
+
+    if (plan === "free") {
+      optionsUpsell.textContent =
+        "Les statistiques détaillées sur les réponses aux champs personnalisés sont disponibles avec les plans Événement, Pro et Business. Modifiez votre plan dans la page Profil pour y accéder.";
+      return;
+    }
+
+    optionsUpsell.textContent =
+      "Basé sur les réponses aux champs personnalisés (listes déroulantes, cases à cocher).";
+
+    try {
+      const { data: fields, error: fieldsError } = await window.supabaseClient
+        .from("event_fields")
+        .select("id, label, type, options, ordre")
+        .eq("event_id", ev.id)
+        .order("ordre", { ascending: true });
+
+      if (fieldsError) {
+        return;
+      }
+
+      const optionFields = (fields || []).filter(
+        (f) =>
+          (f.type === "select" || f.type === "checkbox") &&
+          Array.isArray(f.options) &&
+          f.options.length > 0
+      );
+
+      if (optionFields.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "ef-form-help";
+        empty.textContent =
+          "Aucun champ à options n'a été configuré pour cet événement.";
+        optionsContainer.appendChild(empty);
+        return;
+      }
+
+      const statsByField = new Map();
+      optionFields.forEach((field) => {
+        statsByField.set(field.id, {
+          field,
+          counts: new Map(),
+          total: 0,
+        });
+      });
+
+      registrations.forEach((reg) => {
+        const answers = reg.answers || {};
+        optionFields.forEach((field) => {
+          const value = answers[field.id];
+          const stat = statsByField.get(field.id);
+          if (!stat) return;
+
+          if (field.type === "select") {
+            if (!value) return;
+            const key = String(value);
+            stat.total += 1;
+            stat.counts.set(key, (stat.counts.get(key) || 0) + 1);
+          } else if (field.type === "checkbox") {
+            if (typeof value !== "boolean") return;
+            const key = value ? "Coché" : "Non coché";
+            stat.total += 1;
+            stat.counts.set(key, (stat.counts.get(key) || 0) + 1);
+          }
+        });
+      });
+
+      statsByField.forEach((stat) => {
+        if (!stat.total || stat.counts.size === 0) return;
+
+        const card = document.createElement("article");
+        card.className = "ef-card";
+
+        const title = document.createElement("h3");
+        title.textContent = stat.field.label;
+        card.appendChild(title);
+
+        const chart = document.createElement("div");
+        chart.className = "ef-pro-chart";
+
+        let maxCount = 0;
+        stat.counts.forEach((count) => {
+          if (count > maxCount) maxCount = count;
+        });
+
+        Array.from(stat.counts.entries())
+          .sort((a, b) => b[1] - a[1])
+          .forEach(([optionLabel, count]) => {
+            const row = document.createElement("div");
+            row.className = "ef-pro-bar-row";
+
+            const label = document.createElement("span");
+            label.className = "ef-pro-bar-label";
+            label.textContent = optionLabel;
+
+            const outer = document.createElement("div");
+            outer.className = "ef-pro-bar-outer";
+
+            const inner = document.createElement("div");
+            inner.className = "ef-pro-bar-inner";
+            const width = maxCount ? Math.min(100, (count / maxCount) * 100) : 0;
+            inner.style.width = `${width}%`;
+            const percent = Math.round((count / stat.total) * 100);
+            inner.textContent = `${count} · ${percent}%`;
+
+            outer.appendChild(inner);
+            row.appendChild(label);
+            row.appendChild(outer);
+            chart.appendChild(row);
+          });
+
+        card.appendChild(chart);
+        optionsContainer.appendChild(card);
+      });
+
+      if (!optionsContainer.hasChildNodes()) {
+        const empty = document.createElement("p");
+        empty.className = "ef-form-help";
+        empty.textContent =
+          "Aucune réponse exploitable n'a encore été enregistrée sur les champs à options.";
+        optionsContainer.appendChild(empty);
+      }
+    } catch (e) {
+      // En cas d'erreur silencieuse, on n'affiche simplement pas les stats d'options
     }
   }
 }
