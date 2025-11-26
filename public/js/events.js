@@ -317,12 +317,28 @@ function efInitMap() {
     map.setView(latLng, 14);
   }
 
-  map.on("click", (e) => {
+  map.on("click", async (e) => {
     const lat = e.latlng.lat;
     const lng = e.latlng.lng;
     if (latitudeInput) latitudeInput.value = lat.toFixed(6);
     if (longitudeInput) longitudeInput.value = lng.toFixed(6);
     updateMarker(lat, lng);
+
+    // Géocodage inverse pour renseigner automatiquement l'adresse
+    if (adresseInput) {
+      try {
+        const response = await fetch(
+          "https://nominatim.openstreetmap.org/reverse?format=json&lat=" +
+            encodeURIComponent(lat) +
+            "&lon=" +
+            encodeURIComponent(lng)
+        );
+        const data = await response.json();
+        if (data && data.display_name) {
+          adresseInput.value = data.display_name;
+        }
+      } catch (_) {}
+    }
   });
 
   function tryUpdateFromInputs() {
