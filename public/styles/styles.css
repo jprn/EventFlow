@@ -40,12 +40,12 @@ img {
   position: sticky;
   top: 0;
   z-index: 15;
-  /* Fond type Base44 : bleu nuit avec léger dégradé */
-  background: linear-gradient(90deg, #020617 0%, #0f172a 40%, #1e293b 100%);
-  color: #e5e7eb;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.8);
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(14px);
+  /* Header clair façon app SaaS (comme dans l'exemple Base44) */
+  background-color: #ffffff;
+  color: var(--ef-color-text);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(10px);
 }
 
 .ef-header-public {
@@ -115,7 +115,7 @@ img {
   gap: 0.35rem;
   padding: 0.15rem;
   border-radius: 999px;
-  background-color: rgba(15, 23, 42, 0.55);
+  background-color: transparent;
 }
 
 .ef-header-public .ef-nav {
@@ -124,7 +124,7 @@ img {
 
 .ef-nav-link {
   font-size: 0.95rem;
-  color: #e5e7eb;
+  color: #0f172a;
   padding: 0.35rem 0.9rem;
   border-radius: 999px;
   border: 1px solid transparent;
@@ -135,8 +135,8 @@ img {
 
 .ef-nav-link.is-active,
 .ef-nav-link:hover {
-  background-color: rgba(148, 163, 184, 0.22);
-  border-color: rgba(148, 163, 184, 0.8);
+  background-color: rgba(15, 23, 42, 0.04);
+  border-color: rgba(148, 163, 184, 0.9);
 }
 
 .ef-nav-link-disabled {
@@ -151,11 +151,11 @@ img {
 }
 
 .ef-nav .ef-link-button {
-  color: #fecaca;
+  color: #b91c1c;
 }
 
 .ef-nav .ef-link-button:hover {
-  color: #fee2e2;
+  color: #dc2626;
 }
 
 .ef-main {
@@ -173,10 +173,11 @@ img {
   position: sticky;
   top: 0;
   z-index: 20;
-  /* Même esprit que le header app, avec un peu plus de transparence sur la landing */
-  background: linear-gradient(90deg, rgba(2, 6, 23, 0.95) 0%, rgba(15, 23, 42, 0.95) 40%, rgba(30, 64, 175, 0.9) 100%);
+  /* Header landing clair et légèrement translucide sur le fond dégradé */
+  background-color: rgba(255, 255, 255, 0.96);
+  color: var(--ef-color-text);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(15, 23, 42, 0.9);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.4);
 }
 
 .ef-landing .ef-header-inner {
