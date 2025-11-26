@@ -204,6 +204,38 @@ img {
   padding-bottom: 4rem;
 }
 
+.ef-trust {
+  padding: 1.1rem 0 0.5rem;
+}
+
+.ef-trust-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  align-items: flex-start;
+}
+
+.ef-trust-label {
+  font-size: 0.85rem;
+  color: #e5e7eb;
+  opacity: 0.9;
+}
+
+.ef-trust-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.ef-trust-pill {
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #e5e7eb;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+}
+
 .ef-hero-landing {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
@@ -320,7 +352,7 @@ img {
 
 .ef-section-header h2 {
   margin: 0 0 0.6rem;
-  font-size: 1.7rem;
+  font-size: 1.85rem;
 }
 
 .ef-section-header p {
@@ -329,13 +361,14 @@ img {
 }
 
 .ef-card-landing {
-  background: rgba(15, 23, 42, 0.9);
-  border-color: rgba(148, 163, 184, 0.3);
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+  background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), #020617);
+  border-color: rgba(148, 163, 184, 0.35);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.85);
 }
 
 .ef-card-landing h3 {
   margin-top: 0;
+  font-size: 1.15rem;
 }
 
 .ef-card-landing p {
